@@ -97,7 +97,8 @@ class Chainsaw(Weapon):
         # Chainsaw is a bit of a special case. It has an 'idle' sound
         # that needs to play in a loop when not firing.
         self.idle_sound: Optional[pg.mixer.Sound] = None
-        idle_path = os.path.join(game.sound.path, 'chainsaw_idle.wav')
+        weapon_path = os.path.join(game.sound.path, 'weapon')
+        idle_path = os.path.join(weapon_path, 'chainsaw_idle.wav')
         if os.path.exists(idle_path):
             print(f'Loading idle weapon sound: {idle_path}')
             self.idle_sound = pg.mixer.Sound(idle_path)

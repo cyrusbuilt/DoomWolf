@@ -12,6 +12,9 @@ class Sound:
         self.path: str = 'assets/sound'
         self.music_loaded: bool = False
         self.music_playing: bool = False
+
+        # TODO make loading theme music more dynamic (like weapon sounds)
+        # so that they can be loaded with the levels/maps
         self.music_path: str = os.path.join(self.path, 'theme.mp3')
         if os.path.exists(self.music_path):
             print(f'Loading theme music: {self.music_path}')

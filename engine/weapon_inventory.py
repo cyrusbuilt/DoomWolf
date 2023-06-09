@@ -16,9 +16,6 @@ class WeaponInventory:
         ]
         self.current: WeaponClass = WeaponClass.SHOTGUN
         self.path: str = 'assets/sprites/weapon'
-        self.shotgun_path: str = os.path.join(self.path,
-                                              WeaponClass.SHOTGUN.value,
-                                              '0.png')
 
     def get_current(self) -> Weapon:
         img_path = os.path.join(self.path, self.current.value, '0.png')
