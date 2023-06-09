@@ -1,4 +1,3 @@
-from enum import Enum
 import math
 import pygame as pg
 from random import randint, random
@@ -6,13 +5,6 @@ from typing import Optional
 
 from engine import constants as con
 from engine.sprite import AnimatedSprite
-
-
-class EnemyClass(Enum):
-    SOLDIER = 'soldier'
-    CACO_DEMON = 'caco_demon'
-    CYBER_DEMON = 'cyber_demon'
-    NONE = 'none'
 
 
 class Enemy(AnimatedSprite):
@@ -41,7 +33,6 @@ class Enemy(AnimatedSprite):
         self.ray_cast_value: bool = False
         self.frame_counter: int = 0
         self.player_search_trigger: bool = False
-        self.enemy_class: EnemyClass = EnemyClass.NONE
         self.pain_sound: Optional[pg.mixer.Sound] = game.sound.enemy_pain
         self.death_sound: Optional[pg.mixer.Sound] = game.sound.enemy_death
         self.attack_sound: Optional[pg.mixer.Sound] = game.sound.enemy_attack
@@ -228,65 +219,3 @@ class Enemy(AnimatedSprite):
                 self.animate(self.idle_images)
         else:
             self.animate_death()
-
-
-class Soldier(Enemy):
-
-    def __init__(self,
-                 game,
-                 path: str = 'assets/sprites/enemy/soldier/0.png',
-                 pos: tuple[float, float] = (10.5, 5.5),
-                 scale: float = 0.6,
-                 shift: float = 0.38,
-                 animation_time: int = 180):
-        super().__init__(game, path, pos, scale, shift, animation_time)
-        self.enemy_class = EnemyClass.SOLDIER
-
-
-class CacoDemon(Enemy):
-
-    def __init__(self,
-                 game,
-                 path: str = 'assets/sprites/enemy/caco_demon/0.png',
-                 pos: tuple[float, float] = (10.5, 6.5),
-                 scale: float = 0.7,
-                 shift: float = 0.27,
-                 animation_time: int = 250):
-        super().__init__(game, path, pos, scale, shift, animation_time)
-        self.enemy_class = EnemyClass.CACO_DEMON
-        self.attack_dist = 1.0
-        self.health = 150
-        self.attack_damage = 25
-        self.speed = 0.05
-        self.accuracy = 0.35
-
-
-class CyberDemon(Enemy):
-
-    def __init__(self,
-                 game,
-                 path: str = 'assets/sprites/enemy/cyber_demon/0.png',
-                 pos: tuple[float, float] = (11.5, 6.0),
-                 scale: float = 1.0,
-                 shift: float = 0.04,
-                 animation_time: int = 210):
-        super().__init__(game, path, pos, scale, shift, animation_time)
-        self.enemy_class = EnemyClass.CYBER_DEMON
-        self.attack_dist = 6
-        self.health = 350
-        self.attack_damage = 15
-        self.speed = 0.055
-        self.accuracy = 0.25
-
-
-def build_enemy(
-    game, klass: EnemyClass,
-    pos: tuple[float, float] = (10.5, 5.5)) -> Optional[Enemy]:
-    if klass == EnemyClass.NONE:
-        return None
-    if klass == EnemyClass.CACO_DEMON:
-        return CacoDemon(game=game, pos=pos)
-    if klass == EnemyClass.CYBER_DEMON:
-        return CyberDemon(game=game, pos=pos)
-    if klass == EnemyClass.SOLDIER:
-        return Soldier(game=game, pos=pos)

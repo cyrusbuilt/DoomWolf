@@ -38,7 +38,7 @@ class Game:
         self.ray_caster: Optional[RayCaster] = None
         self.object_renderer: Optional[ObjectRenderer] = None
         self.current_weapon: Optional[Weapon] = None
-        self.object_handler: Optional[ObjectHandler] = None
+        self.object_handler: Optional[ObjectHandler] = ObjectHandler(self)
         self.path_finder: Optional[PathFinder] = None
         self.sound: Optional[Sound] = None
         pg.time.set_timer(self.global_event, 40)
@@ -54,7 +54,6 @@ class Game:
         self.object_renderer = ObjectRenderer(self)
         self.ray_caster = RayCaster(self)
 
-        self.object_handler = ObjectHandler(self)
         self.object_handler.spawn_sprites()
         self.object_handler.spawn_enemies()
 
@@ -102,6 +101,9 @@ class Game:
         pg.image.save(self.screen, 'screenshot.jpg')
         print('Screenshot saved.')
 
+    def do_event(self, event: pg.event.Event):
+        pass
+
     def check_events(self):
         self.global_trigger = False
         for event in pg.event.get():
@@ -133,7 +135,7 @@ class Game:
 
             if not self.paused:
                 self.player.single_fire_event(event)
-                self.weapon_inventory.inventory_event(event)
+                self.do_event(event)
 
     def run(self):
         while True:
