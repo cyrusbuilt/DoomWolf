@@ -21,7 +21,7 @@ improves on the original with the following:
 
 - Better code organization and formatting and stronger type safety.
 - Can fully control the game using keyboard only, keyboard and mouse, or gamepad.
-- Weapon inventory system (will be useful when I introduce more weapons)
+- Weapon inventory system
 - Fullscreen toggle
 - Game pause
 - Ability to screenshot

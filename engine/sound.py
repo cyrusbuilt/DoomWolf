@@ -2,7 +2,7 @@ import os
 import pygame as pg
 from typing import Optional
 
-from engine.weapon import WeaponClass
+from weapon import WeaponClass
 
 
 class Sound:

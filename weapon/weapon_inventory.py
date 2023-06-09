@@ -1,10 +1,10 @@
 import os
 import pygame as pg
 
-from engine.weapon import Chainsaw
-from engine.weapon import Shotgun
 from engine.weapon import Weapon
-from engine.weapon import WeaponClass
+from weapon import WeaponClass
+from weapon.shotgun import Shotgun
+from weapon.chainsaw import Chainsaw
 
 
 class WeaponInventory:

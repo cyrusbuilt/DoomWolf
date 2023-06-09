@@ -12,7 +12,6 @@ from engine.player import Player
 from engine.raycaster import RayCaster
 from engine.sound import Sound
 from engine.weapon import Weapon
-from engine.weapon_inventory import WeaponInventory
 
 
 class Game:
@@ -42,9 +41,7 @@ class Game:
         self.object_handler: Optional[ObjectHandler] = None
         self.path_finder: Optional[PathFinder] = None
         self.sound: Optional[Sound] = None
-        self.weapon_inventory: WeaponInventory = WeaponInventory(self)
         pg.time.set_timer(self.global_event, 40)
-        self.new_game()
 
     def new_game(self):
         # TODO Need to be able to load more than one map
@@ -61,7 +58,7 @@ class Game:
         self.object_handler.spawn_sprites()
         self.object_handler.spawn_enemies()
 
-        self.current_weapon = self.weapon_inventory.get_current()
+        self.current_weapon = Weapon(self, '')
 
         self.path_finder = PathFinder(self)
         self.sound.play_music()

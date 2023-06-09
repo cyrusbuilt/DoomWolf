@@ -9,7 +9,5 @@ if __name__ == '__main__':
     print(title)
     print(__copyright__)
 
-    from engine.game import Game
-    game = Game()
-    game.window_title = title
-    game.run()
+    from game import run_doom_wolf
+    run_doom_wolf(title)
