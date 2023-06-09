@@ -20,17 +20,13 @@ class Sound:
             self.music_loaded = True
 
         print('Loading weapon sounds...')
-        w_sounds: dict = {}
+        self.weapon_sounds: dict[str, pg.mixer.Sound] = {}
         names = [w.value for w in WeaponClass if w != WeaponClass.NONE]
         for name in names:
-            sound_path = os.path.join(self.path, f'{name}.wav')
+            weapon_path = os.path.join(self.path, 'weapon')
+            sound_path = os.path.join(weapon_path, f'{name}.wav')
             if os.path.exists(sound_path):
-                w_sounds[name] = pg.mixer.Sound(sound_path)
-
-        self.shotgun: Optional[pg.mixer.Sound] = \
-            w_sounds.get(WeaponClass.SHOTGUN.value)
-        self.chainsaw: Optional[pg.mixer.Sound] = \
-            w_sounds.get(WeaponClass.CHAINSAW.value)
+                self.weapon_sounds[name] = pg.mixer.Sound(sound_path)
 
         self.player_pain: Optional[pg.mixer.Sound] = None
         player_pain_path = os.path.join(self.path, 'player_pain.wav')
@@ -73,3 +69,6 @@ class Sound:
         if self.music_loaded and not self.music_playing:
             pg.mixer.music.unpause()
             self.music_playing = True
+
+    def get_weapon_sound(self, klass: WeaponClass) -> Optional[pg.mixer.Sound]:
+        return self.weapon_sounds.get(klass.value)

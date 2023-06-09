@@ -77,7 +77,7 @@ class Shotgun(Weapon):
                  animation_time: int = 90):
         super().__init__(game, path, scale, animation_time)
         self.weapon_class = WeaponClass.SHOTGUN
-        self.sound = game.sound.shotgun
+        self.sound = game.sound.get_weapon_sound(self.weapon_class)
 
 
 class Chainsaw(Weapon):
@@ -89,8 +89,8 @@ class Chainsaw(Weapon):
                  animation_time: int = 200):
         super().__init__(game, path, scale, animation_time)
         self.weapon_class = WeaponClass.CHAINSAW
+        self.sound = game.sound.get_weapon_sound(self.weapon_class)
         self.damage = 20
-        self.sound = game.sound.chainsaw
         self.time_prev: int = 0
         self.idle_sound_delay: int = 0
 

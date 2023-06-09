@@ -85,7 +85,6 @@ class Player:
             self.y += dy
 
     def movement(self):
-        # TODO Check enemy collision
         keys = pg.key.get_pressed()
         joy_left_bump = self.game.joystick.get_button(9)
         joy_right_bump = self.game.joystick.get_button(10)
@@ -126,6 +125,8 @@ class Player:
             dy *= self.diag_move_corr
 
         self.check_wall_collision(dx, dy)
+        # TODO Check enemy collision?
+
         if keys[pg.K_LEFT] or joy_left_bump:
             self.angle -= con.PLAYER_ROT_SPEED * self.game.delta_time
         if keys[pg.K_RIGHT] or joy_right_bump:
