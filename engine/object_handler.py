@@ -1,14 +1,11 @@
 from random import choices, randrange
 import pygame as pg
 from typing import Optional
-from typing import Type
 
 from engine.enemy import Enemy
-from engine.enemy import CacoDemon
-from engine.enemy import CyberDemon
-from engine.enemy import Soldier
 from engine.sprite import AnimatedSprite
 from engine.sprite import Sprite
+from enemy import EnemyClass
 
 
 class ObjectHandler:
@@ -22,16 +19,17 @@ class ObjectHandler:
         self.anim_sprite_path: str = 'assets/sprites/animated_sprites'
         self.enemy_positions: dict[tuple[int, int]] = {}
         self.enemy_count: int = 20
-        self.enemy_types: list[Type[Soldier | CacoDemon | CyberDemon]] = [
-            Soldier, CacoDemon, CyberDemon
+        self.enemy_types: list[EnemyClass] = [
+            EnemyClass.SOLDIER, EnemyClass.CACO_DEMON, EnemyClass.CYBER_DEMON
         ]
         self.weights: list[int] = [70, 20, 10]
         self.restricted_area = {(i, j) for i in range(10) for j in range(10)}
 
+    def build_enemy_npc(self, game, klass: EnemyClass, pos: tuple[float, float]) -> Enemy:
+        return Enemy(self.game, '')
+
     def spawn_enemies(self):
         for _ in range(self.enemy_count):
-            npc = choices(self.enemy_types, self.weights)[0]
-
             x = randrange(self.game.map.cols)
             y = randrange(self.game.map.rows)
             pos = x, y
@@ -44,7 +42,9 @@ class ObjectHandler:
                 pos_in_map = pos in self.game.map.world_map
                 pos_in_res_area = pos in self.restricted_area
 
-            self.add_enemy(npc(self.game, pos=(x + 0.5, y + 0.5)))
+            npc_type = choices(self.enemy_types, self.weights)[0]
+            enemy = self.build_enemy_npc(self.game, npc_type, (x + 0.5, y + 0.5))
+            self.add_enemy(enemy)
 
         # x = randrange(self.game.map.cols)
         # y = randrange(self.game.map.rows)
