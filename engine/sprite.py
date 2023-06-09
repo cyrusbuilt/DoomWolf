@@ -102,13 +102,16 @@ class AnimatedSprite(Sprite):
 
     @staticmethod
     def load_images(path: str):
+        print(f'Loading images for sprite: {os.path.dirname(path)}')
         images: deque[pg.Surface] = deque()
         if os.path.exists(path):
             files = sorted(os.listdir(path))
             for file_name in files:
+                if os.path.splitext(file_name)[1] != '.png':
+                    continue
+
                 full_path = os.path.join(path, file_name)
                 if os.path.isfile(full_path):
-                    print(f'Loading png: {full_path}')
                     img = pg.image.load(full_path).convert_alpha()
                     images.append(img)
         return images

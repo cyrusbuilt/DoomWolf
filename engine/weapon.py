@@ -1,3 +1,4 @@
+import os.path
 from collections import deque
 from enum import Enum
 import pygame as pg
@@ -8,6 +9,7 @@ from engine.sprite import AnimatedSprite
 
 class WeaponClass(Enum):
     SHOTGUN = 'shotgun'
+    CHAINSAW = 'chainsaw'
     NONE = 'none'
 
 
@@ -76,3 +78,37 @@ class Shotgun(Weapon):
         super().__init__(game, path, scale, animation_time)
         self.weapon_class = WeaponClass.SHOTGUN
         self.sound = game.sound.shotgun
+
+
+class Chainsaw(Weapon):
+
+    def __init__(self,
+                 game,
+                 path: str,
+                 scale: float = 0.5,
+                 animation_time: int = 200):
+        super().__init__(game, path, scale, animation_time)
+        self.weapon_class = WeaponClass.CHAINSAW
+        self.damage = 20
+        self.sound = game.sound.chainsaw
+        self.time_prev: int = 0
+        self.idle_sound_delay: int = 0
+
+        # Chainsaw is a bit of a special case. It has an 'idle' sound
+        # that needs to play in a loop when not firing.
+        self.idle_sound: Optional[pg.mixer.Sound] = None
+        idle_path = os.path.join(game.sound.path, 'chainsaw_idle.wav')
+        if os.path.exists(idle_path):
+            print(f'Loading idle weapon sound: {idle_path}')
+            self.idle_sound = pg.mixer.Sound(idle_path)
+            self.time_prev = pg.time.get_ticks()
+            self.idle_sound_delay = 700
+
+    def update(self):
+        super().update()
+        if self.idle_sound and not self.reloading:
+            time_now = pg.time.get_ticks()
+            time_delta = time_now - self.time_prev
+            if time_delta > self.idle_sound_delay:
+                self.time_prev = time_now
+                self.idle_sound.play()

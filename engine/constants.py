@@ -1,6 +1,7 @@
 import math
 
 DEBUG = False
+GOD_MODE = False
 RES = WIDTH, HEIGHT = 1600, 900
 HALF_WIDTH = WIDTH // 2
 HALF_HEIGHT = HEIGHT // 2

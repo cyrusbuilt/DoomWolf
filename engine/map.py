@@ -57,6 +57,7 @@ class Map:
     def load_map(self):
         # TODO Ideally, when we load the tile map, we also load the sprite map
         # and enemy map.
+        print(f'Loading map: {self.name}')
         for j, row in enumerate(self.mini_map):
             for i, value in enumerate(row):
                 if value:

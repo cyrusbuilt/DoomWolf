@@ -2,6 +2,8 @@ import os
 import pygame as pg
 from typing import Optional
 
+from engine.weapon import WeaponClass
+
 
 class Sound:
 
@@ -17,11 +19,18 @@ class Sound:
             pg.mixer.music.set_volume(0.4)
             self.music_loaded = True
 
-        self.shotgun: Optional[pg.mixer.Sound] = None
-        shotgun_path = os.path.join(self.path, 'shotgun.wav')
-        if os.path.exists(shotgun_path):
-            print(f'Loading weapon sound: {shotgun_path}')
-            self.shotgun = pg.mixer.Sound(shotgun_path)
+        print('Loading weapon sounds...')
+        w_sounds: dict = {}
+        names = [w.value for w in WeaponClass if w != WeaponClass.NONE]
+        for name in names:
+            sound_path = os.path.join(self.path, f'{name}.wav')
+            if os.path.exists(sound_path):
+                w_sounds[name] = pg.mixer.Sound(sound_path)
+
+        self.shotgun: Optional[pg.mixer.Sound] = \
+            w_sounds.get(WeaponClass.SHOTGUN.value)
+        self.chainsaw: Optional[pg.mixer.Sound] = \
+            w_sounds.get(WeaponClass.CHAINSAW.value)
 
         self.player_pain: Optional[pg.mixer.Sound] = None
         player_pain_path = os.path.join(self.path, 'player_pain.wav')

@@ -49,7 +49,8 @@ class Player:
             self.game.new_game()
 
     def take_damage(self, damage: int):
-        self.health -= damage
+        if not con.GOD_MODE:
+            self.health -= damage
         self.game.object_renderer.player_damage()
         self.play_pain_sound()
         self.check_game_over()
@@ -84,6 +85,7 @@ class Player:
             self.y += dy
 
     def movement(self):
+        # TODO Check enemy collision
         keys = pg.key.get_pressed()
         joy_left_bump = self.game.joystick.get_button(9)
         joy_right_bump = self.game.joystick.get_button(10)

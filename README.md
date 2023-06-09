@@ -26,6 +26,7 @@ improves on the original with the following:
 - Game pause
 - Ability to screenshot
 - Better error handling and asset existence checks
+- More than one weapon
 
 Future planned improvements:
 - More maps! And a map loading system
@@ -46,7 +47,7 @@ Future planned improvements:
 - - Pause: P
 - - Toggle fullscreen: T
 - - Quit/Exit: Esc
-- - Weapon switch (works when I have more weapons): Tab
+- - Weapon switch: Tab
 - - Screenshot: M
 - Mouse
 - - Head turn: mouse move left/right
