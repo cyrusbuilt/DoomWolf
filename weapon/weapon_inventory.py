@@ -45,9 +45,13 @@ class WeaponInventory:
             self.game.current_weapon = self.get_current()
 
     def inventory_event(self, event: pg.event.Event):
-        if event.type == pg.KEYDOWN:
-            if event.key == pg.K_TAB:
-                self.next()
+        tab_pressed = event.type == pg.KEYDOWN and \
+            event.key == pg.K_TAB
+        b_pressed = event.type == pg.JOYBUTTONDOWN and \
+            event.button == 1
+
+        if tab_pressed or b_pressed:
+            self.next()
 
     def drop_current(self):
         next_index = self.get_next_weapon_index()
