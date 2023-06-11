@@ -23,6 +23,8 @@ class Weapon(AnimatedSprite):
         self.weapon_pos = 0
         self.num_images: int = 0
         self.sound: Optional[pg.mixer.Sound] = None
+        # TODO Need to support sounds for multiple events:
+        # Fire, reload, empty, idle, hit, etc
         # TODO Need an ammo count and each shot should decrement.
 
         if self.image:

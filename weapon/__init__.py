@@ -4,6 +4,7 @@ from engine.weapon import Weapon
 
 
 class WeaponClass(Enum):
+    PISTOL = 'pistol'
     SHOTGUN = 'shotgun'
     CHAINSAW = 'chainsaw'
     NONE = 'none'

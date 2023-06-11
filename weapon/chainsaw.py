@@ -16,7 +16,7 @@ class Chainsaw(WeaponBase):
         super().__init__(game, path, scale, animation_time)
         self.weapon_class = WeaponClass.CHAINSAW
         self.sound = game.sound.get_weapon_sound(self.weapon_class)
-        self.damage = 20
+        self.damage = 30
         self.time_prev: int = 0
         self.idle_sound_delay: int = 0
 

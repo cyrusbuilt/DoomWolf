@@ -3,6 +3,7 @@ import pygame as pg
 
 from engine.weapon import Weapon
 from weapon import WeaponClass
+from weapon.pistol import Pistol
 from weapon.shotgun import Shotgun
 from weapon.chainsaw import Chainsaw
 
@@ -23,6 +24,8 @@ class WeaponInventory:
             return Shotgun(self.game, img_path)
         if self.current == WeaponClass.CHAINSAW:
             return Chainsaw(self.game, img_path)
+        if self.current == WeaponClass.PISTOL:
+            return Pistol(self.game, img_path)
 
     def get_next_weapon_index(self) -> int:
         current_index = self.inventory.index(self.current)
