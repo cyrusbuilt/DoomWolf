@@ -26,9 +26,16 @@ class Sound:
         self.weapon_sounds: dict[str, pg.mixer.Sound] = {}
         names = [w.value for w in WeaponClass if w != WeaponClass.NONE]
         for name in names:
+            sound_path: Optional[str] = None
             weapon_path = os.path.join(self.path, 'weapon')
-            sound_path = os.path.join(weapon_path, f'{name}.wav')
-            if os.path.exists(sound_path):
+            sound_path_wav = os.path.join(weapon_path, f'{name}.wav')
+            sound_path_ogg = os.path.join(weapon_path, f'{name}.ogg')
+            if os.path.exists(sound_path_wav):
+                sound_path = sound_path_wav
+            if os.path.exists(sound_path_ogg):
+                sound_path = sound_path_ogg
+
+            if sound_path:
                 self.weapon_sounds[name] = pg.mixer.Sound(sound_path)
 
         self.player_pain: Optional[pg.mixer.Sound] = None
