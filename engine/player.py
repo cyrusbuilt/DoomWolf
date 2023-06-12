@@ -56,6 +56,7 @@ class Player:
         self.check_game_over()
 
     def single_fire_event(self, event: pg.event.Event):
+        # TODO Need a way to do continuous fire
         mouse_fire = event.type == pg.MOUSEBUTTONDOWN and \
                      event.button == 1
         joy_fire = event.type == pg.JOYBUTTONDOWN and \
@@ -68,6 +69,18 @@ class Player:
             self.game.current_weapon.play_sound()
             self.shot = True
             self.game.current_weapon.reloading = True
+
+        mouse_fire_stop = event.type == pg.MOUSEBUTTONUP and \
+                          event.button == 1
+        joy_fire_stop = event.type == pg.JOYBUTTONUP and \
+                        event.button == 0
+        kbd_fire_stop = event.type == pg.KEYUP and \
+                        event.key == pg.K_SPACE
+
+        if mouse_fire_stop or joy_fire_stop or kbd_fire_stop:
+            print(f'Fire stop')
+            self.shot = False
+            self.game.current_weapon.reloading = False
 
     def check_wall(self, x: int, y: int) -> bool:
         return (x, y) not in self.game.map.world_map
