@@ -60,8 +60,8 @@ class Player:
         if self.do_continuous_fire:
             if self.game.current_weapon.frame_counter == 0:
                 self.game.current_weapon.play_sound()
-            self.shot = True
-            self.game.current_weapon.reloading = True
+                self.shot = True
+                self.game.current_weapon.reloading = True
 
     def start_weapon_fire(self):
         self.do_continuous_fire = self.game.current_weapon.has_continuous_fire
