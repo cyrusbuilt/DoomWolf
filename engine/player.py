@@ -19,6 +19,7 @@ class Player:
         self.time_prev: int = pg.time.get_ticks()
         self.diag_move_corr: float = 1 / math.sqrt(2)
         self.pain_sound: Optional[pg.mixer.Sound] = self.game.sound.player_pain
+        self.do_continuous_fire: bool = False
 
     @property
     def pos(self) -> tuple[float, float]:
@@ -55,6 +56,22 @@ class Player:
         self.play_pain_sound()
         self.check_game_over()
 
+    def check_do_continuous_fire(self):
+        if self.do_continuous_fire:
+            if self.game.current_weapon.frame_counter == 0:
+                self.game.current_weapon.play_sound()
+            self.shot = True
+            self.game.current_weapon.reloading = True
+
+    def start_weapon_fire(self):
+        self.do_continuous_fire = self.game.current_weapon.has_continuous_fire
+        self.game.current_weapon.play_sound()
+        self.shot = True
+        self.game.current_weapon.reloading = True
+
+    def stop_weapon_fire(self):
+        self.do_continuous_fire = False
+
     def single_fire_event(self, event: pg.event.Event):
         # TODO Need a way to do continuous fire
         mouse_fire = event.type == pg.MOUSEBUTTONDOWN and \
@@ -66,9 +83,10 @@ class Player:
 
         if (mouse_fire or joy_fire or kbd_fire) and not self.shot and \
                 not self.game.current_weapon.reloading:
-            self.game.current_weapon.play_sound()
-            self.shot = True
-            self.game.current_weapon.reloading = True
+            # self.game.current_weapon.play_sound()
+            # self.shot = True
+            # self.game.current_weapon.reloading = True
+            self.start_weapon_fire()
 
         mouse_fire_stop = event.type == pg.MOUSEBUTTONUP and \
                           event.button == 1
@@ -79,8 +97,9 @@ class Player:
 
         if mouse_fire_stop or joy_fire_stop or kbd_fire_stop:
             print(f'Fire stop')
-            self.shot = False
-            self.game.current_weapon.reloading = False
+            # self.shot = False
+            # self.game.current_weapon.reloading = False
+            self.stop_weapon_fire()
 
     def check_wall(self, x: int, y: int) -> bool:
         return (x, y) not in self.game.map.world_map
@@ -167,6 +186,7 @@ class Player:
         self.movement()
         self.mouse_control()
         self.recover_health()
+        self.check_do_continuous_fire()
 
     def play_pain_sound(self):
         if self.pain_sound:

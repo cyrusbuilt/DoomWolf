@@ -13,4 +13,4 @@ class ChainGun(WeaponBase):
         self.weapon_class = WeaponClass.SUPER_SHOTGUN
         self.sound = game.sound.get_weapon_sound(self.weapon_class)
         self.damage = 40
-        self.continuous_fire = True
+        self.has_continuous_fire = True
