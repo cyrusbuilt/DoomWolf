@@ -18,6 +18,7 @@ class Weapon(AnimatedSprite):
                          scale=scale,
                          animation_time=animation_time)
         self.reloading: bool = False
+        self.has_continuous_fire: bool = False
         self.frame_counter: int = 0
         self.damage: int = 50
         self.weapon_pos = 0
