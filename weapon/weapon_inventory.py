@@ -5,6 +5,7 @@ from engine.weapon import Weapon
 from weapon import WeaponClass
 from weapon.pistol import Pistol
 from weapon.shotgun import Shotgun
+from weapon.chain_gun import ChainGun
 from weapon.chainsaw import Chainsaw
 from weapon.super_shotgun import SuperShotgun
 
@@ -29,6 +30,8 @@ class WeaponInventory:
             return Pistol(self.game, img_path)
         if self.current == WeaponClass.SUPER_SHOTGUN:
             return SuperShotgun(self.game, img_path)
+        if self.current == WeaponClass.CHAIN_GUN:
+            return ChainGun(self.game, img_path)
 
     def get_next_weapon_index(self) -> int:
         current_index = self.inventory.index(self.current)

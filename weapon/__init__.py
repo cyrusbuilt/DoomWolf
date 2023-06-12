@@ -8,6 +8,7 @@ class WeaponClass(Enum):
     SHOTGUN = 'shotgun'
     CHAINSAW = 'chainsaw'
     SUPER_SHOTGUN = 'super_shotgun'
+    CHAIN_GUN = 'chain_gun'
     NONE = 'none'
 
 
