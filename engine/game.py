@@ -42,6 +42,8 @@ class Game:
         self.path_finder: Optional[PathFinder] = None
         self.sound: Optional[Sound] = None
         pg.time.set_timer(self.global_event, 40)
+        # TODO Need a class for handling power-ups and inventory.
+        # TODO Maybe support things like shield and extra health, etc.
 
     def new_game(self):
         # TODO Need to be able to load more than one map
