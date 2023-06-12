@@ -29,6 +29,7 @@ class ObjectHandler:
         return Enemy(self.game, '')
 
     def spawn_enemies(self):
+        self.enemy_list = []
         for _ in range(self.enemy_count):
             x = randrange(self.game.map.cols)
             y = randrange(self.game.map.rows)
@@ -61,6 +62,7 @@ class ObjectHandler:
         # self.add_enemy(CacoDemon(self.game, pos=(x + 0.5, y + 0.5)))
 
     def spawn_sprites(self):
+        self.sprite_list = []
         # TODO this is just a convenience method for now that adds some sprites
         # but we'll really want to load sprites with the map/level
         green_light = 'assets/sprites/animated_sprites/green_light/0.png'

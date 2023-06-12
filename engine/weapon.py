@@ -23,9 +23,10 @@ class Weapon(AnimatedSprite):
         self.weapon_pos = 0
         self.num_images: int = 0
         self.sound: Optional[pg.mixer.Sound] = None
+        # TODO Need variables for things like ammo capacity,
+        # rate of fire, magazine capacity, etc.
         # TODO Need to support sounds for multiple events:
-        # Fire, reload, empty, idle, hit, etc
-        # TODO Need an ammo count and each shot should decrement.
+        # Fire, reload start, reload stop, empty, idle, hit, etc
 
         if self.image:
             s_w = self.image.get_width() * scale
