@@ -82,3 +82,7 @@ class Sound:
 
     def get_weapon_sound(self, klass: WeaponClass) -> Optional[pg.mixer.Sound]:
         return self.weapon_sounds.get(klass.value)
+
+    def set_music_volume(self, volume: float):
+        if self.music_loaded:
+            pg.mixer.music.set_volume(volume)

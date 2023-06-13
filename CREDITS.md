@@ -19,3 +19,4 @@ Weapons
 - Shotgun - id Software, Stanislov Petrov
 - Pistol - Sprites: TyrannotitanFan. Sounds: TyrannotitanFan, DICE
 - Super Shotgun - Sprites: Doom64, KDiZD, Captain Toenail. Sounds: Croteam
+- Chaingun - Sprites: Eriance, Z86. Sounds: Raven Software (Quake 4)
