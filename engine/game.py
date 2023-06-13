@@ -33,6 +33,7 @@ class Game:
         self.global_trigger: bool = False
         self.paused: bool = False
         self.global_event: int = pg.USEREVENT + 0
+        self.mouse_sensitivity: float = con.MOUSE_SENSITIVITY
         self.map: Optional[Map] = None
         self.player: Optional[Player] = None
         self.ray_caster: Optional[RayCaster] = None

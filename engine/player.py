@@ -73,7 +73,6 @@ class Player:
         self.do_continuous_fire = False
 
     def single_fire_event(self, event: pg.event.Event):
-        # TODO Need a way to do continuous fire
         mouse_fire = event.type == pg.MOUSEBUTTONDOWN and \
                      event.button == 1
         joy_fire = event.type == pg.JOYBUTTONDOWN and \
@@ -83,9 +82,6 @@ class Player:
 
         if (mouse_fire or joy_fire or kbd_fire) and not self.shot and \
                 not self.game.current_weapon.reloading:
-            # self.game.current_weapon.play_sound()
-            # self.shot = True
-            # self.game.current_weapon.reloading = True
             self.start_weapon_fire()
 
         mouse_fire_stop = event.type == pg.MOUSEBUTTONUP and \
@@ -96,9 +92,6 @@ class Player:
                         event.key == pg.K_SPACE
 
         if mouse_fire_stop or joy_fire_stop or kbd_fire_stop:
-            print(f'Fire stop')
-            # self.shot = False
-            # self.game.current_weapon.reloading = False
             self.stop_weapon_fire()
 
     def check_wall(self, x: int, y: int) -> bool:
@@ -180,7 +173,8 @@ class Player:
             pg.mouse.set_pos([con.HALF_WIDTH, con.HALF_HEIGHT])
         self.rel = pg.mouse.get_rel()[0]
         self.rel = max(-con.MOUSE_MAX_REL, min(con.MOUSE_MAX_REL, self.rel))
-        self.angle += self.rel * con.MOUSE_SENSITIVITY * self.game.delta_time
+        mouse_sens = self.game.mouse_sensitivity
+        self.angle += self.rel * mouse_sens * self.game.delta_time
 
     def update(self):
         self.movement()
