@@ -101,7 +101,7 @@ class AnimatedSprite(Sprite):
             self.images = self.load_images(self.path)
 
     @staticmethod
-    def load_images(path: str):
+    def load_images(path: str) -> deque[pg.Surface]:
         print(f'Loading images for sprite: {os.path.dirname(path)}')
         images: deque[pg.Surface] = deque()
         if os.path.exists(path):

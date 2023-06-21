@@ -1,0 +1,49 @@
+{
+  "name": "shotgun",
+  "damage": 50,
+  "scale": 0.4,
+  "animation_time": 90,
+  "ammo_capacity": 20,
+  "ammo_use": 1,
+  "magazine_capacity": 8,
+  "has_continuous_fire": false,
+  "action_sounds": {
+    "fire": "shotgun.wav"
+  },
+  "image": "0.png",
+  "animation_frames": {
+    "A": "0.png",
+    "B": "1.png",
+    "C": "2.png",
+    "D": "3.png",
+    "E": "4.png",
+    "F": "5.png"
+  },
+  "states": {
+    "ready": [
+      {
+        "A": {"ticks": 0}
+      }
+    ],
+    "fire": [
+      {
+        "A": {"ticks": 15}
+      },
+      {
+        "B": {"ticks": 15, "play_sound": "fire"}
+      },
+      {
+        "C": {"ticks":  15}
+      },
+      {
+        "D": {"ticks":  15}
+      },
+      {
+        "E": {"ticks":  15}
+      },
+      {
+        "F": {"ticks":  15}
+      }
+    ]
+  }
+}

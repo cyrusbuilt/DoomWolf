@@ -2,6 +2,7 @@ import os
 import pygame as pg
 from typing import Optional
 
+from engine import constants as con
 from weapon import WeaponClass
 
 
@@ -11,7 +12,7 @@ class Sound:
         pg.mixer.init()
         self.path: str = 'assets/sound'
         self.music_loaded: bool = False
-        self.music_playing: bool = False
+        self.auto_channel: pg.mixer.Channel = pg.mixer.Channel(0)
 
         # TODO make loading theme music more dynamic (like weapon sounds)
         # so that they can be loaded with the levels/maps
@@ -63,22 +64,34 @@ class Sound:
             self.enemy_attack = pg.mixer.Sound(enemy_attack_path)
             self.enemy_attack.set_volume(0.2)
 
+    @property
+    def music_playing(self) -> bool:
+        return pg.mixer.music.get_busy()
+
+    @staticmethod
+    def get_weapon_sounds(weapon_name: str) -> dict[str, pg.mixer.Sound]:
+        sounds: dict[str, pg.mixer.Sound] = {}
+        path = os.path.join(con.WEAPON_SOUND_BASE, weapon_name)
+        for file_name in os.listdir(path):
+            ext = os.path.splitext(file_name)[1]
+            if ext == '.wav' or ext == '.ogg':
+                full_path = os.path.join(path, file_name)
+                sounds[file_name] = pg.mixer.Sound(full_path)
+        return sounds
+
     def play_music(self):
         if self.music_loaded:
             pg.mixer.music.play(-1)
-            self.music_playing = True
         else:
             print(f"ERROR: Can't play music. Not loaded.")
 
     def pause_music(self):
         if self.music_loaded and self.music_playing:
             pg.mixer.music.pause()
-            self.music_playing = False
 
     def resume_music(self):
         if self.music_loaded and not self.music_playing:
             pg.mixer.music.unpause()
-            self.music_playing = True
 
     def get_weapon_sound(self, klass: WeaponClass) -> Optional[pg.mixer.Sound]:
         return self.weapon_sounds.get(klass.value)
