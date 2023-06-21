@@ -1,7 +1,9 @@
 import os
 import pygame as pg
 
+from engine import constants as con
 from engine.weapon import Weapon
+from weapon import weapon
 from weapon import WeaponClass
 from weapon.pistol import Pistol
 from weapon.shotgun import Shotgun
@@ -14,11 +16,17 @@ class WeaponInventory:
 
     def __init__(self, game):
         self.game = game
+        # TODO Need to change this to list[str] and populate it with
+        # inv_weapons.keys() once deprecated and then modify all
+        # pertinent methods to accommodate this.
         self.inventory: list[WeaponClass] = [
             k for k in WeaponClass if k != WeaponClass.NONE
         ]
+        # TODO change this to str once WeaponClass is deprecated.
         self.current: WeaponClass = WeaponClass.SHOTGUN
         self.path: str = 'assets/sprites/weapon'
+
+        self.inv_weapons: dict[str, Weapon] = {}
 
     def get_current(self) -> Weapon:
         img_path = os.path.join(self.path, self.current.value, '0.png')
@@ -32,6 +40,15 @@ class WeaponInventory:
             return SuperShotgun(self.game, img_path)
         if self.current == WeaponClass.CHAIN_GUN:
             return ChainGun(self.game, img_path)
+
+    def load_weapons(self):
+        self.inv_weapons = {}
+        for file in os.listdir(con.WEAPON_DATA_BASE):
+            ext = os.path.splitext(file)[1]
+            if ext == '.json':
+                full_path = os.path.join(con.WEAPON_DATA_BASE, file)
+                wpn = weapon(self.game, full_path).assembled
+                self.inv_weapons[wpn.name] = wpn
 
     def get_next_weapon_index(self) -> int:
         current_index = self.inventory.index(self.current)
@@ -72,14 +89,14 @@ class WeaponInventory:
         self.next()
         self.inventory.pop(current_index)
 
-    def pickup(self, weapon: WeaponClass):
+    def pickup(self, wpn: WeaponClass):
         exists = True
         try:
-            self.inventory.index(weapon)
+            self.inventory.index(wpn)
         except ValueError:
             exists = False
 
         if not exists:
-            self.inventory.append(weapon)
+            self.inventory.append(wpn)
             self.current = weapon
             self.game.current_weapon = self.get_current()

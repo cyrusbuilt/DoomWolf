@@ -21,6 +21,7 @@ class DoomWolf(Game):
     def new_game(self):
         super().new_game()
         self.settings.load_settings()
+        self.weapon_inventory.load_weapons()
         self.mouse_sensitivity = self.settings.mouse_sensitivity
         self.current_weapon = self.weapon_inventory.get_current()
         self.sound.set_music_volume(self.settings.music_volume)

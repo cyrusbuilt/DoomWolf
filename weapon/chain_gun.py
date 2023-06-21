@@ -10,7 +10,7 @@ class ChainGun(WeaponBase):
                  scale: float = 3.0,
                  animation_time: int = 60):
         super().__init__(game, path, scale, animation_time)
-        self.weapon_class = WeaponClass.SUPER_SHOTGUN
+        self.weapon_class = WeaponClass.CHAIN_GUN
         self.sound = game.sound.get_weapon_sound(self.weapon_class)
         self.damage = 20
         self.has_continuous_fire = True

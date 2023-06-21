@@ -1,4 +1,19 @@
 import math
+import os
+
+ASSETS_BASE = "assets"
+SOUND_BASE = os.path.join(ASSETS_BASE, 'sound')
+WEAPON_SOUND_BASE = os.path.join(SOUND_BASE, "weapon")
+SPRITE_BASE = os.path.join(ASSETS_BASE, "sprites")
+ANIM_SPRITE_BASE = os.path.join(SPRITE_BASE, "animated_sprites")
+ENEMY_SPRITE_BASE = os.path.join(SPRITE_BASE, "enemy")
+STATIC_SPRITE_BASE = os.path.join(SPRITE_BASE, "static")
+WEAPON_SPRITE_BASE = os.path.join(SPRITE_BASE, "weapon")
+TEXTURE_BASE = os.path.join(ASSETS_BASE, "textures")
+WALL_TEXTURE_BASE = os.path.join(TEXTURE_BASE, "walls")
+DATA_BASE = "data"
+MAP_DATA_BASE = os.path.join(DATA_BASE, "maps")
+WEAPON_DATA_BASE = os.path.join(DATA_BASE, "weapons")
 
 DEBUG = False
 GOD_MODE = False
