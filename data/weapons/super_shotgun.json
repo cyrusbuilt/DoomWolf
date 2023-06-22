@@ -1,23 +1,21 @@
 {
-  "name": "shotgun",
-  "damage": 50,
-  "scale": 0.4,
+  "name": "super_shotgun",
+  "damage": 70,
+  "scale": 3.5,
   "animation_time": 90,
-  "ammo_capacity": 20,
-  "ammo_use": 1,
-  "magazine_capacity": 8,
+  "ammo_capacity": 40,
+  "ammo_use": 2,
+  "magazine_capacity": 10,
   "has_continuous_fire": false,
   "action_sounds": {
-    "fire": "shotgun.wav"
+    "fire": "super_shotgun.ogg"
   },
   "image": "0.png",
   "animation_frames": {
     "A": "0.png",
     "B": "1.png",
     "C": "2.png",
-    "D": "3.png",
-    "E": "4.png",
-    "F": "5.png"
+    "D": "3.png"
   },
   "states": {
     "ready": [
@@ -37,12 +35,6 @@
       },
       {
         "D": {"ticks": 15}
-      },
-      {
-        "E": {"ticks": 15}
-      },
-      {
-        "F": {"ticks": 15}
       }
     ]
   }

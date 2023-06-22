@@ -54,6 +54,7 @@ class Weapon(AnimatedSprite):
         self.reloading: bool = False
         self.has_continuous_fire: bool = False
         self.frame_counter: int = 0
+        # TODO Damage (actual) should be = (damage x ammo_use)
         self.damage: int = 50
         self.weapon_pos = 0
         self.num_images: int = 0
@@ -73,18 +74,9 @@ class Weapon(AnimatedSprite):
         # rate of fire, magazine capacity, etc.
         # TODO Need to support sounds for multiple events:
         # Fire, reload start, reload stop, empty, idle, hit, etc
-
-        if self.image:
-            s_w = self.image.get_width() * scale
-            s_h = self.image.get_height() * scale
-            self.images = deque([
-                pg.transform.smoothscale(img, (s_w, s_h))
-                for img in self.images
-            ])
-            self.num_images = len(self.images)
-            i_w = con.HALF_WIDTH - self.images[0].get_width() // 2
-            i_h = con.HEIGHT - self.images[0].get_height()
-            self.weapon_pos = (i_w, i_h)
+        self._idle_prev: int = 0
+        self._idle_sound_delay: int = 0
+        self._has_idle_sound: bool = False
 
     @property
     def magazine_count(self) -> int:
@@ -94,6 +86,24 @@ class Weapon(AnimatedSprite):
                 mags += (self.total_ammo / self.magazine_capacity)
             return mags
         return 0
+
+    def setup(self):
+        if self.image:
+            s_w = self.image.get_width() * self.SPRITE_SCALE
+            s_h = self.image.get_height() * self.SPRITE_SCALE
+            self.images = deque([
+                pg.transform.smoothscale(img, (s_w, s_h))
+                for img in self.images
+            ])
+            self.num_images = len(self.images)
+            i_w = con.HALF_WIDTH - self.images[0].get_width() // 2
+            i_h = con.HEIGHT - self.images[0].get_height()
+            self.weapon_pos = (i_w, i_h)
+
+        self._has_idle_sound = self.sounds.get("idle") is not None
+        if self._has_idle_sound:
+            self._idle_prev = pg.time.get_ticks()
+            self._idle_sound_delay = 700
 
     def animate_shot(self):
         if self.reloading:
@@ -112,12 +122,17 @@ class Weapon(AnimatedSprite):
     def update(self):
         self.check_animation_time()
         self.animate_shot()
-
-    def play_sound(self):
-        if self.sound:
-            self.sound.play()
+        if self._has_idle_sound and not self.reloading:
+            time_now = pg.time.get_ticks()
+            time_delta = time_now - self._idle_prev
+            if time_delta > self._idle_sound_delay:
+                self._idle_prev = time_now
+                self.play_action_sound('idle')
 
     def play_action_sound(self, action: str):
         action_sound = self.sounds.get(action)
         if action_sound:
             action_sound.play()
+
+    def play_attack_sound(self):
+        self.play_action_sound('fire')
