@@ -10,4 +10,5 @@ class DoomWolfObjectHandler(ObjectHandler):
         super().__init__(game)
 
     def build_enemy_npc(self, game, klass: EnemyClass, pos: tuple[float, float]) -> Enemy:
+        # TODO replace this with logic to load enemy descriptor via factory method
         return EnemyBuilder.build_enemy(game, klass, pos)

@@ -22,7 +22,7 @@ class WeaponInventory:
             ext = os.path.splitext(file)[1]
             if ext == '.json':
                 full_path = os.path.join(con.WEAPON_DATA_BASE, file)
-                wpn = weapon(self.game, full_path).assembled
+                wpn = weapon(self.game, full_path).build()
                 self.inv_weapons[wpn.name] = wpn
 
         if self.inv_weapons:

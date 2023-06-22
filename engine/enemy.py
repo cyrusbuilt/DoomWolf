@@ -1,3 +1,4 @@
+from collections import deque
 import math
 import pygame as pg
 from random import randint, random
@@ -17,11 +18,12 @@ class Enemy(AnimatedSprite):
                  shift: float = 0.38,
                  animation_time: int = 180):
         super().__init__(game, path, pos, scale, shift, animation_time)
-        self.attack_images = self.load_images(self.path + '/attack')
-        self.death_images = self.load_images(self.path + '/death')
-        self.idle_images = self.load_images(self.path + '/idle')
-        self.pain_images = self.load_images(self.path + '/pain')
-        self.walk_images = self.load_images(self.path + '/walk')
+        self.name: str = ''
+        self.attack_images: deque[pg.Surface] = self.load_images(self.path + '/attack')
+        self.death_images: deque[pg.Surface] = self.load_images(self.path + '/death')
+        self.idle_images: deque[pg.Surface] = self.load_images(self.path + '/idle')
+        self.pain_images: deque[pg.Surface] = self.load_images(self.path + '/pain')
+        self.walk_images: deque[pg.Surface] = self.load_images(self.path + '/walk')
         self.attack_dist: int = randint(3, 6)
         self.speed: float = 0.03
         self.size: int = 20
@@ -33,6 +35,10 @@ class Enemy(AnimatedSprite):
         self.ray_cast_value: bool = False
         self.frame_counter: int = 0
         self.player_search_trigger: bool = False
+        self.spawn_weight: int = 0
+        self.sounds: dict[str, pg.mixer.Sound] = {}
+
+        # TODO Deprecated. Remove this once we switch to the new enemy system.
         self.pain_sound: Optional[pg.mixer.Sound] = game.sound.enemy_pain
         self.death_sound: Optional[pg.mixer.Sound] = game.sound.enemy_death
         self.attack_sound: Optional[pg.mixer.Sound] = game.sound.enemy_attack
@@ -41,12 +47,12 @@ class Enemy(AnimatedSprite):
     def map_pos(self):
         return int(self.x), int(self.y)
 
-    def update(self):
-        self.check_animation_time()
-        self.refresh_sprite()
-        self.think()
-        if con.DEBUG:
-            self.draw_ray_cast()
+    def setup(self):
+        self.attack_images = self.load_images(self.path + '/attack')
+        self.death_images = self.load_images(self.path + '/death')
+        self.idle_images = self.load_images(self.path + '/idle')
+        self.pain_images = self.load_images(self.path + '/pain')
+        self.walk_images = self.load_images(self.path + '/walk')
 
     def check_wall(self, x: int, y: int) -> bool:
         return (x, y) not in self.game.map.world_map
@@ -57,17 +63,25 @@ class Enemy(AnimatedSprite):
         if self.check_wall(int(self.x), int(self.y + dy * self.size)):
             self.y += dy
 
+    # TODO Deprecated.
     def play_pain_sound(self):
         if self.pain_sound:
             self.pain_sound.play()
 
+    # TODO Deprecated.
     def play_death_sound(self):
         if self.death_sound:
             self.death_sound.play()
 
+    # TODO Deprecated.
     def play_attack_sound(self):
         if self.attack_sound:
             self.attack_sound.play()
+
+    def play_action_sound(self, action: str):
+        action_sound = self.sounds.get(action)
+        if action_sound:
+            action_sound.play()
 
     def movement(self):
         get_path = self.game.path_finder.get_path
@@ -219,3 +233,10 @@ class Enemy(AnimatedSprite):
                 self.animate(self.idle_images)
         else:
             self.animate_death()
+
+    def update(self):
+        self.check_animation_time()
+        self.refresh_sprite()
+        self.think()
+        if con.DEBUG:
+            self.draw_ray_cast()

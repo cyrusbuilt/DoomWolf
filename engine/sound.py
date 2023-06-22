@@ -9,7 +9,7 @@ class Sound:
 
     def __init__(self):
         pg.mixer.init()
-        self.path: str = 'assets/sound'
+        self.path: str = con.SOUND_BASE
         self.music_loaded: bool = False
         self.auto_channel: pg.mixer.Channel = pg.mixer.Channel(0)
 
@@ -52,16 +52,26 @@ class Sound:
         return pg.mixer.music.get_busy()
 
     @staticmethod
-    def get_weapon_sounds(weapon_name: str) -> dict[str, pg.mixer.Sound]:
-        print(f"Loading sounds for weapon '{weapon_name}'...")
+    def _load_sounds_for_path(path: str) -> dict[str, pg.mixer.Sound]:
         sounds: dict[str, pg.mixer.Sound] = {}
-        path = os.path.join(con.WEAPON_SOUND_BASE, weapon_name)
         for file_name in os.listdir(path):
             ext = os.path.splitext(file_name)[1]
             if ext == '.wav' or ext == '.ogg':
                 full_path = os.path.join(path, file_name)
                 sounds[file_name] = pg.mixer.Sound(full_path)
         return sounds
+
+    @staticmethod
+    def get_weapon_sounds(weapon_name: str) -> dict[str, pg.mixer.Sound]:
+        print(f"Loading sounds for weapon '{weapon_name}'...")
+        path = os.path.join(con.WEAPON_SOUND_BASE, weapon_name)
+        return Sound._load_sounds_for_path(path)
+
+    @staticmethod
+    def get_enemy_sounds(enemy_name: str) -> dict[str, pg.mixer.Sound]:
+        print(f"Loading sounds for enemy '{enemy_name}'...")
+        path = os.path.join(con.ENEMY_SOUND_BASE, enemy_name)
+        return Sound._load_sounds_for_path(path)
 
     def play_music(self):
         if self.music_loaded:

@@ -2,6 +2,7 @@ from random import choices, randrange
 import pygame as pg
 from typing import Optional
 
+from engine import constants as con
 from engine.enemy import Enemy
 from engine.sprite import AnimatedSprite
 from engine.sprite import Sprite
@@ -14,16 +15,23 @@ class ObjectHandler:
         self.game = game
         self.sprite_list: list[Sprite] = []
         self.enemy_list: list[Enemy] = []
-        self.enemy_sprite_path: str = 'assets/sprites/enemy'
-        self.static_sprite_path: str = 'assets/sprites/static'
-        self.anim_sprite_path: str = 'assets/sprites/animated_sprites'
+        self.enemy_sprite_path: str = con.ENEMY_SPRITE_BASE
+        self.static_sprite_path: str = con.STATIC_SPRITE_BASE
+        self.anim_sprite_path: str = con.ANIM_SPRITE_BASE
         self.enemy_positions: dict[tuple[int, int]] = {}
+        self.restricted_area = {(i, j) for i in range(10) for j in range(10)}
+
+        # TODO We want to eventually load this from map data
         self.enemy_count: int = 20
+
+        # TODO We want to replace this with a list of strings representing enemy names
         self.enemy_types: list[EnemyClass] = [
             EnemyClass.SOLDIER, EnemyClass.CACO_DEMON, EnemyClass.CYBER_DEMON
         ]
+        # TODO Populate this with weights loaded from enemy descriptors
         self.weights: list[int] = [70, 20, 10]
-        self.restricted_area = {(i, j) for i in range(10) for j in range(10)}
+
+        # TODO Maybe we need a setup/load function that sets up the enemy_types and weights
 
     def build_enemy_npc(self, game, klass: EnemyClass, pos: tuple[float, float]) -> Enemy:
         return Enemy(self.game, '')
@@ -47,26 +55,12 @@ class ObjectHandler:
             enemy = self.build_enemy_npc(self.game, npc_type, (x + 0.5, y + 0.5))
             self.add_enemy(enemy)
 
-        # x = randrange(self.game.map.cols)
-        # y = randrange(self.game.map.rows)
-        # pos = x, y
-        # pos_in_map = pos in self.game.map.world_map
-        # pos_in_res_area = pos in self.restricted_area
-        # while pos_in_map or pos_in_res_area:
-        #     x = randrange(self.game.map.cols)
-        #     y = randrange(self.game.map.rows)
-        #     pos = x, y
-        #     pos_in_map = pos in self.game.map.world_map
-        #     pos_in_res_area = pos in self.restricted_area
-        #
-        # self.add_enemy(CacoDemon(self.game, pos=(x + 0.5, y + 0.5)))
-
     def spawn_sprites(self):
         self.sprite_list = []
         # TODO this is just a convenience method for now that adds some sprites
         # but we'll really want to load sprites with the map/level
-        green_light = 'assets/sprites/animated_sprites/green_light/0.png'
-        red_light = 'assets/sprites/animated_sprites/red_light/0.png'
+        green_light = f'{self.anim_sprite_path}/green_light/0.png'
+        red_light = f'{self.anim_sprite_path}/red_light/0.png'
         self.add_sprite(AnimatedSprite(self.game, green_light))
         self.add_sprite(AnimatedSprite(self.game, green_light, (1.5, 1.5)))
         self.add_sprite(AnimatedSprite(self.game, green_light, (1.5, 7.5)))
