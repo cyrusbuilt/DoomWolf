@@ -3,7 +3,6 @@ import copy
 import json
 import os
 import pygame as pg
-from enum import Enum
 
 from engine import constants as con
 from engine.weapon import Weapon
@@ -65,10 +64,6 @@ class WeaponBuilder:
 
     @copy_method
     def set_animation_frames(self, frames: dict[str, str]):
-        # TODO Not sure if we should keep this or not. We need this
-        # temporarily for sure until we can define custom action
-        # animations, etc. But on the other hand, this might be
-        # nice to have regardless since it gives a good fall back.
         if frames:
             name = self.the_weapon.name
             img_dir = os.path.join(con.WEAPON_SPRITE_BASE, name)
@@ -83,32 +78,35 @@ class WeaponBuilder:
             self.the_weapon.images = deque(
                 [*self.the_weapon.animation_frames.values()])
 
-        # TODO Duplicated from weapon.py, move to some kind of model update
-        if self.the_weapon.image:
-            scale = self.the_weapon.SPRITE_SCALE
-            s_w = self.the_weapon.image.get_width() * scale
-            s_h = self.the_weapon.image.get_height() * scale
-            self.the_weapon.images = deque([
-                pg.transform.smoothscale(img, (s_w, s_h))
-                for img in self.the_weapon.images
-            ])
-            self.the_weapon.num_images = len(self.the_weapon.images)
-            i_w = con.HALF_WIDTH - self.the_weapon.images[0].get_width() // 2
-            i_h = con.HEIGHT - self.the_weapon.images[0].get_height()
-            self.the_weapon.weapon_pos = (i_w, i_h)
-
         return self
 
     @property
     def assembled(self):
         # NOTE: If needed, we can call any additional initialization logic here
+        self.the_weapon.setup()
         return self.the_weapon
 
 
 def weapon(game, data_path: str) -> WeaponBuilder:
     if os.path.exists(data_path):
+        print(f'Loading weapon descriptor {data_path} ...')
         with open(data_path, encoding='UTF-8') as file:
             weapon_dict = json.load(file)
+            # TODO we probably want some additional parser/validation logic
+            # here to validate the JSON file. Ideally, we don't want the game
+            # to crash when loading these. We're better off using sane defaults
+            # for missing values where we can and anything we can't (like assets)
+            # then we should throw an exception that gets handled further up the
+            # stack and reject the JSON file altogether. Better to have a weapon
+            # that doesn't behave or render right or doesn't load at all, than
+            # to crash the game. Also, we should probably have a default embedded
+            # weapon of some kind (fists? pistol?) that can't be removed so that
+            # if no weapon descriptors are found at startup, we can throw a
+            # non-fatal error or warning indicating such, but the game can still
+            # launch and the user can still play albeit with only one weapon.
+            # Probably want to do the same thing with maps, power-ups, enemies,
+            # etc.
+
             name = weapon_dict.get('name')
             # TODO Error if no name?
 
@@ -158,34 +156,3 @@ def weapon(game, data_path: str) -> WeaponBuilder:
                 .set_animation_frames(frames)
 
             return builder
-
-
-# TODO this is deprecated once the new weapon system is fully implemented.
-class WeaponClass(Enum):
-    PISTOL = 'pistol'
-    SHOTGUN = 'shotgun'
-    CHAINSAW = 'chainsaw'
-    SUPER_SHOTGUN = 'super_shotgun'
-    CHAIN_GUN = 'chain_gun'
-    NONE = 'none'
-
-
-# TODO This is deprecated once the new weapon system is fully implemented.
-class WeaponBase(Weapon):
-    # TODO Need to completely rethink this. Instead of adding new members
-    # to the enum and making new subclasses for each new type of weapon,
-    # maybe just have the generic weapon class support all variables,
-    # event hooks, etc and then declare it's type as string (for unique
-    # identification and to help locate assets) and then load all the
-    # variables from a JSON file. This will making modding easier and
-    # make introducing new weapons as easy as writing a new JSON file.
-    # We'll keep using the existing system for now though to help determine
-    # what all needs to go into the JSON schema.
-
-    def __init__(self,
-                 game,
-                 path: str,
-                 scale: float = 0.4,
-                 animation_time: int = 90):
-        super().__init__(game, path, scale, animation_time)
-        self.weapon_class: WeaponClass = WeaponClass.NONE

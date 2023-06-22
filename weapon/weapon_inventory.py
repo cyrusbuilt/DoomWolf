@@ -4,42 +4,17 @@ import pygame as pg
 from engine import constants as con
 from engine.weapon import Weapon
 from weapon import weapon
-from weapon import WeaponClass
-from weapon.pistol import Pistol
-from weapon.shotgun import Shotgun
-from weapon.chain_gun import ChainGun
-from weapon.chainsaw import Chainsaw
-from weapon.super_shotgun import SuperShotgun
 
 
 class WeaponInventory:
 
     def __init__(self, game):
         self.game = game
-        # TODO Need to change this to list[str] and populate it with
-        # inv_weapons.keys() once deprecated and then modify all
-        # pertinent methods to accommodate this.
-        self.inventory: list[WeaponClass] = [
-            k for k in WeaponClass if k != WeaponClass.NONE
-        ]
-        # TODO change this to str once WeaponClass is deprecated.
-        self.current: WeaponClass = WeaponClass.SHOTGUN
-        self.path: str = 'assets/sprites/weapon'
-
         self.inv_weapons: dict[str, Weapon] = {}
+        self.current_weapon: str = ''
 
     def get_current(self) -> Weapon:
-        img_path = os.path.join(self.path, self.current.value, '0.png')
-        if self.current == WeaponClass.SHOTGUN:
-            return Shotgun(self.game, img_path)
-        if self.current == WeaponClass.CHAINSAW:
-            return Chainsaw(self.game, img_path)
-        if self.current == WeaponClass.PISTOL:
-            return Pistol(self.game, img_path)
-        if self.current == WeaponClass.SUPER_SHOTGUN:
-            return SuperShotgun(self.game, img_path)
-        if self.current == WeaponClass.CHAIN_GUN:
-            return ChainGun(self.game, img_path)
+        return self.inv_weapons[self.current_weapon]
 
     def load_weapons(self):
         self.inv_weapons = {}
@@ -50,12 +25,16 @@ class WeaponInventory:
                 wpn = weapon(self.game, full_path).assembled
                 self.inv_weapons[wpn.name] = wpn
 
+        if self.inv_weapons:
+            self.current_weapon = next(iter(self.inv_weapons))
+
     def get_next_weapon_index(self) -> int:
-        current_index = self.inventory.index(self.current)
+        weapon_names = list(self.inv_weapons.keys())
+        current_index = weapon_names.index(self.current_weapon)
         next_index = current_index
-        if current_index < len(self.inventory) - 1:
+        if current_index < len(weapon_names) - 1:
             next_index += 1
-        elif current_index + 1 >= len(self.inventory):
+        elif current_index + 1 >= len(weapon_names):
             next_index = 0
 
         if next_index != current_index:
@@ -66,8 +45,9 @@ class WeaponInventory:
     def next(self):
         next_index = self.get_next_weapon_index()
         if next_index > -1:
-            self.current = self.inventory[next_index]
-            print(f'Switching weapon to: {self.current.value}')
+            weapon_names = list(self.inv_weapons.keys())
+            self.current_weapon = weapon_names[next_index]
+            print(f'Switching weapon to: {self.current_weapon}')
             self.game.current_weapon = self.get_current()
 
     def inventory_event(self, event: pg.event.Event):
@@ -85,18 +65,12 @@ class WeaponInventory:
             # Can't switch weapons since this is the only weapon we have.
             return
 
-        current_index = self.inventory.index(self.current)
+        current_name = self.current_weapon
         self.next()
-        self.inventory.pop(current_index)
+        self.inv_weapons.pop(current_name)
 
-    def pickup(self, wpn: WeaponClass):
-        exists = True
-        try:
-            self.inventory.index(wpn)
-        except ValueError:
-            exists = False
-
-        if not exists:
-            self.inventory.append(wpn)
-            self.current = weapon
+    def pickup(self, wpn: Weapon):
+        if self.inv_weapons.get(wpn.name) is not None:
+            self.inv_weapons[wpn.name] = wpn
+            self.current_weapon = wpn.name
             self.game.current_weapon = self.get_current()

@@ -1,23 +1,22 @@
 {
-  "name": "shotgun",
-  "damage": 50,
-  "scale": 0.4,
-  "animation_time": 90,
-  "ammo_capacity": 20,
+  "name": "chainsaw",
+  "damage": 30,
+  "scale": 0.5,
+  "animation_time": 200,
+  "ammo_capacity": -1,
   "ammo_use": 1,
-  "magazine_capacity": 8,
+  "magazine_capacity": -1,
   "has_continuous_fire": false,
   "action_sounds": {
-    "fire": "shotgun.wav"
+    "fire": "chainsaw.wav",
+    "idle": "chainsaw_idle.wav"
   },
   "image": "0.png",
   "animation_frames": {
     "A": "0.png",
     "B": "1.png",
     "C": "2.png",
-    "D": "3.png",
-    "E": "4.png",
-    "F": "5.png"
+    "D": "3.png"
   },
   "states": {
     "ready": [
@@ -37,12 +36,6 @@
       },
       {
         "D": {"ticks": 15}
-      },
-      {
-        "E": {"ticks": 15}
-      },
-      {
-        "F": {"ticks": 15}
       }
     ]
   }

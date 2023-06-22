@@ -3,7 +3,6 @@ import pygame as pg
 from typing import Optional
 
 from engine import constants as con
-from weapon import WeaponClass
 
 
 class Sound:
@@ -22,22 +21,6 @@ class Sound:
             pg.mixer.music.load(self.music_path)
             pg.mixer.music.set_volume(0.4)
             self.music_loaded = True
-
-        print('Loading weapon sounds...')
-        self.weapon_sounds: dict[str, pg.mixer.Sound] = {}
-        names = [w.value for w in WeaponClass if w != WeaponClass.NONE]
-        for name in names:
-            sound_path: Optional[str] = None
-            weapon_path = os.path.join(self.path, 'weapon')
-            sound_path_wav = os.path.join(weapon_path, f'{name}.wav')
-            sound_path_ogg = os.path.join(weapon_path, f'{name}.ogg')
-            if os.path.exists(sound_path_wav):
-                sound_path = sound_path_wav
-            if os.path.exists(sound_path_ogg):
-                sound_path = sound_path_ogg
-
-            if sound_path:
-                self.weapon_sounds[name] = pg.mixer.Sound(sound_path)
 
         self.player_pain: Optional[pg.mixer.Sound] = None
         player_pain_path = os.path.join(self.path, 'player_pain.wav')
@@ -70,6 +53,7 @@ class Sound:
 
     @staticmethod
     def get_weapon_sounds(weapon_name: str) -> dict[str, pg.mixer.Sound]:
+        print(f"Loading sounds for weapon '{weapon_name}'...")
         sounds: dict[str, pg.mixer.Sound] = {}
         path = os.path.join(con.WEAPON_SOUND_BASE, weapon_name)
         for file_name in os.listdir(path):
@@ -92,9 +76,6 @@ class Sound:
     def resume_music(self):
         if self.music_loaded and not self.music_playing:
             pg.mixer.music.unpause()
-
-    def get_weapon_sound(self, klass: WeaponClass) -> Optional[pg.mixer.Sound]:
-        return self.weapon_sounds.get(klass.value)
 
     def set_music_volume(self, volume: float):
         if self.music_loaded:
