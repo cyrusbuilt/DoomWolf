@@ -1,20 +1,11 @@
 from collections import deque
-import copy
 import json
 import os
 import pygame as pg
 
 from engine import constants as con
 from engine.weapon import Weapon
-
-
-def copy_method(method):
-    def _inner(self, *args, **kwargs):
-        clone = copy.copy(self)
-        method(clone, *args, **kwargs)
-        return clone
-
-    return _inner
+from game.decorators import copy_method
 
 
 class WeaponBuilder:
@@ -80,8 +71,7 @@ class WeaponBuilder:
 
         return self
 
-    @property
-    def assembled(self):
+    def build(self) -> Weapon:
         # NOTE: If needed, we can call any additional initialization logic here
         self.the_weapon.setup()
         return self.the_weapon
@@ -125,6 +115,8 @@ def weapon(game, data_path: str) -> WeaponBuilder:
             ammo_use = weapon_dict.get('ammo_use', 1)
             mag_cap = weapon_dict.get('magazine_capacity', 0)
 
+            # TODO We should consider playing different classes of sounds
+            # via dedicated channels (ie. voice, player weapon, enemy_weapon, etc)
             sounds: dict[str, pg.mixer.Sound] = {}
             action_sounds = weapon_dict.get('action_sounds')
             if action_sounds:
@@ -134,7 +126,7 @@ def weapon(game, data_path: str) -> WeaponBuilder:
                     if action_file in weapon_sounds:
                         sounds[action] = weapon_sounds.get(action_file)
 
-            frames: dict[str, pg.Surface] = {}
+            frames: dict[str, str] = {}
             animation_frames = weapon_dict.get('animation_frames')
             if animation_frames:
                 frames = animation_frames

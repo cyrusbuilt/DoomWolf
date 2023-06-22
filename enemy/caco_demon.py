@@ -13,7 +13,7 @@ class CacoDemon(EnemyBase):
                  animation_time: int = 250):
         super().__init__(game, path, pos, scale, shift, animation_time)
         self.enemy_class = EnemyClass.CACO_DEMON
-        self.attack_dist = 1.0
+        self.attack_dist = 1
         self.health = 150
         self.attack_damage = 25
         self.speed = 0.05

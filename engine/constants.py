@@ -3,6 +3,7 @@ import os
 
 ASSETS_BASE = "assets"
 SOUND_BASE = os.path.join(ASSETS_BASE, 'sound')
+ENEMY_SOUND_BASE = os.path.join(SOUND_BASE, "enemy")
 WEAPON_SOUND_BASE = os.path.join(SOUND_BASE, "weapon")
 SPRITE_BASE = os.path.join(ASSETS_BASE, "sprites")
 ANIM_SPRITE_BASE = os.path.join(SPRITE_BASE, "animated_sprites")
@@ -13,6 +14,7 @@ TEXTURE_BASE = os.path.join(ASSETS_BASE, "textures")
 WALL_TEXTURE_BASE = os.path.join(TEXTURE_BASE, "walls")
 DATA_BASE = "data"
 MAP_DATA_BASE = os.path.join(DATA_BASE, "maps")
+ENEMY_DATA_BASE = os.path.join(DATA_BASE, "enemies")
 WEAPON_DATA_BASE = os.path.join(DATA_BASE, "weapons")
 
 DEBUG = False

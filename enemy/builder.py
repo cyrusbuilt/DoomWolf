@@ -7,6 +7,7 @@ from enemy.cyber_demon import CyberDemon
 from enemy.soldier import Soldier
 
 
+# TODO Deprecated. Remove this whole module once we switch to the new enemy system.
 class EnemyBuilder:
 
     @staticmethod

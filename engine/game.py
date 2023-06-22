@@ -108,6 +108,8 @@ class Game:
         pass
 
     def check_events(self):
+        # TODO I'd like to gather up all the input-related stuff into an input manager.
+        # Right now I've got shit scattered scattered across game, player, and weapon_inventory
         self.global_trigger = False
         for event in pg.event.get():
             escaping = False
