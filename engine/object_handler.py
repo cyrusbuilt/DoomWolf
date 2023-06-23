@@ -6,7 +6,6 @@ from engine import constants as con
 from engine.enemy import Enemy
 from engine.sprite import AnimatedSprite
 from engine.sprite import Sprite
-from enemy import EnemyClass
 
 
 class ObjectHandler:
@@ -24,16 +23,13 @@ class ObjectHandler:
         # TODO We want to eventually load this from map data
         self.enemy_count: int = 20
 
-        # TODO We want to replace this with a list of strings representing enemy names
-        self.enemy_types: list[EnemyClass] = [
-            EnemyClass.SOLDIER, EnemyClass.CACO_DEMON, EnemyClass.CYBER_DEMON
-        ]
-        # TODO Populate this with weights loaded from enemy descriptors
-        self.weights: list[int] = [70, 20, 10]
+        self.enemy_types: list[str] = []
+        self.weights: list[int] = []
 
-        # TODO Maybe we need a setup/load function that sets up the enemy_types and weights
+    def setup(self):
+        pass
 
-    def build_enemy_npc(self, game, klass: EnemyClass, pos: tuple[float, float]) -> Enemy:
+    def build_enemy_npc(self, game, klass: str, pos: tuple[float, float]) -> Enemy:
         return Enemy(self.game, '')
 
     def spawn_enemies(self):
@@ -83,7 +79,10 @@ class ObjectHandler:
         self.add_sprite(AnimatedSprite(self.game, green_light, (14.5, 30.5)))
         self.add_sprite(AnimatedSprite(self.game, green_light, (1.5, 30.5)))
         self.add_sprite(AnimatedSprite(self.game, green_light, (1.5, 24.5)))
-        pass
+
+    def spawn_entities(self):
+        self.spawn_sprites()
+        self.spawn_enemies()
 
     def check_win(self):
         if not len(self.enemy_positions):

@@ -28,25 +28,6 @@ class Sound:
             print(f'Loading player pain sound: {player_pain_path}')
             self.player_pain = pg.mixer.Sound(player_pain_path)
 
-        self.enemy_pain: Optional[pg.mixer.Sound] = None
-        enemy_pain_path = os.path.join(self.path, 'npc_pain.wav')
-        if os.path.exists(enemy_pain_path):
-            print(f'Loading enemy pain sound: {enemy_pain_path}')
-            self.enemy_pain = pg.mixer.Sound(enemy_pain_path)
-
-        self.enemy_death: Optional[pg.mixer.Sound] = None
-        enemy_death_path = os.path.join(self.path, 'npc_death.wav')
-        if os.path.exists(enemy_death_path):
-            print(f'Loading enemy death sound: {enemy_death_path}')
-            self.enemy_death = pg.mixer.Sound(enemy_death_path)
-
-        self.enemy_attack: Optional[pg.mixer.Sound] = None
-        enemy_attack_path = os.path.join(self.path, 'npc_attack.wav')
-        if os.path.exists(enemy_attack_path):
-            print(f'Loading enemy attack sound: {enemy_attack_path}')
-            self.enemy_attack = pg.mixer.Sound(enemy_attack_path)
-            self.enemy_attack.set_volume(0.2)
-
     @property
     def music_playing(self) -> bool:
         return pg.mixer.music.get_busy()

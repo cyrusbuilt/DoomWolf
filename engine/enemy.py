@@ -2,7 +2,6 @@ from collections import deque
 import math
 import pygame as pg
 from random import randint, random
-from typing import Optional
 
 from engine import constants as con
 from engine.sprite import AnimatedSprite
@@ -19,11 +18,11 @@ class Enemy(AnimatedSprite):
                  animation_time: int = 180):
         super().__init__(game, path, pos, scale, shift, animation_time)
         self.name: str = ''
-        self.attack_images: deque[pg.Surface] = self.load_images(self.path + '/attack')
-        self.death_images: deque[pg.Surface] = self.load_images(self.path + '/death')
-        self.idle_images: deque[pg.Surface] = self.load_images(self.path + '/idle')
-        self.pain_images: deque[pg.Surface] = self.load_images(self.path + '/pain')
-        self.walk_images: deque[pg.Surface] = self.load_images(self.path + '/walk')
+        self.attack_images: deque[pg.Surface] = deque()
+        self.death_images: deque[pg.Surface] = deque()
+        self.idle_images: deque[pg.Surface] = deque()
+        self.pain_images: deque[pg.Surface] = deque()
+        self.walk_images: deque[pg.Surface] = deque()
         self.attack_dist: int = randint(3, 6)
         self.speed: float = 0.03
         self.size: int = 20
@@ -37,11 +36,6 @@ class Enemy(AnimatedSprite):
         self.player_search_trigger: bool = False
         self.spawn_weight: int = 0
         self.sounds: dict[str, pg.mixer.Sound] = {}
-
-        # TODO Deprecated. Remove this once we switch to the new enemy system.
-        self.pain_sound: Optional[pg.mixer.Sound] = game.sound.enemy_pain
-        self.death_sound: Optional[pg.mixer.Sound] = game.sound.enemy_death
-        self.attack_sound: Optional[pg.mixer.Sound] = game.sound.enemy_attack
 
     @property
     def map_pos(self):
@@ -62,21 +56,6 @@ class Enemy(AnimatedSprite):
             self.x += dx
         if self.check_wall(int(self.x), int(self.y + dy * self.size)):
             self.y += dy
-
-    # TODO Deprecated.
-    def play_pain_sound(self):
-        if self.pain_sound:
-            self.pain_sound.play()
-
-    # TODO Deprecated.
-    def play_death_sound(self):
-        if self.death_sound:
-            self.death_sound.play()
-
-    # TODO Deprecated.
-    def play_attack_sound(self):
-        if self.attack_sound:
-            self.attack_sound.play()
 
     def play_action_sound(self, action: str):
         action_sound = self.sounds.get(action)
@@ -102,7 +81,7 @@ class Enemy(AnimatedSprite):
 
     def attack(self):
         if self.animation_trigger:
-            self.play_attack_sound()
+            self.play_action_sound('attack')
             if random() < self.accuracy:
                 self.game.player.take_damage(self.attack_damage)
 
@@ -122,14 +101,14 @@ class Enemy(AnimatedSprite):
     def check_health(self):
         if self.health < 1:
             self.alive = False
-            self.play_death_sound()
+            self.play_action_sound('death')
 
     def check_damage(self):
         if self.ray_cast_value and self.game.player.shot:
             w1 = con.HALF_WIDTH - self.sprite_half_width
             w2 = con.HALF_WIDTH + self.sprite_half_width
             if w1 < self.screen_x < w2:
-                self.play_pain_sound()
+                self.play_action_sound('pain')
                 self.game.player.shot = False
                 self.pain = True
                 self.health -= self.game.current_weapon.damage

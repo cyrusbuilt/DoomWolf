@@ -54,11 +54,12 @@ class Game:
         self.sound = Sound()
 
         self.player = Player(self)
+
         self.object_renderer = ObjectRenderer(self)
         self.ray_caster = RayCaster(self)
 
-        self.object_handler.spawn_sprites()
-        self.object_handler.spawn_enemies()
+        self.object_handler.setup()
+        self.object_handler.spawn_entities()
 
         self.current_weapon = Weapon(self, '')
 
