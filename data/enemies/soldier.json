@@ -1,7 +1,5 @@
 {
   "name": "soldier",
-  "position_x": 10.5,
-  "position_y": 5.5,
   "scale": 0.6,
   "height_shift": 0.38,
   "animation_time": 180,

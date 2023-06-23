@@ -11,7 +11,7 @@ from game.decorators import copy_method
 
 class EnemyBuilder:
 
-    def __init__(self, game, path: str, pos: tuple[int, int]):
+    def __init__(self, game, path: str, pos: tuple[float, float]):
         self.the_enemy: Enemy = Enemy(game, path, pos)
 
     @copy_method
@@ -66,6 +66,10 @@ class EnemyBuilder:
 
     @copy_method
     def set_sounds(self, sounds: dict[str, pg.mixer.Sound]):
+        attack_sound = sounds.get('attack')
+        if attack_sound:
+            attack_sound.set_volume(0.2)
+
         self.the_enemy.sounds = sounds
         return self
 
@@ -79,7 +83,7 @@ class EnemyBuilder:
         return self.the_enemy
 
 
-def enemy(game, data_path: str) -> EnemyBuilder:
+def enemy(game, data_path: str, pos: tuple[float, float]) -> EnemyBuilder:
     if os.path.exists(data_path):
         print(f'Loading enemy descriptor {data_path} ...')
         with open(data_path, encoding='UTF-8') as file:
@@ -93,10 +97,6 @@ def enemy(game, data_path: str) -> EnemyBuilder:
                 path = os.path.join(img_dir, img)
                 if os.path.exists(path):
                     img_path = path
-
-            pos_x = enemy_dict.get('position_x')
-            pos_y = enemy_dict.get('position_y')
-            pos = (pos_x, pos_y)
 
             scale = enemy_dict.get('scale', 0.6)
             shift = enemy_dict.get('height_shift', 0.38)
@@ -152,25 +152,3 @@ def get_enemy_meta(data_dir: str) -> tuple[dict[str, int], dict[str, str]]:
                     data[name] = weight
                     paths[name] = full_path
     return data, paths
-
-
-# TODO Deprecated. Remove once we switch to the new enemy system.
-class EnemyClass(Enum):
-    SOLDIER = 'soldier'
-    CACO_DEMON = 'caco_demon'
-    CYBER_DEMON = 'cyber_demon'
-    NONE = 'none'
-
-
-# TODO Deprecated. Remove once we switch to the new enemy system.
-class EnemyBase(Enemy):
-
-    def __init__(self,
-                 game,
-                 path: str,
-                 pos: tuple[float, float] = (10.5, 5.5),
-                 scale: float = 0.6,
-                 shift: float = 0.38,
-                 animation_time: int = 180):
-        super().__init__(game, path, pos, scale, shift, animation_time)
-        self.enemy_class: EnemyClass = EnemyClass.NONE

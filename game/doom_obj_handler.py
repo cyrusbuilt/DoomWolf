@@ -22,4 +22,4 @@ class DoomWolfObjectHandler(ObjectHandler):
 
     def build_enemy_npc(self, game, klass: str, pos: tuple[float, float]) -> Enemy:
         path = self.enemy_paths[klass]
-        return enemy(game, path).build()
+        return enemy(game, path, pos).build()

@@ -1,7 +1,5 @@
 {
   "name": "caco_demon",
-  "position_x": 10.5,
-  "position_y": 6.5,
   "scale": 0.7,
   "height_shift": 0.27,
   "animation_time": 250,

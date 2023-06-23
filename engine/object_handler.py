@@ -23,13 +23,8 @@ class ObjectHandler:
         # TODO We want to eventually load this from map data
         self.enemy_count: int = 20
 
-        # TODO We want to replace this with a list of strings representing enemy names
         self.enemy_types: list[str] = []
-
-        # TODO Populate this with weights loaded from enemy descriptors
         self.weights: list[int] = []
-
-        # TODO Maybe we need a setup/load function that sets up the enemy_types and weights
 
     def setup(self):
         pass

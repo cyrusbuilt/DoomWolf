@@ -1,42 +1,9 @@
 from collections import deque
-from enum import Enum
 import pygame as pg
 from typing import Optional
 
 from engine import constants as con
 from engine.sprite import AnimatedSprite
-
-
-class WeaponState(Enum):
-    READY = 'ready'
-    IDLE = 'idle'
-    FIRE = 'fire'
-
-
-# TODO Not sure we're going to need this
-class WeaponActionType(Enum):
-    PLAY_SOUND = "play_sound"
-    ANIMATE = "animate"
-    NONE = "none"
-
-
-# TODO might not need this
-class WeaponSound:
-
-    def __init__(self, name: str, file: str):
-        self.name: str = name
-        self.file: str = file
-        self.volume: Optional[float] = None
-        self.sound: Optional[pg.mixer.Sound] = None
-
-
-# TODO might not need this
-class WeaponAction:
-
-    def __init__(self):
-        self.action: WeaponActionType = WeaponActionType.NONE
-        self.sound: Optional[str] = None
-        self.images: Optional[list[str]] = None
 
 
 class Weapon(AnimatedSprite):
@@ -70,10 +37,6 @@ class Weapon(AnimatedSprite):
         self.sound: Optional[pg.mixer.Sound] = None
         self.sounds: dict[str, pg.mixer.Sound] = {}
         self.animation_frames: dict[str, pg.Surface] = {}
-        # TODO Need variables for things like ammo capacity,
-        # rate of fire, magazine capacity, etc.
-        # TODO Need to support sounds for multiple events:
-        # Fire, reload start, reload stop, empty, idle, hit, etc
         self._idle_prev: int = 0
         self._idle_sound_delay: int = 0
         self._has_idle_sound: bool = False
