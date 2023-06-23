@@ -12,6 +12,7 @@ STATIC_SPRITE_BASE = os.path.join(SPRITE_BASE, "static")
 WEAPON_SPRITE_BASE = os.path.join(SPRITE_BASE, "weapon")
 TEXTURE_BASE = os.path.join(ASSETS_BASE, "textures")
 WALL_TEXTURE_BASE = os.path.join(TEXTURE_BASE, "walls")
+DIGITS_TEXTURE_BASE = os.path.join(TEXTURE_BASE, 'digits')
 DATA_BASE = "data"
 MAP_DATA_BASE = os.path.join(DATA_BASE, "maps")
 ENEMY_DATA_BASE = os.path.join(DATA_BASE, "enemies")

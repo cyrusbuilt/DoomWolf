@@ -1,5 +1,4 @@
 import os.path
-from enum import Enum
 import json
 import pygame as pg
 from random import randint
