@@ -19,11 +19,11 @@ class Enemy(AnimatedSprite):
                  animation_time: int = 180):
         super().__init__(game, path, pos, scale, shift, animation_time)
         self.name: str = ''
-        self.attack_images: deque[pg.Surface] = self.load_images(self.path + '/attack')
-        self.death_images: deque[pg.Surface] = self.load_images(self.path + '/death')
-        self.idle_images: deque[pg.Surface] = self.load_images(self.path + '/idle')
-        self.pain_images: deque[pg.Surface] = self.load_images(self.path + '/pain')
-        self.walk_images: deque[pg.Surface] = self.load_images(self.path + '/walk')
+        self.attack_images: deque[pg.Surface] = deque()
+        self.death_images: deque[pg.Surface] = deque()
+        self.idle_images: deque[pg.Surface] = deque()
+        self.pain_images: deque[pg.Surface] = deque()
+        self.walk_images: deque[pg.Surface] = deque()
         self.attack_dist: int = randint(3, 6)
         self.speed: float = 0.03
         self.size: int = 20

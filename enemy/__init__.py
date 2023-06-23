@@ -135,6 +135,25 @@ def enemy(game, data_path: str) -> EnemyBuilder:
             return builder
 
 
+def get_enemy_meta(data_dir: str) -> tuple[dict[str, int], dict[str, str]]:
+    print('Loading enemy meta data...')
+    data: dict[str, int] = {}
+    paths: dict[str, str] = {}
+    files = os.listdir(data_dir)
+    for file in files:
+        ext = os.path.splitext(file)[1]
+        if ext == '.json':
+            full_path = os.path.join(data_dir, file)
+            with open(full_path, encoding='UTF-8') as e_file:
+                enemy_dict = json.load(e_file)
+                name = enemy_dict.get('name')
+                weight = enemy_dict.get('spawn_weight')
+                if name and weight:
+                    data[name] = weight
+                    paths[name] = full_path
+    return data, paths
+
+
 # TODO Deprecated. Remove once we switch to the new enemy system.
 class EnemyClass(Enum):
     SOLDIER = 'soldier'

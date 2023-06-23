@@ -7,7 +7,7 @@
   "animation_time": 250,
   "speed": 0.05,
   "size": 20,
-  "attack_distance": 1.0,
+  "attack_distance": 1,
   "attack_damage": 10,
   "health": 150,
   "accuracy": 0.35,

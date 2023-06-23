@@ -1,0 +1,20 @@
+{
+  "name": "soldier",
+  "position_x": 10.5,
+  "position_y": 5.5,
+  "scale": 0.6,
+  "height_shift": 0.38,
+  "animation_time": 180,
+  "speed": 0.03,
+  "size": 20,
+  "attack_damage": 10,
+  "health": 100,
+  "accuracy": 0.15,
+  "spawn_weight": 70,
+  "image": "0.png",
+  "action_sounds": {
+    "pain": "npc_pain.wav",
+    "death": "npc_death.wav",
+    "attack": "npc_attack.wav"
+  }
+}

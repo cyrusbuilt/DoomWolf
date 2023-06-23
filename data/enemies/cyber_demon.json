@@ -1,0 +1,21 @@
+{
+  "name": "cyber_demon",
+  "position_x": 11.5,
+  "position_y": 6.0,
+  "scale": 1.0,
+  "height_shift": 0.04,
+  "animation_time": 210,
+  "speed": 0.055,
+  "size": 20,
+  "attack_distance": 6,
+  "attack_damage": 15,
+  "health": 350,
+  "accuracy": 0.25,
+  "spawn_weight": 10,
+  "image": "0.png",
+  "action_sounds": {
+    "pain": "npc_pain.wav",
+    "death": "npc_death.wav",
+    "attack": "npc_attack.wav"
+  }
+}
