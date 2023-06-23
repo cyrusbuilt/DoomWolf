@@ -10,12 +10,12 @@ class ObjectRenderer:
     def __init__(self, game):
         self.game = game
         self.screen: pg.Surface | pg.SurfaceType = game.screen
-        wall_tex_path: str = 'assets/textures/walls'
-        sky_tex_path: str = 'assets/textures/sky.png'
-        blood_screen_path: str = 'assets/textures/blood_screen.png'
-        health_digits_path: str = 'assets/textures/digits'
-        game_over_path: str = 'assets/textures/game_over.png'
-        win_path: str = 'assets/textures/win.png'
+        wall_tex_path: str = con.WALL_TEXTURE_BASE
+        sky_tex_path: str = os.path.join(con.TEXTURE_BASE, 'sky.png')
+        blood_screen_path: str = os.path.join(con.TEXTURE_BASE, 'blood_screen.png')
+        health_digits_path: str = con.DIGITS_TEXTURE_BASE
+        game_over_path: str = os.path.join(con.TEXTURE_BASE, 'game_over.png')
+        win_path: str = os.path.join(con.TEXTURE_BASE, 'win.png')
         self.wall_textures: Optional[dict] =\
             self.load_wall_textures(wall_tex_path)
         self.sky_image: Optional[pg.Surface | pg.SurfaceType] =\
@@ -49,7 +49,7 @@ class ObjectRenderer:
             return pg.transform.scale(texture, res)
         return None
 
-    def load_wall_textures(self, path: str) -> Optional[dict]:
+    def load_wall_textures(self, path: str) -> Optional[dict[int, pg.Surface]]:
         if os.path.exists(path):
             textures = {}
             files = os.listdir(path)
@@ -60,10 +60,12 @@ class ObjectRenderer:
         return None
 
     def win(self):
-        self.screen.blit(self.win_image, (0, 0))
+        if self.win_image:
+            self.screen.blit(self.win_image, (0, 0))
 
     def game_over(self):
-        self.screen.blit(self.game_over_image, (0, 0))
+        if self.game_over_image:
+            self.screen.blit(self.game_over_image, (0, 0))
 
     def draw_player_health(self):
         if self.health:
@@ -73,7 +75,8 @@ class ObjectRenderer:
             self.screen.blit(self.health['10'], ((i + 1) * self.digit_size, 0))
 
     def player_damage(self):
-        self.screen.blit(self.blood_screen, (0, 0))
+        if self.blood_screen:
+            self.screen.blit(self.blood_screen, (0, 0))
 
     def draw_background(self):
         # TODO background should change with map
