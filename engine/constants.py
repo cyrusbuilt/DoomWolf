@@ -3,6 +3,7 @@ import os
 
 ASSETS_BASE = "assets"
 SOUND_BASE = os.path.join(ASSETS_BASE, 'sound')
+MUSIC_BASE = os.path.join(SOUND_BASE, 'music')
 ENEMY_SOUND_BASE = os.path.join(SOUND_BASE, "enemy")
 WEAPON_SOUND_BASE = os.path.join(SOUND_BASE, "weapon")
 SPRITE_BASE = os.path.join(ASSETS_BASE, "sprites")

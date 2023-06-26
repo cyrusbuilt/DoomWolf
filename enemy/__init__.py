@@ -117,7 +117,7 @@ def enemy(game, data_path: str, pos: tuple[float, float]) -> EnemyBuilder:
                     if action_file in enemy_sounds:
                         sounds[action] = enemy_sounds.get(action_file)
 
-            builder = EnemyBuilder(game, img_path, pos) \
+            builder: EnemyBuilder = EnemyBuilder(game, img_path, pos) \
                 .set_name(name) \
                 .set_scale(scale) \
                 .set_shift(shift) \

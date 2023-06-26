@@ -52,10 +52,14 @@ class Game:
         self.map.load_map()
 
         self.sound = Sound()
+        # TODO load relevant sound data from map
+        self.sound.load_game_music()
 
         self.player = Player(self)
 
         self.object_renderer = ObjectRenderer(self)
+        # TODO load relevant data from map
+
         self.ray_caster = RayCaster(self)
 
         self.object_handler.setup()
@@ -74,13 +78,13 @@ class Game:
         self.ray_caster.update()
         self.object_handler.update()
         self.current_weapon.update()
-        pg.display.flip()
         self.delta_time = self.clock.tick(con.FPS)
         title = self.window_title
         # if con.DEBUG:
         title += f' FPS: {self.clock.get_fps() :.1f}'
 
         pg.display.set_caption(title)
+        pg.display.flip()
 
     def draw(self):
         if con.DEBUG:

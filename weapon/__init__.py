@@ -136,7 +136,7 @@ def weapon(game, data_path: str) -> WeaponBuilder:
             # define a sequence where you specify: frame, ticks, action
             # ie: "A", 3, "play_sound('fire')" or something like that
 
-            builder = WeaponBuilder(game, img_path) \
+            builder: WeaponBuilder = WeaponBuilder(game, img_path) \
                 .set_name(name) \
                 .set_has_continuous_fire(cont_fire) \
                 .set_damage(dmg) \
