@@ -16,11 +16,6 @@ class Sound:
         # TODO make loading theme music more dynamic (like weapon sounds)
         # so that they can be loaded with the levels/maps
         self.music_path: str = os.path.join(self.path, 'theme.mp3')
-        if os.path.exists(self.music_path):
-            print(f'Loading theme music: {self.music_path}')
-            pg.mixer.music.load(self.music_path)
-            pg.mixer.music.set_volume(0.4)
-            self.music_loaded = True
 
         self.player_pain: Optional[pg.mixer.Sound] = None
         player_pain_path = os.path.join(self.path, 'player_pain.wav')
@@ -53,6 +48,13 @@ class Sound:
         print(f"Loading sounds for enemy '{enemy_name}'...")
         path = os.path.join(con.ENEMY_SOUND_BASE, enemy_name)
         return Sound._load_sounds_for_path(path)
+
+    def load_game_music(self):
+        if os.path.exists(self.music_path):
+            print(f'Loading theme music: {self.music_path}')
+            pg.mixer.music.load(self.music_path)
+            pg.mixer.music.set_volume(0.4)
+            self.music_loaded = True
 
     def play_music(self):
         if self.music_loaded:

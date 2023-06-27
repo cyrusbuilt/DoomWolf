@@ -1,4 +1,5 @@
 import pygame as pg
+from typing import Optional
 
 # TODO need a way to load maps by name
 _ = False
@@ -53,6 +54,12 @@ class Map:
         self.world_map: dict[tuple[int, int]] = {}
         self.rows: int = len(self.mini_map)
         self.cols: int = len(self.mini_map[0])
+        self.sky_texture: Optional[pg.Surface] = None
+        self.sky_offset: int = 0
+        self.floor_texture: Optional[pg.Surface] = None
+        self.floor_color: Optional[pg.Color] = None
+        self.music_track: Optional[str] = None
+        self.sprite_map_path: Optional[str] = None
 
     def load_map(self):
         # TODO Ideally, when we load the tile map, we also load the sprite map

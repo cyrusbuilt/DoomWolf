@@ -1,0 +1,114 @@
+{
+  "sprites": {
+    "animated": [
+      {
+        "name": "green_light"
+      },
+      {
+        "name": "green_light",
+        "pos_x": 1.5,
+        "pos_y": 1.5
+      },
+      {
+        "name": "green_light",
+        "pos_x": 1.5,
+        "pos_y": 7.5
+      },
+      {
+        "name": "green_light",
+        "pos_x": 5.5,
+        "pos_y": 3.25
+      },
+      {
+        "name": "green_light",
+        "pos_x": 5.5,
+        "pos_y": 4.75
+      },
+      {
+        "name": "green_light",
+        "pos_x": 7.5,
+        "pos_y": 2.5
+      },
+      {
+        "name": "green_light",
+        "pos_x": 7.5,
+        "pos_y": 5.5
+      },
+      {
+        "name": "green_light",
+        "pos_x": 14.5,
+        "pos_y": 1.5
+      },
+      {
+        "name": "green_light",
+        "pos_x": 14.5,
+        "pos_y": 4.5
+      },
+      {
+        "name": "red_light",
+        "pos_x": 14.5,
+        "pos_y": 5.5
+      },
+      {
+        "name": "red_light",
+        "pos_x": 14.5,
+        "pos_y": 7.5
+      },
+      {
+        "name": "red_light",
+        "pos_x": 12.5,
+        "pos_y": 7.5
+      },
+      {
+        "name": "red_light",
+        "pos_x": 9.5,
+        "pos_y": 7.5
+      },
+      {
+        "name": "red_light",
+        "pos_x": 14.5,
+        "pos_y": 12.5
+      },
+      {
+        "name": "red_light",
+        "pos_x": 9.5,
+        "pos_y": 20.5
+      },
+      {
+        "name": "red_light",
+        "pos_x": 10.5,
+        "pos_y": 20.5
+      },
+      {
+        "name": "red_light",
+        "pos_x": 3.5,
+        "pos_y": 14.5
+      },
+      {
+        "name": "red_light",
+        "pos_x": 3.5,
+        "pos_y": 18.5
+      },
+      {
+        "name": "green_light",
+        "pos_x": 14.5,
+        "pos_y": 24.5
+      },
+      {
+        "name": "green_light",
+        "pos_x": 14.5,
+        "pos_y": 30.5
+      },
+      {
+        "name": "green_light",
+        "pos_x": 1.5,
+        "pos_y": 30.5
+      },
+      {
+        "name": "green_light",
+        "pos_x": 1.5,
+        "pos_y": 24.5
+      }
+    ]
+  }
+}
