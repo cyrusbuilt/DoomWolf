@@ -19,10 +19,7 @@ class ObjectHandler:
         self.anim_sprite_path: str = con.ANIM_SPRITE_BASE
         self.enemy_positions: dict[tuple[int, int]] = {}
         self.restricted_area = {(i, j) for i in range(10) for j in range(10)}
-
-        # TODO We want to eventually load this from map data
         self.enemy_count: int = 20
-
         self.enemy_types: list[str] = []
         self.weights: list[int] = []
 
@@ -53,8 +50,6 @@ class ObjectHandler:
 
     def spawn_sprites(self):
         self.sprite_list = []
-        # TODO this is just a convenience method for now that adds some sprites
-        # but we'll really want to load sprites with the map/level
         green_light = f'{self.anim_sprite_path}/green_light/0.png'
         red_light = f'{self.anim_sprite_path}/red_light/0.png'
         self.add_sprite(AnimatedSprite(self.game, green_light))
@@ -89,6 +84,7 @@ class ObjectHandler:
             self.game.object_renderer.win()
             pg.display.flip()
             pg.time.delay(1500)
+            self.game.map.won = True
             self.game.new_game()
 
     def update(self):

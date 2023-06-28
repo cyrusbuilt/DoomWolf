@@ -37,28 +37,25 @@ class Game:
         self.map: Optional[Map] = None
         self.player: Optional[Player] = None
         self.ray_caster: Optional[RayCaster] = None
-        self.object_renderer: Optional[ObjectRenderer] = None
+        self.object_renderer: ObjectRenderer = ObjectRenderer(self)
         self.current_weapon: Optional[Weapon] = None
         self.object_handler: Optional[ObjectHandler] = ObjectHandler(self)
         self.path_finder: Optional[PathFinder] = None
-        self.sound: Optional[Sound] = None
+        self.sound: Sound = Sound()
         pg.time.set_timer(self.global_event, 40)
         # TODO Need a class for handling power-ups and inventory.
         # TODO Maybe support things like shield and extra health, etc.
 
-    def new_game(self):
-        # TODO Need to be able to load more than one map
-        self.map = Map(self, 'level1')
-        self.map.load_map()
+    def new_game(self, skip_default_map_load: bool = False):
+        if not skip_default_map_load:
+            self.map = Map(self, 'level1')
+            self.map.load_map()
 
-        self.sound = Sound()
-        # TODO load relevant sound data from map
         self.sound.load_game_music()
 
         self.player = Player(self)
 
-        self.object_renderer = ObjectRenderer(self)
-        # TODO load relevant data from map
+        self.object_renderer.setup()
 
         self.ray_caster = RayCaster(self)
 

@@ -27,6 +27,7 @@ improves on the original with the following:
 - Ability to screenshot
 - Better error handling and asset existence checks
 - More than one weapon
+- User-definable weapons, enemies, level map and sprite map (documentation coming soon)
 
 Future planned improvements:
 - More maps! And a map loading system
@@ -38,6 +39,8 @@ Future planned improvements:
 - Level progression
 - Difficulty levels
 - Possible multiplayer
+- Settings screen
+- Intro/new game screen
 
 ## Controls
 - Keyboard

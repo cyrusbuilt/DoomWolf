@@ -9,35 +9,45 @@ class ObjectRenderer:
 
     def __init__(self, game):
         self.game = game
-        self.screen: pg.Surface | pg.SurfaceType = game.screen
-        wall_tex_path: str = con.WALL_TEXTURE_BASE
-        sky_tex_path: str = os.path.join(con.TEXTURE_BASE, 'sky.png')
-        blood_screen_path: str = os.path.join(con.TEXTURE_BASE, 'blood_screen.png')
-        health_digits_path: str = con.DIGITS_TEXTURE_BASE
-        game_over_path: str = os.path.join(con.TEXTURE_BASE, 'game_over.png')
-        win_path: str = os.path.join(con.TEXTURE_BASE, 'win.png')
-        self.wall_textures: Optional[dict] =\
-            self.load_wall_textures(wall_tex_path)
-        self.sky_image: Optional[pg.Surface | pg.SurfaceType] =\
-            self.get_texture(sky_tex_path, (con.WIDTH, con.HALF_HEIGHT))
+        self.screen: pg.Surface = game.screen
+        self.wall_textures: Optional[dict] = None
+        self.sky_image: Optional[pg.Surface] = None
         self.sky_offset: int = 0
-        self.blood_screen: Optional[pg.Surface | pg.SurfaceType] =\
-            self.get_texture(blood_screen_path, con.RES)
+        self.blood_screen: Optional[pg.Surface] = None
         self.digit_size: int = 90
+        self.digit_images: Optional[list[pg.Surface]] = None
+        self.health: Optional[dict] = None
+        self.game_over_image: Optional[pg.Surface] = None
+        self.win_image: Optional[pg.Surface] = None
+        self.floor_color: pg.Color = pg.Color(con.FLOOR_COLOR)
+        # TODO Need to support a floor texture
+
+    def setup(self):
+        self.wall_textures = self.load_wall_textures(con.WALL_TEXTURE_BASE)
+        if self.sky_image is None:
+            sky_tex_path: str = os.path.join(con.TEXTURE_BASE, 'sky.png')
+            res = (con.WIDTH, con.HALF_HEIGHT)
+            self.sky_image = self.get_texture(sky_tex_path, res)
+
+        blood_screen_path: str = os.path.join(con.TEXTURE_BASE, 'blood_screen.png')
+        self.blood_screen = self.get_texture(blood_screen_path, con.RES)
+
+        health_digits_path: str = con.DIGITS_TEXTURE_BASE
+        self.digit_images = None
         if os.path.exists(health_digits_path):
             self.digit_images = [
                 self.get_texture(f'{health_digits_path}/{i}.png',
-                                 [self.digit_size] * 2) for i in range(11)
+                                [self.digit_size] * 2) for i in range(11)
             ]
-        else:
-            self.digit_images = None
-        self.health: Optional[dict] = None
+
         if self.digit_images and self.digit_images[0]:
             self.health = dict(zip(map(str, range(11)), self.digit_images))
-        self.game_over_image: Optional[pg.Surface | pg.SurfaceType] =\
-            self.get_texture(game_over_path, con.RES)
-        self.win_image: Optional[pg.Surface | pg.SurfaceType] =\
-            self.get_texture(win_path, con.RES)
+
+        game_over_path: str = os.path.join(con.TEXTURE_BASE, 'game_over.png')
+        self.game_over_image = self.get_texture(game_over_path, con.RES)
+
+        win_path: str = os.path.join(con.TEXTURE_BASE, 'win.png')
+        self.win_image = self.get_texture(win_path, con.RES)
 
     @staticmethod
     def get_texture(path: str, res: tuple[int, int] = (con.TEXTURE_SIZE, con.TEXTURE_SIZE))\
@@ -79,7 +89,6 @@ class ObjectRenderer:
             self.screen.blit(self.blood_screen, (0, 0))
 
     def draw_background(self):
-        # TODO background should change with map
         if self.sky_image:
             offset = (self.sky_offset + 4.5 * self.game.player.rel)
             self.sky_offset = offset % con.WIDTH
@@ -89,8 +98,10 @@ class ObjectRenderer:
             self.screen.fill('black')
 
         # Now, the floor
+        # TODO Prefer floor texture if defined, over floor color
+        # TODO Fallback to default floor color if neither defined.
         rect = (0, con.HALF_HEIGHT, con.WIDTH, con.HEIGHT)
-        pg.draw.rect(self.screen, con.FLOOR_COLOR, rect)
+        pg.draw.rect(self.screen, self.floor_color, rect)
 
     def render_game_objects(self):
         objs_to_render = self.game.ray_caster.objects_to_render

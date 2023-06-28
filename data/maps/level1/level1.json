@@ -1,5 +1,6 @@
 {
   "name": "level1",
+  "enemy_count": 20,
   "music": "level1_theme.mp3",
   "sky_texture": "sky.png",
   "sky_offset": 0,

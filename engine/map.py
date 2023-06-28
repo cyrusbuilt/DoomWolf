@@ -1,7 +1,7 @@
 import pygame as pg
 from typing import Optional
 
-# TODO need a way to load maps by name
+
 _ = False
 
 # yapf: disable
@@ -46,9 +46,6 @@ class Map:
 
     def __init__(self, game, name: str):
         self.name: str = name
-        # TODO Need a way to load this from an asset file
-        # TODO Probably also need to load things like enemies,
-        # sprites, weapons, power-ups, etc from the same asset file
         self.mini_map: list[list[int] | list[int | bool]] = mini_map
         self.game = game
         self.world_map: dict[tuple[int, int]] = {}
@@ -60,11 +57,25 @@ class Map:
         self.floor_color: Optional[pg.Color] = None
         self.music_track: Optional[str] = None
         self.sprite_map_path: Optional[str] = None
+        self.enemy_count: int = 0
+        self.won: bool = False
 
     def load_map(self):
-        # TODO Ideally, when we load the tile map, we also load the sprite map
-        # and enemy map.
         print(f'Loading map: {self.name}')
+        if self.music_track:
+            self.game.sound.music_path = self.music_track
+
+        # TODO Load floor texture
+
+        if self.floor_color:
+            self.game.object_renderer.floor_color = self.floor_color
+
+        if self.sky_texture:
+            self.game.object_renderer.sky_image = self.sky_texture
+
+        if self.enemy_count > 0:
+            self.game.object_handler.enemy_count = self.enemy_count
+
         for j, row in enumerate(self.mini_map):
             for i, value in enumerate(row):
                 if value:

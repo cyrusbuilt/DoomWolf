@@ -150,7 +150,6 @@ class Player:
             dy *= self.diag_move_corr
 
         self.check_wall_collision(dx, dy)
-        # TODO Check enemy collision?
 
         if keys[pg.K_LEFT] or joy_left_bump:
             self.angle -= con.PLAYER_ROT_SPEED * self.game.delta_time
