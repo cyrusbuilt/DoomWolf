@@ -47,28 +47,47 @@ class MapBuilder:
         self.the_map.sprite_map_path = path
         return self
 
+    @copy_method
+    def set_enemy_count(self, enemy_count: int):
+        self.the_map.enemy_count = enemy_count
+        return self
+
     def build(self) -> Map:
+        self.the_map.load_map()
         return self.the_map
 
 
 def game_map(game, map_path: str) -> MapBuilder:
     if os.path.exists(map_path):
+        print(f'Loading map {map_path} ...')
         with open(map_path, encoding='UTF-8') as file:
             map_dict = json.load(file)
 
             name = map_dict.get('name')
-            music = map_dict.get('music')
-            sky_tex = map_dict.get('sky_texture')
+            music = map_dict.get('music', 'theme.mp3')
+            sky_tex = map_dict.get('sky_texture', 'sky.png')
             floor_tex = map_dict.get('floor_texture')
-            floor_clr = map_dict.get('floor_color')
+            floor_clr = map_dict.get('floor_color',
+                                     {'R': 30, 'G': 30, 'B': 30})
             mini_map = map_dict.get('minimap')
             sprite_map = map_dict.get('sprite_map')
+            enemy_count = map_dict.get('enemy_count', 20)
 
             builder: MapBuilder = MapBuilder(game, name) \
                 .set_mini_map(mini_map) \
-                .set_music_track(music) \
-                .set_sky_texture(sky_tex) \
-                .set_floor_texture(floor_tex)
+                .set_floor_texture(floor_tex) \
+                .set_enemy_count(enemy_count)
+
+            music_path = os.path.join(con.MUSIC_BASE, music)
+            if os.path.exists(music_path):
+                builder = builder.set_music_track(music_path)
+
+            sky_tex_path = os.path.join(con.TEXTURE_BASE, sky_tex)
+            if os.path.exists(sky_tex_path):
+                sky_res = (con.WIDTH, con.HALF_HEIGHT)
+                the_sky = game.object_renderer.get_texture(sky_tex_path, sky_res)
+                if the_sky:
+                    builder = builder.set_sky_texture(the_sky)
 
             if floor_clr:
                 flr_clr = pg.Color((

@@ -12,12 +12,9 @@ class Sound:
         self.path: str = con.SOUND_BASE
         self.music_loaded: bool = False
         self.auto_channel: pg.mixer.Channel = pg.mixer.Channel(0)
-
-        # TODO make loading theme music more dynamic (like weapon sounds)
-        # so that they can be loaded with the levels/maps
         self.music_path: str = os.path.join(self.path, 'theme.mp3')
-
         self.player_pain: Optional[pg.mixer.Sound] = None
+
         player_pain_path = os.path.join(self.path, 'player_pain.wav')
         if os.path.exists(player_pain_path):
             print(f'Loading player pain sound: {player_pain_path}')
