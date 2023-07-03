@@ -3,11 +3,14 @@ import os
 import json
 
 from game.decorators import copy_method
+from sprite_object import door
+from sprite_object.door import Door
 
 
 class SpriteType(Enum):
     ANIMATED = 'animated'
     STATIC = 'static'
+    DOOR = 'door'
 
 
 class SpriteMeta:
@@ -23,6 +26,7 @@ class SpriteMap:
     def __init__(self):
         self.static_sprites: list[SpriteMeta] = []
         self.animated_sprites: list[SpriteMeta] = []
+        self.door_sprites: list[Door] = []
 
 
 class SpriteMapBuilder:
@@ -40,11 +44,16 @@ class SpriteMapBuilder:
         self.sprite_map.animated_sprites = animated_sprites
         return self
 
+    @copy_method
+    def set_door_sprites(self, door_sprites: list[Door]):
+        self.sprite_map.door_sprites = door_sprites
+        return self
+
     def build(self):
         return self.sprite_map
 
 
-def sprite_map(path: str) -> SpriteMapBuilder:
+def sprite_map(game, path: str) -> SpriteMapBuilder:
     builder = SpriteMapBuilder()
     if os.path.exists(path):
         print(f'Loading sprite map {path} ...')
@@ -75,4 +84,13 @@ def sprite_map(path: str) -> SpriteMapBuilder:
                         a_sprites.append(spr)
 
                     builder.set_animated_sprites(a_sprites)
+
+                d_sprites: list[Door] = []
+                door_sprites = sprites.get(SpriteType.DOOR.value)
+                if door_sprites:
+                    for d_spr in door_sprites:
+                        the_door = door(game, d_spr).build()
+                        d_sprites.append(the_door)
+
+                    builder.set_door_sprites(d_sprites)
     return builder

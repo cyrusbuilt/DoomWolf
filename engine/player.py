@@ -19,7 +19,20 @@ class Player:
         self.time_prev: int = pg.time.get_ticks()
         self.diag_move_corr: float = 1 / math.sqrt(2)
         self.pain_sound: Optional[pg.mixer.Sound] = self.game.sound.player_pain
+        self.movement_sound: Optional[pg.mixer.Sound] = None
         self.do_continuous_fire: bool = False
+        self.interact: bool = False
+
+    def reset(self):
+        self.x = con.PLAYER_POS[0]
+        self.y = con.PLAYER_POS[1]
+        self.angle = con.PLAYER_ANGLE
+        self.shot = False
+        self.health = con.PLAYER_MAX_HEALTH
+        self.rel = 0
+        self.time_prev = pg.time.get_ticks()
+        self.do_continuous_fire = False
+        self.interact = False
 
     @property
     def pos(self) -> tuple[float, float]:
@@ -95,7 +108,8 @@ class Player:
             self.stop_weapon_fire()
 
     def check_wall(self, x: int, y: int) -> bool:
-        return (x, y) not in self.game.map.world_map
+        return ((x, y) not in self.game.map.world_map and
+                not self.game.map.has_obstacle((x, y)))
 
     def check_wall_collision(self, dx: float, dy: float):
         scale = con.PLAYER_SIZE_SCALE / self.game.delta_time
@@ -126,23 +140,36 @@ class Player:
         speed_sin = speed * sin_a
         speed_cos = speed * cos_a
 
+        has_moved = False
         num_key_pressed = -1
         if keys[pg.K_w] or d_pad_up:
             num_key_pressed += 1
             dx += speed_cos
             dy += speed_sin
+            has_moved = True
         if keys[pg.K_s] or d_pad_down:
             num_key_pressed += 1
             dx += -speed_cos
             dy += -speed_sin
+            has_moved = True
         if keys[pg.K_a] or d_pad_left:
             num_key_pressed += 1
             dx += speed_sin
             dy += -speed_cos
+            has_moved = True
         if keys[pg.K_d] or d_pad_right:
             num_key_pressed += 1
             dx += -speed_sin
             dy += speed_cos
+            has_moved = True
+        if keys[pg.K_e]:
+            self.interact = True
+
+        if has_moved:
+            print(f'Player X = {self.x}, Y = {self.y}')
+
+        if has_moved and self.movement_sound:
+            self.movement_sound.play()
 
         # diagonal movement correction
         if num_key_pressed:
@@ -167,6 +194,9 @@ class Player:
         pg.draw.circle(self.game.screen, 'green', (s_x, s_y), 15)
 
     def mouse_control(self):
+        if not pg.mouse.get_focused():
+            return
+
         mx, my = pg.mouse.get_pos()
         if mx < con.MOUSE_BORDER_LEFT or mx > con.MOUSE_BORDER_RIGHT:
             pg.mouse.set_pos([con.HALF_WIDTH, con.HALF_HEIGHT])
@@ -176,6 +206,7 @@ class Player:
         self.angle += self.rel * mouse_sens * self.game.delta_time
 
     def update(self):
+        self.interact = False
         self.movement()
         self.mouse_control()
         self.recover_health()

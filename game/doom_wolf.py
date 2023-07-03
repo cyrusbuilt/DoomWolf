@@ -36,7 +36,7 @@ class DoomWolf(Game):
 
                 s_map = self.map.sprite_map_path
                 if s_map and os.path.exists(s_map):
-                    sprites = sprite_map(s_map).build()
+                    sprites = sprite_map(self, s_map).build()
                     self.object_handler.sprite_map = sprites
 
         super().new_game(have_maps)

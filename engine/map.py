@@ -48,7 +48,8 @@ class Map:
         self.name: str = name
         self.mini_map: list[list[int] | list[int | bool]] = mini_map
         self.game = game
-        self.world_map: dict[tuple[int, int]] = {}
+        self.world_map: dict[tuple[int, int], int] = {}
+        self.obstacles: list[tuple[int, int]] = []
         self.rows: int = len(self.mini_map)
         self.cols: int = len(self.mini_map[0])
         self.sky_texture: Optional[pg.Surface] = None
@@ -87,3 +88,12 @@ class Map:
                          (pos[0] * 100, pos[1] * 100, 100, 100), 2)
             for pos in self.world_map
         ]
+
+    def add_obstacle(self, obstacle: tuple[int, int]):
+        self.obstacles.append(obstacle)
+
+    def remove_obstacle(self, obstacle: tuple[int, int]):
+        self.obstacles.remove(obstacle)
+
+    def has_obstacle(self, obstacle: tuple[int, int]):
+        return obstacle in self.obstacles

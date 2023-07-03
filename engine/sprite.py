@@ -20,18 +20,22 @@ class Sprite:
         self.x: float = pos[0]
         self.y: float = pos[1]
         self.image: Optional[pg.Surface] = None
-        self.dx = 0
-        self.dy = 0
-        self.theta = 0
-        self.screen_x = 0
-        self.dist = 1
-        self.norm_dist = 1
-        self.sprite_half_width = 0
-        self.SPRITE_SCALE = scale
-        self.SPRITE_HEIGHT_SHIFT = shift
-        self.IMAGE_WIDTH = 0
-        self.IMAGE_HALF_WIDTH = 0
-        self.IMAGE_RATIO = 0
+        self.dx: float = 0
+        self.dy: float = 0
+        self.theta: float = 0
+        self.screen_x: float | int = 0
+        self.dist: float = 1
+        self.norm_dist: float = 1
+        self.sprite_half_width: float | int = 0
+        self.interact_trigger: bool = False
+        self.is_interactive: bool = False
+        self.SPRITE_SCALE: float = scale
+        self.SPRITE_HEIGHT_SHIFT: float = shift
+        self.IMAGE_WIDTH: int = 0
+        self.IMAGE_HALF_WIDTH: int = 0
+        self.IMAGE_RATIO: int = 0
+        self.interaction_sound: Optional[pg.mixer.Sound] = None
+        self.removed: bool = False
 
         if os.path.exists(path):
             self.image = pg.image.load(path).convert_alpha()
@@ -40,6 +44,9 @@ class Sprite:
             self.IMAGE_RATIO = self.IMAGE_WIDTH / self.image.get_height()
 
     def get_sprite_projection(self):
+        if not self.image:
+            return
+
         proj = con.SCREEN_DIST / self.norm_dist * self.SPRITE_SCALE
         proj_width = proj * self.IMAGE_RATIO
         proj_height = proj
@@ -76,8 +83,14 @@ class Sprite:
         if acceptable_width and self.norm_dist > 0.5:
             self.get_sprite_projection()
 
+    def interact(self):
+        if self.interaction_sound and not self.removed:
+            self.interaction_sound.play()
+
     def update(self):
         self.refresh_sprite()
+        if self.interact_trigger and self.norm_dist > 30:
+            self.interact()
 
 
 class AnimatedSprite(Sprite):
@@ -95,6 +108,9 @@ class AnimatedSprite(Sprite):
         self.images: deque[pg.Surface] = deque()
         self.animation_time_prev: int = pg.time.get_ticks()
         self.animation_trigger: bool = False
+        self.has_viewing_angles: bool = False
+        self.sprite_angles: list[frozenset[int]] = []
+        self.sprite_positions: dict[frozenset[int], pg.Surface] = {}
 
         if os.path.exists(path):
             self.path = path.rsplit('/', 1)[0]
