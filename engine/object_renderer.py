@@ -19,7 +19,7 @@ class ObjectRenderer:
         self.health: Optional[dict] = None
         self.game_over_image: Optional[pg.Surface] = None
         self.win_image: Optional[pg.Surface] = None
-        self.floor_color: pg.Color = pg.Color(con.FLOOR_COLOR)
+        self.floor_color: pg.Color = pg.Color(con.DEFAULT_FLOOR_COLOR)
         # TODO Need to support a floor texture
 
     def setup(self):

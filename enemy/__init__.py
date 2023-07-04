@@ -1,4 +1,4 @@
-import os.path
+import os
 import json
 import pygame as pg
 from random import randint

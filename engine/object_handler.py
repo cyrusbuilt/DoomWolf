@@ -3,6 +3,7 @@ import pygame as pg
 from typing import Optional
 
 from engine import constants as con
+from engine.common import align_grid
 from engine.enemy import Enemy
 from engine.sprite import AnimatedSprite
 from engine.sprite import Sprite
@@ -92,6 +93,22 @@ class ObjectHandler:
             npc.map_pos
             for npc in self.enemy_list if npc.alive
         }
+
+        if self.game.player.interact:
+            print('Interact!')
+            for sprite in sorted(self.sprite_list, key=lambda obj: obj.norm_dist):
+                player = self.game.player
+                px, py = align_grid(player.x, player.y)
+                sx, sy = align_grid(sprite.x, sprite.y)
+                x_dist = px - sx
+                y_dist = py - sy
+                if sprite.is_interactive:
+                    print('Sprite interactive!')
+                    if ((-con.INTERACTION_RANGE <= x_dist <= con.INTERACTION_RANGE) and (
+                            -con.INTERACTION_RANGE <= y_dist <= con.INTERACTION_RANGE)) and not sprite.interact_trigger:
+                        sprite.interact_trigger = True
+                        print('Trigger set')
+
         [sprite.update() for sprite in self.sprite_list]
         [npc.update() for npc in self.enemy_list]
         self.check_win()

@@ -109,6 +109,19 @@
         "pos_x": 1.5,
         "pos_y": 24.5
       }
+    ],
+    "door": [
+      {
+        "name": "horizontal_door",
+        "pos_x": 11.0,
+        "pos_y": 12.0,
+        "scale_height": 1.4,
+        "scale_width": 3.2,
+        "shift": 0.0,
+        "type": "horizontal",
+        "animation_time": 100,
+        "interaction_sound": "door.wav"
+      }
     ]
   }
 }

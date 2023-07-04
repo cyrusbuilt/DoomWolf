@@ -35,13 +35,13 @@ class Game:
         self.global_event: int = pg.USEREVENT + 0
         self.mouse_sensitivity: float = con.MOUSE_SENSITIVITY
         self.map: Optional[Map] = None
-        self.player: Optional[Player] = None
+        self.sound: Sound = Sound()
+        self.player: Player = Player(self)
         self.ray_caster: Optional[RayCaster] = None
         self.object_renderer: ObjectRenderer = ObjectRenderer(self)
         self.current_weapon: Optional[Weapon] = None
-        self.object_handler: Optional[ObjectHandler] = ObjectHandler(self)
+        self.object_handler: ObjectHandler = ObjectHandler(self)
         self.path_finder: Optional[PathFinder] = None
-        self.sound: Sound = Sound()
         pg.time.set_timer(self.global_event, 40)
         # TODO Need a class for handling power-ups and inventory.
         # TODO Maybe support things like shield and extra health, etc.
@@ -53,7 +53,7 @@ class Game:
 
         self.sound.load_game_music()
 
-        self.player = Player(self)
+        self.player.reset()
 
         self.object_renderer.setup()
 
