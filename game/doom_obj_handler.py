@@ -54,9 +54,8 @@ class DoomWolfObjectHandler(ObjectHandler):
 
             for d_sprite in self.sprite_map.door_sprites:
                 self.add_sprite(d_sprite)
-                pos = (int(d_sprite.x), int(d_sprite.y))
-                self.game.map.add_obstacle(pos)
-                pos = (int(d_sprite.x - 1), int(d_sprite.y))
-                self.game.map.add_obstacle(pos)
+                for i in range(d_sprite.tile_count):
+                    pos = (int(d_sprite.x - i), int(d_sprite.y))
+                    self.game.map.add_obstacle(pos)
         else:
             super().spawn_sprites()

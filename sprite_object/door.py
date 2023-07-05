@@ -21,6 +21,7 @@ class Door(AnimatedSprite):
                  animation_time: int = 120):
         super().__init__(game, path, pos, scale, shift, animation_time)
         self.SCALE_WIDTH: float = 1.0
+        self.tile_count: int = 1
         self.is_interactive = True
         self.has_viewing_angles = True
         self.type: DoorType = DoorType.HORIZONTAL
@@ -45,13 +46,12 @@ class Door(AnimatedSprite):
                 self.removed = True
 
         if self.removed:
-            my_pos = (int(self.previous_pos_x), int(self.previous_pos_y))
-            if self.game.map.has_obstacle(my_pos):
-                self.game.map.remove_obstacle(my_pos)
-
-            my_pos = (int(self.previous_pos_x - 1), int(self.previous_pos_y))
-            if self.game.map.has_obstacle(my_pos):
-                self.game.map.remove_obstacle(my_pos)
+            for i in range(self.tile_count):
+                my_x = int(self.previous_pos_x - i)
+                my_y = int(self.previous_pos_y)
+                my_pos = (my_x, my_y)
+                if self.game.map.has_obstacle(my_pos):
+                    self.game.map.remove_obstacle(my_pos)
 
     def get_sprite_projection(self):
         if not self.image:

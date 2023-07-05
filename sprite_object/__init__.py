@@ -42,6 +42,11 @@ class DoorBuilder:
         self.the_door.interaction_sound = sound
         return self
 
+    @copy_method
+    def set_tile_count(self, tiles: int):
+        self.the_door.tile_count = tiles
+        return self
+
     def build(self) -> Door:
         return self.the_door
 
@@ -56,6 +61,7 @@ def door(game, door_dict: dict) -> DoorBuilder:
     anim_time = door_dict.get('animation_time', 120)
     d_type = DoorType(str(door_dict.get('type')))
     sound_file = door_dict.get('interaction_sound')
+    tiles = door_dict.get('tiles', 1)
 
     door_dir = os.path.join(con.DOOR_SPRITE_BASE, name)
     door_path = os.path.join(door_dir, "0.png")
@@ -70,7 +76,8 @@ def door(game, door_dict: dict) -> DoorBuilder:
         .set_scale_height(scale_height) \
         .set_height_shift(shift) \
         .set_animation_time(anim_time) \
-        .set_door_type(d_type)
+        .set_door_type(d_type) \
+        .set_tile_count(tiles)
 
     if sound_file:
         sound_path = os.path.join(con.DOOR_SOUND_BASE, name)
