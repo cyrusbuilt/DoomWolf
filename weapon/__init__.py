@@ -115,8 +115,6 @@ def weapon(game, data_path: str) -> WeaponBuilder:
             ammo_use = weapon_dict.get('ammo_use', 1)
             mag_cap = weapon_dict.get('magazine_capacity', 0)
 
-            # TODO We should consider playing different classes of sounds
-            # via dedicated channels (ie. voice, player weapon, enemy_weapon, etc)
             sounds: dict[str, pg.mixer.Sound] = {}
             action_sounds = weapon_dict.get('action_sounds')
             if action_sounds:
