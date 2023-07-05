@@ -149,7 +149,10 @@ class Enemy(AnimatedSprite):
             if tile_hor in self.game.map.world_map:
                 wall_dist_h = depth_hor
                 break
-            # TODO Handle obstacles
+            if tile_hor in self.game.map.obstacles:
+                # Treat obstacles the same as walls
+                wall_dist_h = depth_hor
+                break
 
             x_hor += dx
             y_hor += dy
@@ -172,7 +175,10 @@ class Enemy(AnimatedSprite):
             if tile_vert in self.game.map.world_map:
                 wall_dist_v = depth_vert
                 break
-            # TODO Handle obstacles
+            if tile_vert in self.game.map.obstacles:
+                # Treat obstacles the same as walls
+                wall_dist_v = depth_vert
+                break
 
             x_vert += dx
             y_vert += dy
