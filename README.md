@@ -52,6 +52,7 @@ Future planned improvements:
 - - Quit/Exit: Esc
 - - Weapon switch: Tab
 - - Screenshot: M
+- - Interact: E
 - Mouse
 - - Head turn: mouse move left/right
 - - Fire: Left mouse button

@@ -35,13 +35,13 @@ class Door(AnimatedSprite):
         if self.type == DoorType.VERTICAL:
             self.y -= 1
             delta_y = self.y - self.previous_pos_y
-            if abs(delta_y) > con.HALF_BLOCK:
+            if abs(delta_y) > con.FIFTH_BLOCK:
                 self.removed = True
         elif self.type == DoorType.HORIZONTAL:
             self.x -= 1
             delta_x = self.x - self.previous_pos_x
             print(f'delta_x = {abs(delta_x)}')
-            if abs(delta_x) > con.HALF_BLOCK:
+            if abs(delta_x) > con.FIFTH_BLOCK:
                 self.removed = True
 
         if self.removed:
@@ -71,7 +71,6 @@ class Door(AnimatedSprite):
 
         self.game.ray_caster.objects_to_render.append(
             (self.norm_dist, image, pos))
-
 
     def update(self):
         if self.removed:

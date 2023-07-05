@@ -61,7 +61,7 @@ class Enemy(AnimatedSprite):
     def play_action_sound(self, action: str):
         action_sound = self.sounds.get(action)
         if action_sound:
-            action_sound.play()
+            self.game.sound.play_sound(action_sound)
 
     def movement(self):
         get_path = self.game.path_finder.get_path

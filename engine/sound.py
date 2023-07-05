@@ -9,16 +9,24 @@ class Sound:
 
     def __init__(self):
         pg.mixer.init()
+        pg.mixer.set_num_channels(16)
         self.path: str = con.SOUND_BASE
         self.music_loaded: bool = False
-        self.auto_channel: pg.mixer.Channel = pg.mixer.Channel(0)
         self.music_path: str = os.path.join(self.path, 'theme.mp3')
-        self.player_pain: Optional[pg.mixer.Sound] = None
+        self.item_channel: pg.mixer.Channel = pg.mixer.Channel(2)
+        self.body_channel: pg.mixer.Channel = pg.mixer.Channel(3)
 
+        self.player_pain: Optional[pg.mixer.Sound] = None
         player_pain_path = os.path.join(self.path, 'player_pain.wav')
         if os.path.exists(player_pain_path):
             print(f'Loading player pain sound: {player_pain_path}')
             self.player_pain = pg.mixer.Sound(player_pain_path)
+
+        self.player_movement: Optional[pg.mixer.Sound] = None
+        player_movement_path = os.path.join(self.path, 'footstep.wav')
+        if os.path.exists(player_movement_path):
+            print(f'Loading player movement sound: {player_movement_path}')
+            self.player_movement = pg.mixer.Sound(player_movement_path)
 
     @property
     def music_playing(self) -> bool:
@@ -76,3 +84,7 @@ class Sound:
     def set_music_volume(self, volume: float):
         if self.music_loaded:
             pg.mixer.music.set_volume(volume)
+
+    @staticmethod
+    def play_sound(sound: pg.mixer.Sound):
+        pg.mixer.find_channel(True).play(sound)

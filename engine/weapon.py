@@ -95,7 +95,7 @@ class Weapon(AnimatedSprite):
     def play_action_sound(self, action: str):
         action_sound = self.sounds.get(action)
         if action_sound:
-            action_sound.play()
+            self.game.sound.play_sound(action_sound)
 
     def play_attack_sound(self):
         self.play_action_sound('fire')
