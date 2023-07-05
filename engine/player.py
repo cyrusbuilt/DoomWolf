@@ -19,7 +19,8 @@ class Player:
         self.time_prev: int = pg.time.get_ticks()
         self.diag_move_corr: float = 1 / math.sqrt(2)
         self.pain_sound: Optional[pg.mixer.Sound] = self.game.sound.player_pain
-        self.movement_sound: Optional[pg.mixer.Sound] = None
+        self.movement_sound: Optional[pg.mixer.Sound] = \
+            self.game.sound.player_movement
         self.do_continuous_fire: bool = False
         self.interact: bool = False
 
@@ -123,6 +124,11 @@ class Player:
         if self.check_wall(x, y):
             self.y += dy
 
+    def play_movement_sound(self):
+        b_chan = self.game.sound.body_channel
+        if self.movement_sound and not b_chan.get_busy():
+            b_chan.play(self.movement_sound)
+
     def movement(self):
         keys = pg.key.get_pressed()
         joy_left_bump = self.game.joystick.get_button(9)
@@ -168,8 +174,8 @@ class Player:
         if has_moved:
             print(f'Player X = {self.x}, Y = {self.y}')
 
-        if has_moved and self.movement_sound:
-            self.movement_sound.play()
+        if has_moved:
+            self.play_movement_sound()
 
         # diagonal movement correction
         if num_key_pressed:
@@ -214,4 +220,4 @@ class Player:
 
     def play_pain_sound(self):
         if self.pain_sound:
-            self.pain_sound.play()
+            self.game.sound.play_sound(self.pain_sound)

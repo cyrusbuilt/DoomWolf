@@ -85,7 +85,9 @@ class Sprite:
 
     def interact(self):
         if self.interaction_sound and not self.removed:
-            self.interaction_sound.play()
+            i_chan = self.game.sound.item_channel
+            if not i_chan.get_busy():
+                i_chan.play(self.interaction_sound)
 
     def update(self):
         self.refresh_sprite()
