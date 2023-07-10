@@ -104,11 +104,9 @@ class ObjectHandler:
                 x_dist = px - sx
                 y_dist = py - sy
                 if sprite.is_interactive:
-                    print('Sprite interactive!')
                     if ((-con.INTERACTION_RANGE <= x_dist <= con.INTERACTION_RANGE) and (
                             -con.INTERACTION_RANGE <= y_dist <= con.INTERACTION_RANGE)) and not sprite.interact_trigger:
                         sprite.interact_trigger = True
-                        print('Trigger set')
 
         [sprite.update() for sprite in self.sprite_list]
         [npc.update() for npc in self.enemy_list]
