@@ -95,6 +95,8 @@ class ObjectHandler:
         }
 
         if self.game.player.interact:
+            print('Interact!')
+            self.game.player.interact = False
             for sprite in sorted(self.sprite_list, key=lambda obj: obj.norm_dist):
                 player = self.game.player
                 px, py = align_grid(player.x, player.y)

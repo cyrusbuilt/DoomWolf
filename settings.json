@@ -2,6 +2,21 @@
   "music_volume": 0.4,
   "launch_fullscreen": false,
   "input": {
-    "mouse_sensitivity": 0.0003
+    "mouse": {
+      "sensitivity": 0.0003,
+      "fire_button": 1
+    },
+    "joystick": {
+      "id": 0,
+      "fire_button": 0,
+      "pause_button": 6,
+      "quit_button": 4,
+      "use_button": 2,
+      "weapon_switch_button": 1,
+      "left_bumper_button": 9,
+      "right_bumper_button": 10,
+      "d-pad_x_axis": 0,
+      "d-pad_y_axis": 1
+    }
   }
 }
