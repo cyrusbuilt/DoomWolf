@@ -1,7 +1,7 @@
 import os
-import pygame as pg
 
 from engine import constants as con
+from engine.input_handler import InputEvent
 from engine.weapon import Weapon
 from weapon import weapon
 
@@ -50,13 +50,8 @@ class WeaponInventory:
             print(f'Switching weapon to: {self.current_weapon}')
             self.game.current_weapon = self.get_current()
 
-    def inventory_event(self, event: pg.event.Event):
-        tab_pressed = event.type == pg.KEYDOWN and \
-            event.key == pg.K_TAB
-        b_pressed = event.type == pg.JOYBUTTONDOWN and \
-            event.button == 1
-
-        if tab_pressed or b_pressed:
+    def inventory_event(self, events: set[InputEvent]):
+        if InputEvent.WEAPON_SWITCH in events:
             self.next()
 
     def drop_current(self):

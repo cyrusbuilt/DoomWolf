@@ -3,6 +3,7 @@ import pygame as pg
 
 from engine import constants as con
 from engine.game import Game
+from engine.input_handler import InputEvent
 from weapon.weapon_inventory import WeaponInventory
 from game.doom_obj_handler import DoomWolfObjectHandler
 from game.settings import GameSettings
@@ -42,14 +43,24 @@ class DoomWolf(Game):
         super().new_game(have_maps)
         self.settings.load_settings()
         self.weapon_inventory.load_weapons()
-        self.mouse_sensitivity = self.settings.mouse_sensitivity
+        self.input.mouse_sensitivity = self.settings.mouse_sensitivity
+        self.input.mouse_fire_button = self.settings.mouse_fire_button
+        self.input.joy_fire_button = self.settings.joy_fire_button
+        self.input.joy_pause_button = self.settings.joy_pause_button
+        self.input.joy_quit_button = self.settings.joy_quit_button
+        self.input.joy_use_button = self.settings.joy_use_button
+        self.input.joy_weapon_switch = self.settings.joy_weapon_switch
+        self.input.joy_left_bumper = self.settings.joy_left_bumper
+        self.input.joy_right_bumper = self.settings.joy_right_bumper
+        self.input.joy_d_pad_x_axis = self.settings.joy_d_pad_x_axis
+        self.input.joy_d_pad_y_axis = self.settings.joy_d_pad_y_axis
         self.current_weapon = self.weapon_inventory.get_current()
         self.sound.set_music_volume(self.settings.music_volume)
         if self.settings.launch_fullscreen and not pg.display.is_fullscreen():
             pg.display.toggle_fullscreen()
 
-    def do_event(self, event: pg.event.Event):
-        self.weapon_inventory.inventory_event(event)
+    def do_events(self, events: set[InputEvent]):
+        self.weapon_inventory.inventory_event(events)
 
     def find_maps(self):
         items = os.listdir(con.MAP_DATA_BASE)
