@@ -4,6 +4,8 @@ import pygame as pg
 from typing import Optional
 
 from engine import constants as con
+from engine.input_handler import InputEvent
+from engine.input_handler import InputHandler
 from engine.map import Map
 from engine.object_handler import ObjectHandler
 from engine.object_renderer import ObjectRenderer
@@ -18,22 +20,14 @@ class Game:
 
     def __init__(self):
         pg.init()
-        joysticks = [
-            pg.joystick.Joystick(x)
-            for x in range(pg.joystick.get_count())
-        ]
-        self.joystick = joysticks[0]
-        print(f'Joystick: {self.joystick.get_name()}')
-        pg.mouse.set_visible(con.DEBUG)
+        self.input: InputHandler = InputHandler(self)
         self.screen: pg.Surface = pg.display.set_mode(con.RES)
-        pg.event.set_grab(True)
         self.window_title: str = ''
         self.clock: pg.time.Clock = pg.time.Clock()
         self.delta_time: int = 1
         self.global_trigger: bool = False
         self.paused: bool = False
         self.global_event: int = pg.USEREVENT + 0
-        self.mouse_sensitivity: float = con.MOUSE_SENSITIVITY
         self.map: Optional[Map] = None
         self.sound: Sound = Sound()
         self.player: Player = Player(self)
@@ -50,6 +44,8 @@ class Game:
         if not skip_default_map_load:
             self.map = Map(self, 'level1')
             self.map.load_map()
+
+        self.input.setup()
 
         self.sound.load_game_music()
 
@@ -106,43 +102,31 @@ class Game:
         pg.image.save(self.screen, 'screenshot.jpg')
         print('Screenshot saved.')
 
-    def do_event(self, event: pg.event.Event):
+    def do_events(self, events: set[InputEvent]):
         pass
 
     def check_events(self):
-        # TODO I'd like to gather up all the input-related stuff into an input manager.
-        # Right now I've got shit scattered scattered across game, player, and weapon_inventory
         self.global_trigger = False
-        for event in pg.event.get():
-            escaping = False
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_m:
-                    self._handle_screenshot()
-                elif event.key == pg.K_p:
-                    self._handle_pause()
-                elif event.key == pg.K_t:
-                    pg.display.toggle_fullscreen()
-                elif event.key == pg.K_ESCAPE:
-                    escaping = True
-            elif event.type == pg.JOYBUTTONDOWN:
-                # TODO Probably should store controller ID and and button
-                # mapping in a config file. Maybe also do the same for
-                # for key map. This is all hard-coded for now, but should
-                # make this user-configurable at some point.
-                if event.button == 6:
-                    self._handle_pause()
-                elif event.button == 4:
-                    escaping = True
 
-            if event.type == pg.QUIT or escaping:
+        events = self.input.get_input_events()
+        for event in events:
+            if event == InputEvent.SCREENSHOT:
+                self._handle_screenshot()
+            elif event == InputEvent.PAUSE:
+                self._handle_pause()
+            elif event == InputEvent.TOGGLE_FULLSCREEN:
+                pg.display.toggle_fullscreen()
+            elif event == InputEvent.INTERACT:
+                self.player.interact = True
+            elif event == InputEvent.QUIT:
                 pg.quit()
                 sys.exit()
-            elif event.type == self.global_event:
+            elif event == InputEvent.GLOBAL_EVENT:
                 self.global_trigger = True
 
-            if not self.paused:
-                self.player.single_fire_event(event)
-                self.do_event(event)
+        if not self.paused:
+            self.player.single_fire_event(events)
+            self.do_events(events)
 
     def run(self):
         while True:

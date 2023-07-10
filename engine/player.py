@@ -3,6 +3,8 @@ import pygame as pg
 from typing import Optional
 
 from engine import constants as con
+from engine.input_handler import InputEvent
+from engine.input_handler import Movement
 
 
 class Player:
@@ -86,26 +88,14 @@ class Player:
     def stop_weapon_fire(self):
         self.do_continuous_fire = False
 
-    def single_fire_event(self, event: pg.event.Event):
-        mouse_fire = event.type == pg.MOUSEBUTTONDOWN and \
-                     event.button == 1
-        joy_fire = event.type == pg.JOYBUTTONDOWN and \
-                   event.button == 0
-        kbd_fire = event.type == pg.KEYDOWN and \
-                   event.key == pg.K_SPACE
-
-        if (mouse_fire or joy_fire or kbd_fire) and not self.shot and \
-                not self.game.current_weapon.reloading:
+    def single_fire_event(self, events: set[InputEvent]):
+        start_fire = InputEvent.WEAPON_FIRE in events
+        reloading = self.game.current_weapon.reloading
+        if start_fire and not self.shot and not reloading:
             self.start_weapon_fire()
 
-        mouse_fire_stop = event.type == pg.MOUSEBUTTONUP and \
-                          event.button == 1
-        joy_fire_stop = event.type == pg.JOYBUTTONUP and \
-                        event.button == 0
-        kbd_fire_stop = event.type == pg.KEYUP and \
-                        event.key == pg.K_SPACE
-
-        if mouse_fire_stop or joy_fire_stop or kbd_fire_stop:
+        stop_fire = InputEvent.WEAPON_FIRE_STOP in events
+        if stop_fire:
             self.stop_weapon_fire()
 
     def check_wall(self, x: int, y: int) -> bool:
@@ -130,51 +120,36 @@ class Player:
             b_chan.play(self.movement_sound)
 
     def movement(self):
-        keys = pg.key.get_pressed()
-        joy_left_bump = self.game.joystick.get_button(9)
-        joy_right_bump = self.game.joystick.get_button(10)
-        d_pad_right = self.game.joystick.get_axis(0) >= 0.5
-        d_pad_left = self.game.joystick.get_axis(0) <= -1
-        d_pad_down = self.game.joystick.get_axis(1) >= 0.5
-        d_pad_up = self.game.joystick.get_axis(1) <= -1
+        movement = self.game.input.get_player_movement()
 
-        sin_a = math.sin(self.angle)
-        cos_a = math.cos(self.angle)
         dx = 0
         dy = 0
+        sin_a = math.sin(self.angle)
+        cos_a = math.cos(self.angle)
         speed = con.PLAYER_SPEED * self.game.delta_time
         speed_sin = speed * sin_a
         speed_cos = speed * cos_a
 
-        has_moved = False
         num_key_pressed = -1
-        if keys[pg.K_w] or d_pad_up:
+        if Movement.FORWARD in movement:
             num_key_pressed += 1
             dx += speed_cos
             dy += speed_sin
-            has_moved = True
-        if keys[pg.K_s] or d_pad_down:
+        if Movement.BACKWARD in movement:
             num_key_pressed += 1
             dx += -speed_cos
             dy += -speed_sin
-            has_moved = True
-        if keys[pg.K_a] or d_pad_left:
+        if Movement.LEFT in movement:
             num_key_pressed += 1
             dx += speed_sin
             dy += -speed_cos
-            has_moved = True
-        if keys[pg.K_d] or d_pad_right:
+        if Movement.RIGHT in movement:
             num_key_pressed += 1
             dx += -speed_sin
             dy += speed_cos
-            has_moved = True
-        if keys[pg.K_e]:
-            self.interact = True
 
-        if has_moved:
+        if movement:
             print(f'Player X = {self.x}, Y = {self.y}')
-
-        if has_moved:
             self.play_movement_sound()
 
         # diagonal movement correction
@@ -184,9 +159,9 @@ class Player:
 
         self.check_wall_collision(dx, dy)
 
-        if keys[pg.K_LEFT] or joy_left_bump:
+        if Movement.LOOK_LEFT in movement:
             self.angle -= con.PLAYER_ROT_SPEED * self.game.delta_time
-        if keys[pg.K_RIGHT] or joy_right_bump:
+        if Movement.LOOK_RIGHT in movement:
             self.angle += con.PLAYER_ROT_SPEED * self.game.delta_time
 
         self.angle %= math.tau
@@ -200,19 +175,13 @@ class Player:
         pg.draw.circle(self.game.screen, 'green', (s_x, s_y), 15)
 
     def mouse_control(self):
-        if not pg.mouse.get_focused():
-            return
-
-        mx, my = pg.mouse.get_pos()
-        if mx < con.MOUSE_BORDER_LEFT or mx > con.MOUSE_BORDER_RIGHT:
-            pg.mouse.set_pos([con.HALF_WIDTH, con.HALF_HEIGHT])
-        self.rel = pg.mouse.get_rel()[0]
-        self.rel = max(-con.MOUSE_MAX_REL, min(con.MOUSE_MAX_REL, self.rel))
-        mouse_sens = self.game.mouse_sensitivity
-        self.angle += self.rel * mouse_sens * self.game.delta_time
+        movement = self.game.input.get_mouse_movement()
+        if movement:
+            rel, angle = movement
+            self.rel = rel
+            self.angle += angle
 
     def update(self):
-        self.interact = False
         self.movement()
         self.mouse_control()
         self.recover_health()
