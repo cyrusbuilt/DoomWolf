@@ -51,7 +51,7 @@ class OptionsMenu:
         self.settings.save_settings()
 
     @staticmethod
-    def _get_mouse_button_ids():
+    def _get_mouse_button_ids() -> list[tuple[str, int]]:
         return [(str(x), x) for x in range(4)]
 
     @staticmethod
@@ -63,7 +63,7 @@ class OptionsMenu:
         return [(str(x), x) for x in range(11)]
 
     @staticmethod
-    def _get_joy_axis_ids():
+    def _get_joy_axis_ids() -> list[tuple[str, int]]:
         return [(str(x), x) for x in range(2)]
 
     def setup(self):
