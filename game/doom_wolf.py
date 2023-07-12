@@ -42,7 +42,6 @@ class DoomWolf(Game):
 
         super().new_game(have_maps)
         self.settings.load_settings()
-        self.weapon_inventory.load_weapons()
         self.input.mouse_sensitivity = self.settings.mouse_sensitivity
         self.input.mouse_fire_button = self.settings.mouse_fire_button
         self.input.joy_fire_button = self.settings.joy_fire_button
@@ -54,6 +53,7 @@ class DoomWolf(Game):
         self.input.joy_right_bumper = self.settings.joy_right_bumper
         self.input.joy_d_pad_x_axis = self.settings.joy_d_pad_x_axis
         self.input.joy_d_pad_y_axis = self.settings.joy_d_pad_y_axis
+        self.weapon_inventory.load_weapons()
         self.current_weapon = self.weapon_inventory.get_current()
         self.sound.set_music_volume(self.settings.music_volume)
         if self.settings.launch_fullscreen and not pg.display.is_fullscreen():

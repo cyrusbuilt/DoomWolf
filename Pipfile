@@ -9,6 +9,7 @@ yapf = "*"
 
 [packages]
 pygame = "*"
+pygame_menu = "*"
 
 [requires]
 python_version = "3.10"

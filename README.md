@@ -28,10 +28,10 @@ improves on the original with the following:
 - Better error handling and asset existence checks
 - More than one weapon
 - User-definable weapons, enemies, level map and sprite map (documentation coming soon)
+- Main menu and options screens
 
 Future planned improvements:
 - More maps! And a map loading system
-- Key-mapping and controller button mapping configuration
 - More weapons
 - More enemies
 - More sprites (static and animated)
@@ -39,8 +39,6 @@ Future planned improvements:
 - Level progression
 - Difficulty levels
 - Possible multiplayer
-- Settings screen
-- Intro/new game screen
 
 ## Controls
 - Keyboard
@@ -52,7 +50,7 @@ Future planned improvements:
 - - Quit/Exit: Esc
 - - Weapon switch: Tab
 - - Screenshot: M
-- - Interact: E
+- - Use/Interact: E
 - Mouse
 - - Head turn: mouse move left/right
 - - Fire: Left mouse button
@@ -60,6 +58,8 @@ Future planned improvements:
 - - Player move: D-pad
 - - Head turn: Left/right bumpers
 - - Fire: A
+- - Weapon switch: B
+- - Use/Interact: X
 - - Pause: Start
 - - Quit/Exit: Mode/Select
 
