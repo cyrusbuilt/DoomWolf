@@ -8,8 +8,8 @@ from engine import constants as con
 class Sound:
 
     def __init__(self):
+        pg.mixer.pre_init(buffer=4096, channels=16)
         pg.mixer.init()
-        pg.mixer.set_num_channels(16)
         self.path: str = con.SOUND_BASE
         self.music_loaded: bool = False
         self.music_path: str = os.path.join(self.path, 'theme.mp3')
