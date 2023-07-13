@@ -88,4 +88,5 @@ class GameSettings:
     def save_settings(self):
         with open(self.path, 'w') as file:
             json.dump(self.to_dict(), file, indent=2)
+            file.write("\n")
         print(f'Saved settings to {self.path}')
