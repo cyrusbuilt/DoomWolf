@@ -5,7 +5,7 @@ from screens.options_menu import OptionsMenu
 
 
 def run_doom_wolf(window_title: str = 'DoomWolf'):
-    main_menu = MainMenu(window_title, 700, 800)
+    main_menu = MainMenu(window_title, 700, 625)
 
     options = OptionsMenu(SETTINGS, main_menu.width, main_menu.height)
     options.setup()
