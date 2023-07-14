@@ -2,6 +2,7 @@ import json
 import os
 
 from engine import constants as con
+from engine import Resolution
 
 
 class GameSettings:
@@ -10,6 +11,8 @@ class GameSettings:
         self.path: str = path
         self.music_volume: float = 0.4
         self.launch_fullscreen: bool = False
+        self.resolution: Resolution = Resolution.zero()
+        self.monitor_id: int = 0
         self.mouse_sensitivity: float = con.MOUSE_SENSITIVITY
         self.mouse_fire_button: int = 1
         self.joy_id: int = 0
@@ -27,6 +30,11 @@ class GameSettings:
         return {
             'music_volume': self.music_volume,
             'launch_fullscreen': self.launch_fullscreen,
+            'monitor_id': self.monitor_id,
+            'resolution': {
+                "width": self.resolution.width,
+                "height": self.resolution.height
+            },
             'input': {
                 'mouse': {
                     'sensitivity': self.mouse_sensitivity,
@@ -59,6 +67,14 @@ class GameSettings:
                 fullscreen = settings.get('launch_fullscreen')
                 if fullscreen:
                     self.launch_fullscreen = fullscreen
+
+                res = settings.get('resolution')
+                if res:
+                    self.resolution = Resolution.from_dict(res)
+
+                monitor_id = settings.get('monitor_id')
+                if monitor_id:
+                    self.monitor_id = monitor_id
 
                 user_input = settings.get('input')
                 if user_input:

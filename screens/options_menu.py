@@ -2,6 +2,7 @@ import pygame as pg
 import pygame_menu as pm
 from typing import Optional
 
+from engine import Resolution
 from game.settings import GameSettings
 from screens import RGBColors
 
@@ -16,6 +17,8 @@ class OptionsMenu:
         self.joy_menu: Optional[pm.Menu] = None
         self.mouse_menu: Optional[pm.Menu] = None
         self.settings: GameSettings = GameSettings(path)
+        self.display_modes: list[tuple[str, Resolution]] = []
+        self.res_drop: Optional[pm.widgets.DropSelect] = None
 
     def save_options(self):
         data = self.menu.get_input_data()
@@ -24,6 +27,10 @@ class OptionsMenu:
                 self.settings.launch_fullscreen = data[key]
             elif key == "music_volume":
                 self.settings.music_volume = round(data[key], 1)
+            elif key == "monitor_id":
+                self.settings.monitor_id = data[key][0][1]
+            elif key == "resolution":
+                self.settings.resolution = data[key][0][1]
             else:
                 print(f'WARN: Unrecognized options key: {key}')
 
@@ -44,6 +51,15 @@ class OptionsMenu:
     @staticmethod
     def _get_joy_axis_ids() -> list[tuple[str, int]]:
         return [(str(x), x) for x in range(2)]
+
+    @staticmethod
+    def _get_monitor_ids() -> list[tuple[str, int]]:
+        return [(str(x), x) for x in range(pg.display.get_num_displays())]
+
+    @staticmethod
+    def _get_display_modes_for_monitor(monitor: int) -> list[tuple[str, Resolution]]:
+        return [(f'{str(x[0])}x{str(x[1])}', Resolution.from_tuple(x))
+                for x in pg.display.list_modes(display=monitor)]
 
     def _store_joy_settings(self):
         data = self.joy_menu.get_input_data()
@@ -162,12 +178,46 @@ class OptionsMenu:
                               button_id='mouse_options_save')
         return mouse_menu
 
+    def _get_selected_monitor(self) -> int:
+        data = self.menu.get_input_data()
+        if 'monitor_id' not in data:
+            return 0
+        return data['monitor_id'][0][1]
+
+    def _update_display_modes(self):
+        monitor = self._get_selected_monitor()
+        self.display_modes = self._get_display_modes_for_monitor(monitor)
+        if self.res_drop:
+            self.res_drop.update_items(self.display_modes)
+
+    def _on_res_change(self, *args, **kwargs):
+        self._update_display_modes()
+
     def setup(self):
         self.settings.load_settings()
         self.menu.get_theme().widget_font_size = 20
         self.menu.get_theme().widget_font_color = RGBColors.WHITE.value
         self.menu.get_theme().widget_alignment = pm.locals.ALIGN_LEFT
-        # TODO Need options for screen res and sounds toggle
+
+        default_disp_index: int = self.settings.monitor_id
+        disp_index: int = 0
+        for res in self.display_modes:
+            if res[1] == self.settings.resolution:
+                default_disp_index = disp_index
+                break
+            disp_index += 1
+
+        # TODO Need option for sounds toggle
+        self.menu.add.dropselect(title="Display",
+                                 default=self.settings.monitor_id,
+                                 items=self._get_monitor_ids(),
+                                 dropselect_id='monitor_id',
+                                 onchange=self._on_res_change)
+        self._update_display_modes()
+        self.res_drop = self.menu.add.dropselect(title="Resolution",
+                                                 default=default_disp_index,
+                                                 items=self.display_modes,
+                                                 dropselect_id='resolution')
         self.menu.add.toggle_switch(title="Launch full screen",
                                     default=self.settings.launch_fullscreen,
                                     toggleswitch_id="launch_fullscreen")

@@ -2,6 +2,7 @@ import os
 import pygame as pg
 
 from engine import constants as con
+from engine import Resolution
 from engine.game import Game
 from engine.input_handler import InputEvent
 from weapon.weapon_inventory import WeaponInventory
@@ -53,9 +54,15 @@ class DoomWolf(Game):
         self.input.joy_right_bumper = self.settings.joy_right_bumper
         self.input.joy_d_pad_x_axis = self.settings.joy_d_pad_x_axis
         self.input.joy_d_pad_y_axis = self.settings.joy_d_pad_y_axis
+
         self.weapon_inventory.load_weapons()
         self.current_weapon = self.weapon_inventory.get_current()
         self.sound.set_music_volume(self.settings.music_volume)
+
+        if self.settings.resolution != Resolution.zero():
+            res = self.settings.resolution.to_tuple()
+            self.screen = pg.display.set_mode(res)
+
         if self.settings.launch_fullscreen and not pg.display.is_fullscreen():
             pg.display.toggle_fullscreen()
 
