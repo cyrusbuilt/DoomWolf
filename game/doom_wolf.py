@@ -29,6 +29,27 @@ class DoomWolf(Game):
         self.current_map_index: int = -1
         self.pause_screen: Optional[PauseScreen] = None
 
+    def _apply_settings(self):
+        self.input.mouse_sensitivity = self.settings.mouse_sensitivity
+        self.input.mouse_fire_button = self.settings.mouse_fire_button
+        self.input.joy_fire_button = self.settings.joy_fire_button
+        self.input.joy_pause_button = self.settings.joy_pause_button
+        self.input.joy_quit_button = self.settings.joy_quit_button
+        self.input.joy_use_button = self.settings.joy_use_button
+        self.input.joy_weapon_switch = self.settings.joy_weapon_switch
+        self.input.joy_left_bumper = self.settings.joy_left_bumper
+        self.input.joy_right_bumper = self.settings.joy_right_bumper
+        self.input.joy_d_pad_x_axis = self.settings.joy_d_pad_x_axis
+        self.input.joy_d_pad_y_axis = self.settings.joy_d_pad_y_axis
+
+        self.sound.set_music_volume(self.settings.music_volume)
+        if self.settings.resolution != Resolution.zero():
+            res = self.settings.resolution.to_tuple()
+            self.screen = pg.display.set_mode(res)
+
+        if self.settings.launch_fullscreen and not pg.display.is_fullscreen():
+            pg.display.toggle_fullscreen()
+
     def new_game(self):
         have_maps = False
         if self.map is None or self.map.won:
@@ -46,28 +67,10 @@ class DoomWolf(Game):
 
         super().new_game(have_maps)
         self.settings.load_settings()
-        self.input.mouse_sensitivity = self.settings.mouse_sensitivity
-        self.input.mouse_fire_button = self.settings.mouse_fire_button
-        self.input.joy_fire_button = self.settings.joy_fire_button
-        self.input.joy_pause_button = self.settings.joy_pause_button
-        self.input.joy_quit_button = self.settings.joy_quit_button
-        self.input.joy_use_button = self.settings.joy_use_button
-        self.input.joy_weapon_switch = self.settings.joy_weapon_switch
-        self.input.joy_left_bumper = self.settings.joy_left_bumper
-        self.input.joy_right_bumper = self.settings.joy_right_bumper
-        self.input.joy_d_pad_x_axis = self.settings.joy_d_pad_x_axis
-        self.input.joy_d_pad_y_axis = self.settings.joy_d_pad_y_axis
+        self._apply_settings()
 
         self.weapon_inventory.load_weapons()
         self.current_weapon = self.weapon_inventory.get_current()
-        self.sound.set_music_volume(self.settings.music_volume)
-
-        if self.settings.resolution != Resolution.zero():
-            res = self.settings.resolution.to_tuple()
-            self.screen = pg.display.set_mode(res)
-
-        if self.settings.launch_fullscreen and not pg.display.is_fullscreen():
-            pg.display.toggle_fullscreen()
 
         self.pause_screen = PauseScreen(self)
 
