@@ -29,13 +29,14 @@ improves on the original with the following:
 - More than one weapon
 - User-definable weapons, enemies, level map and sprite map (documentation coming soon)
 - Main menu and options screens
+- Pause screen
+- Map loading system
 
 Future planned improvements:
-- More maps! And a map loading system
+- More maps!
 - More weapons
 - More enemies
 - More sprites (static and animated)
-- Pause screen
 - Level progression
 - Difficulty levels
 - Possible multiplayer

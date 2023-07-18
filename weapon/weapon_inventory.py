@@ -51,6 +51,9 @@ class WeaponInventory:
             self.game.current_weapon = self.get_current()
 
     def inventory_event(self, events: set[InputEvent]):
+        if self.game.paused:
+            return
+
         if InputEvent.WEAPON_SWITCH in events:
             self.next()
 

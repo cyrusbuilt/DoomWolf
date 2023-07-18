@@ -88,7 +88,7 @@ class Game:
             self.object_renderer.draw()
             self.current_weapon.draw()
 
-    def _handle_pause(self):
+    def handle_pause(self):
         self.paused = not self.paused
         if self.paused:
             print('Game paused!')
@@ -113,7 +113,7 @@ class Game:
             if event == InputEvent.SCREENSHOT:
                 self._handle_screenshot()
             elif event == InputEvent.PAUSE:
-                self._handle_pause()
+                self.handle_pause()
             elif event == InputEvent.TOGGLE_FULLSCREEN:
                 pg.display.toggle_fullscreen()
             elif event == InputEvent.INTERACT:
@@ -126,7 +126,8 @@ class Game:
 
         if not self.paused:
             self.player.single_fire_event(events)
-            self.do_events(events)
+
+        self.do_events(events)
 
     def run(self):
         while True:
