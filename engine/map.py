@@ -60,6 +60,7 @@ class Map:
         self.sprite_map_path: Optional[str] = None
         self.enemy_count: int = 0
         self.won: bool = False
+        self.enemies: Optional[list[str]] = None
 
     def load_map(self):
         print(f'Loading map: {self.name}')

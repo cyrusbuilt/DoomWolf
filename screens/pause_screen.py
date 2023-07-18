@@ -19,7 +19,9 @@ class PauseScreen:
         self.is_shown: bool = False
 
     def close_menu(self):
+        # TODO Move this to input_handler?
         pg.mouse.set_visible(con.DEBUG)
+
         self.game.handle_pause()
         self.menu.disable()
         self.is_shown = False

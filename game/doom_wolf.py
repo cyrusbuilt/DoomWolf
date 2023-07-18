@@ -59,6 +59,8 @@ class DoomWolf(Game):
                     self.current_map_index += 1
                 path = self.maps[self.current_map_index]
                 self.map = game_map(self, path).build()
+                if self.map.enemies:
+                    self.object_handler.enemy_list = self.map.enemies
 
                 s_map = self.map.sprite_map_path
                 if s_map and os.path.exists(s_map):

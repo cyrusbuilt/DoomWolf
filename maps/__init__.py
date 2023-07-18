@@ -1,6 +1,7 @@
 import json
 import os
 import pygame as pg
+from typing import Optional
 
 from engine import constants as con
 from engine.map import Map
@@ -52,6 +53,11 @@ class MapBuilder:
         self.the_map.enemy_count = enemy_count
         return self
 
+    @copy_method
+    def set_enemies(self, enemies: Optional[list[str]] = None):
+        self.the_map.enemies = enemies
+        return self
+
     def build(self) -> Map:
         self.the_map.load_map()
         return self.the_map
@@ -72,11 +78,13 @@ def game_map(game, map_path: str) -> MapBuilder:
             mini_map = map_dict.get('minimap')
             sprite_map = map_dict.get('sprite_map')
             enemy_count = map_dict.get('enemy_count', 20)
+            enemies = map_dict.get('enemies')
 
             builder: MapBuilder = MapBuilder(game, name) \
                 .set_mini_map(mini_map) \
                 .set_floor_texture(floor_tex) \
-                .set_enemy_count(enemy_count)
+                .set_enemy_count(enemy_count) \
+                .set_enemies(enemies)
 
             music_path = os.path.join(con.MUSIC_BASE, music)
             if os.path.exists(music_path):

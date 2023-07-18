@@ -2,6 +2,7 @@ import os
 import json
 import pygame as pg
 from random import randint
+from typing import Optional
 
 from engine import constants as con
 from engine.enemy import Enemy
@@ -134,7 +135,8 @@ def enemy(game, data_path: str, pos: tuple[float, float]) -> EnemyBuilder:
             return builder
 
 
-def get_enemy_meta(data_dir: str) -> tuple[dict[str, int], dict[str, str]]:
+def get_enemy_meta(data_dir: str, names: Optional[list[str]] = None) \
+        -> tuple[dict[str, int], dict[str, str]]:
     print('Loading enemy meta data...')
     data: dict[str, int] = {}
     paths: dict[str, str] = {}
@@ -146,8 +148,13 @@ def get_enemy_meta(data_dir: str) -> tuple[dict[str, int], dict[str, str]]:
             with open(full_path, encoding='UTF-8') as e_file:
                 enemy_dict = json.load(e_file)
                 name = enemy_dict.get('name')
+                if names and name not in names:
+                    print(f"'{name}' not specified in map data. Skipping...")
+                    continue
+
                 weight = enemy_dict.get('spawn_weight')
                 if name and weight:
                     data[name] = weight
                     paths[name] = full_path
+
     return data, paths

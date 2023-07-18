@@ -17,10 +17,11 @@ class DoomWolfObjectHandler(ObjectHandler):
         super().__init__(game)
         self.enemy_paths: dict[str, str] = {}
         self.sprite_map: Optional[SpriteMap] = None
+        self.enemy_names: Optional[list[str]] = None
 
     def setup(self):
         super().setup()
-        data, paths = get_enemy_meta(con.ENEMY_DATA_BASE)
+        data, paths = get_enemy_meta(con.ENEMY_DATA_BASE, self.enemy_names)
         items = data.items()
         spawn_weights = dict(sorted(items, key=lambda item: item[1], reverse=True))
         self.enemy_types = list(spawn_weights.keys())

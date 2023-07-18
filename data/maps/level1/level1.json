@@ -44,5 +44,6 @@
     [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
   ],
-  "sprite_map": "sprite_map.json"
+  "sprite_map": "sprite_map.json",
+  "enemies": ["soldier", "caco_demon", "cyber_demon"]
 }
