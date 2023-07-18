@@ -48,4 +48,4 @@ class MainMenu:
                                   font_color=RGBColors.WHITE.value,
                                   background_color=RGBColors.RED.value)
         self.main_menu.mainloop(self.screen)
-        pg.quit()
+        pg.display.quit()

@@ -1,5 +1,6 @@
 import os
 import pygame as pg
+from typing import Optional
 
 from engine import constants as con
 from engine import Resolution
@@ -10,6 +11,7 @@ from game.doom_obj_handler import DoomWolfObjectHandler
 from game.settings import GameSettings
 from maps import game_map
 from maps.sprite_map import sprite_map
+from screens.pause_screen import PauseScreen
 
 
 SETTINGS = 'settings.json'
@@ -25,6 +27,7 @@ class DoomWolf(Game):
         self.weapon_inventory: WeaponInventory = WeaponInventory(self)
         self.maps: list[str] = []
         self.current_map_index: int = -1
+        self.pause_screen: Optional[PauseScreen] = None
 
     def new_game(self):
         have_maps = False
@@ -66,8 +69,19 @@ class DoomWolf(Game):
         if self.settings.launch_fullscreen and not pg.display.is_fullscreen():
             pg.display.toggle_fullscreen()
 
+        self.pause_screen = PauseScreen(self)
+
+    def handle_pause(self):
+        super().handle_pause()
+        if (self.paused and self.pause_screen and
+                not self.pause_screen.is_shown):
+            self.pause_screen.show_menu()
+
     def do_events(self, events: set[InputEvent]):
         self.weapon_inventory.inventory_event(events)
+        if (self.paused and self.pause_screen and
+                self.pause_screen.is_shown):
+            self.pause_screen.event_loop()
 
     def find_maps(self):
         items = os.listdir(con.MAP_DATA_BASE)
