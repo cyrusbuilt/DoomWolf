@@ -135,7 +135,7 @@ class AnimatedSprite(Sprite):
         return images
 
     def animate(self, images: deque[pg.Surface]):
-        if self.animation_trigger:
+        if self.animation_trigger and len(images):
             images.rotate(-1)
             self.image = images[0]
 
