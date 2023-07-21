@@ -1,5 +1,6 @@
 from collections import deque
 import math
+import os.path as path
 import pygame as pg
 from random import randint, random
 
@@ -23,6 +24,7 @@ class Enemy(AnimatedSprite):
         self.idle_images: deque[pg.Surface] = deque()
         self.pain_images: deque[pg.Surface] = deque()
         self.walk_images: deque[pg.Surface] = deque()
+        self.see_images: deque[pg.Surface] = deque()
         self.attack_dist: int = randint(3, 6)
         self.speed: float = 0.03
         self.size: int = 20
@@ -42,11 +44,12 @@ class Enemy(AnimatedSprite):
         return int(self.x), int(self.y)
 
     def setup(self):
-        self.attack_images = self.load_images(self.path + '/attack')
-        self.death_images = self.load_images(self.path + '/death')
-        self.idle_images = self.load_images(self.path + '/idle')
-        self.pain_images = self.load_images(self.path + '/pain')
-        self.walk_images = self.load_images(self.path + '/walk')
+        self.attack_images = self.load_images(path.join(self.path, "attack"))
+        self.death_images = self.load_images(path.join(self.path, "death"))
+        self.idle_images = self.load_images(path.join(self.path, "idle"))
+        self.pain_images = self.load_images(path.join(self.path, "pain"))
+        self.walk_images = self.load_images(path.join(self.path, "walk"))
+        self.see_images = self.load_images(path.join(self.path, "see"))
 
     def check_wall(self, x: int, y: int) -> bool:
         return ((x, y) not in self.game.map.world_map and
@@ -87,6 +90,11 @@ class Enemy(AnimatedSprite):
             self.play_action_sound('attack')
             if random() < self.accuracy:
                 self.game.player.take_damage(self.attack_damage)
+
+    def see_player(self):
+        if self.animation_trigger:
+            self.animate(self.see_images)
+            self.play_action_sound('see')
 
     def animate_death(self):
         if not self.alive:
@@ -209,7 +217,18 @@ class Enemy(AnimatedSprite):
             if self.pain:
                 self.animate_pain()
             elif self.ray_cast_value:
+                # TODO In the future, we should probably implement a way for
+                # enemies to 'lose track' of the player and go back to idle.
+                # Right now, once an enemy spots the player, it *never* loses
+                # track of the player. It's possible to attract the attention
+                # of a whole bunch of enemies at once and have to battle them
+                # all. While certainly a challenge, I could also see this as
+                # annoying and impossible to survive (ie. multiple cyber
+                # demons + soldiers attacking at once). We should have some
+                # criteria/threshold where player_search_trigger and
+                # ray_cast_value is reset to false.
                 self.player_search_trigger = True
+                self.see_player()
 
                 if self.dist < self.attack_dist:
                     self.animate(self.attack_images)
