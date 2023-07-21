@@ -16,6 +16,7 @@ Enemies
 - CacoDemon - id Software, Stanislov Petrov (I think)
 - CyberDemon - id Software, Stanislov Petrov (I think)
 - Soldier - id Software, Stanislov Petrov (I think)
+- BlindPinky - Sprites: HorrorMovieGuy, Sounds: Doom64
 
 Weapons
 - Chainsaw - Cyrus Brunner
