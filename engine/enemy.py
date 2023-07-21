@@ -62,6 +62,8 @@ class Enemy(AnimatedSprite):
         action_sound = self.sounds.get(action)
         if action_sound:
             self.game.sound.play_sound(action_sound)
+        else:
+            print(f"ERROR: Sound not found for action: '{action}'")
 
     def movement(self):
         get_path = self.game.path_finder.get_path
