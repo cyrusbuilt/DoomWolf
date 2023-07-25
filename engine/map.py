@@ -50,6 +50,7 @@ class Map:
         self.game = game
         self.world_map: dict[tuple[int, int], int] = {}
         self.obstacles: list[tuple[int, int]] = []
+        self.pickups: list[tuple[int, int]] = []
         self.rows: int = len(self.mini_map)
         self.cols: int = len(self.mini_map[0])
         self.sky_texture: Optional[pg.Surface] = None
@@ -98,3 +99,12 @@ class Map:
 
     def has_obstacle(self, obstacle: tuple[int, int]):
         return obstacle in self.obstacles
+
+    def add_pickup(self, pickup: tuple[int, int]):
+        self.pickups.append(pickup)
+
+    def remove_pickup(self, pickup: tuple[int, int]):
+        self.pickups.remove(pickup)
+
+    def has_pickup(self, pickup: tuple[int, int]):
+        return pickup in self.pickups

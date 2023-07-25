@@ -9,6 +9,7 @@ from engine.sprite import Sprite
 from enemy import get_enemy_meta
 from enemy import enemy
 from maps.sprite_map import SpriteMap
+from sprite_object.item import Item
 
 
 class DoomWolfObjectHandler(ObjectHandler):
@@ -58,5 +59,10 @@ class DoomWolfObjectHandler(ObjectHandler):
                 for i in range(d_sprite.tile_count):
                     pos = (int(d_sprite.x - i), int(d_sprite.y))
                     self.game.map.add_obstacle(pos)
+
+            for i_sprite in self.sprite_map.item_sprites:
+                self.add_sprite(i_sprite)
+                pos = (i_sprite.x, i_sprite.y)
+                self.game.map.add_pickup(pos)
         else:
             super().spawn_sprites()

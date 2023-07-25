@@ -121,7 +121,21 @@
         "tiles": 2,
         "type": "horizontal",
         "animation_time": 100,
-        "interaction_sound": "door.wav"
+        "interaction_sound": "dsdoropn.wav"
+      }
+    ],
+    "item": [
+      {
+        "name": "armor",
+        "type": "armor",
+        "shift": 1.5,
+        "scale_height": 0.2,
+        "pos_x": 11.5,
+        "pos_y": 15.5,
+        "interaction_sound": "dsitemup.wav",
+        "image": "ARECA0.png",
+        "animation_time": 200,
+        "units": 33
       }
     ]
   }

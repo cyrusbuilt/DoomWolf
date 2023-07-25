@@ -84,6 +84,9 @@ class Sprite:
             self.get_sprite_projection()
 
     def interact(self):
+        if not self.is_interactive:
+            return
+
         if self.interaction_sound and not self.removed:
             i_chan = self.game.sound.item_channel
             if not i_chan.get_busy():
