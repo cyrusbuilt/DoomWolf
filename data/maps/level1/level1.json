@@ -1,6 +1,6 @@
 {
   "name": "level1",
-  "enemy_count": 2,
+  "enemy_count": 20,
   "music": "level1_theme.mp3",
   "sky_texture": "sky.png",
   "sky_offset": 0,
@@ -45,5 +45,5 @@
     [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
   ],
   "sprite_map": "sprite_map.json",
-  "enemies": ["soldier", "caco_demon", "blind_pinky", "cyber_demon"]
+  "enemies": ["soldier", "caco_demon", "cyber_demon"]
 }
