@@ -4,12 +4,14 @@ import os
 ASSETS_BASE = "assets"
 SOUND_BASE = os.path.join(ASSETS_BASE, 'sound')
 DOOR_SOUND_BASE = os.path.join(SOUND_BASE, 'doors')
+ITEM_SOUND_BASE = os.path.join(SOUND_BASE, 'items')
 MUSIC_BASE = os.path.join(SOUND_BASE, 'music')
 ENEMY_SOUND_BASE = os.path.join(SOUND_BASE, "enemy")
 WEAPON_SOUND_BASE = os.path.join(SOUND_BASE, "weapon")
 SPRITE_BASE = os.path.join(ASSETS_BASE, "sprites")
 ANIM_SPRITE_BASE = os.path.join(SPRITE_BASE, "animated_sprites")
 DOOR_SPRITE_BASE = os.path.join(SPRITE_BASE, "doors")
+ITEM_SPRITE_BASE = os.path.join(SPRITE_BASE, "items")
 ENEMY_SPRITE_BASE = os.path.join(SPRITE_BASE, "enemy")
 STATIC_SPRITE_BASE = os.path.join(SPRITE_BASE, "static")
 WEAPON_SPRITE_BASE = os.path.join(SPRITE_BASE, "weapon")
@@ -27,6 +29,7 @@ RES = WIDTH, HEIGHT = 1600, 900
 HALF_WIDTH = WIDTH // 2
 HALF_HEIGHT = HEIGHT // 2
 GRID_BLOCK = 100
+HALF_BLOCK = GRID_BLOCK / 2
 FIFTH_BLOCK = GRID_BLOCK / 5
 FPS = 0
 
@@ -36,6 +39,7 @@ PLAYER_SPEED = 0.004
 PLAYER_ROT_SPEED = 0.002
 PLAYER_SIZE_SCALE = 60
 PLAYER_MAX_HEALTH = 100
+PLAYER_MAX_ARMOR = 250
 INTERACTION_RANGE = 200
 
 MOUSE_SENSITIVITY = 0.0003

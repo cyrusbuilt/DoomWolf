@@ -32,7 +32,10 @@ class Door(AnimatedSprite):
         if self.removed:
             return
 
+        # We want the interaction sound to only play once.
         super().interact()
+        self.is_interactive = False
+
         if self.type == DoorType.VERTICAL:
             self.y -= 1
             delta_y = self.y - self.previous_pos_y
@@ -41,7 +44,6 @@ class Door(AnimatedSprite):
         elif self.type == DoorType.HORIZONTAL:
             self.x -= 1
             delta_x = self.x - self.previous_pos_x
-            print(f'delta_x = {abs(delta_x)}')
             if abs(delta_x) > con.FIFTH_BLOCK:
                 self.removed = True
 

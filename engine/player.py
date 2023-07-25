@@ -16,6 +16,7 @@ class Player:
         self.angle: int = con.PLAYER_ANGLE
         self.shot: bool = False
         self.health: int = con.PLAYER_MAX_HEALTH
+        self.armor: int = 0
         self.rel: int = 0
         self.health_recovery_delay: int = 700
         self.time_prev: int = pg.time.get_ticks()
@@ -25,10 +26,18 @@ class Player:
             self.game.sound.player_movement
         self.do_continuous_fire: bool = False
         self.interact: bool = False
+        self.sprite: pg.Surface = pg.Surface(((con.GRID_BLOCK / 12) - 3,
+                                              (con.GRID_BLOCK / 12) - 3))
+        self.rect: pg.Rect = self.sprite.get_rect()
+        self.rect.x = self.x
+        self.rect.y = self.y
+        self.hit_pickup: bool = False
 
     def reset(self):
         self.x = con.PLAYER_POS[0]
         self.y = con.PLAYER_POS[1]
+        self.rect.x = self.x
+        self.rect.y = self.y
         self.angle = con.PLAYER_ANGLE
         self.shot = False
         self.health = con.PLAYER_MAX_HEALTH
@@ -58,6 +67,31 @@ class Player:
         if self.check_health_recovery_delay() and can_recover:
             self.health += 1
 
+    def give_health(self, health: int):
+        if health > con.PLAYER_MAX_HEALTH:
+            health = con.PLAYER_MAX_HEALTH
+
+        if health < 1:
+            health = 1
+
+        if (self.health + health) > con.PLAYER_MAX_HEALTH:
+            self.health = con.PLAYER_MAX_HEALTH
+        else:
+            self.health += health
+
+    def give_armor(self, armor: int):
+        print(f'Player: took armor: {armor}%')
+        if armor > con.PLAYER_MAX_ARMOR:
+            armor = con.PLAYER_MAX_ARMOR
+
+        if armor < 1:
+            armor = 1
+
+        if (self.armor + armor) > con.PLAYER_MAX_ARMOR:
+            self.armor = con.PLAYER_MAX_ARMOR
+        else:
+            self.armor += armor
+
     def check_game_over(self):
         if self.health < 1:
             self.game.object_renderer.game_over()
@@ -67,7 +101,16 @@ class Player:
 
     def take_damage(self, damage: int):
         if not con.GOD_MODE:
-            self.health -= damage
+            # If we have armor, decrement that first (but take double)
+            if self.armor > 0:
+                damage *= 2
+                print(f'Armor damage: {damage}%')
+                self.armor -= damage
+                if self.armor < 0:
+                    self.armor = 0
+            else:
+                print(f'Health damage: {damage}%')
+                self.health -= damage
         self.game.object_renderer.player_damage()
         self.play_pain_sound()
         self.check_game_over()
@@ -150,6 +193,8 @@ class Player:
 
         if movement:
             print(f'Player X = {self.x}, Y = {self.y}')
+            self.rect.x = self.x
+            self.rect.y = self.y
             self.play_movement_sound()
 
         # diagonal movement correction

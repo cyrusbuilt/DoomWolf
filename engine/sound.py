@@ -58,6 +58,8 @@ class Sound:
     def get_sprite_sounds(sprite_name: str) -> dict[str, pg.mixer.Sound]:
         print(f"Loading sounds for sprite '{sprite_name}' ...")
         path = os.path.join(con.DOOR_SOUND_BASE, sprite_name)
+        if not os.path.isdir(path):
+            path = os.path.join(con.ITEM_SOUND_BASE, sprite_name)
         return Sound._load_sounds_for_path(path)
 
     def load_game_music(self):
