@@ -2,7 +2,7 @@ import pygame as pg
 import pygame_menu as pm
 from typing import Optional
 
-from screens import RGBColors
+from engine import RGBColors
 
 
 class MainMenu:

@@ -3,8 +3,8 @@ import pygame_menu as pm
 from typing import Optional
 
 from engine import Resolution
+from engine import RGBColors
 from game.settings import GameSettings
-from screens import RGBColors
 
 
 class OptionsMenu:

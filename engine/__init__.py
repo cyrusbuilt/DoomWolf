@@ -1,3 +1,16 @@
+from enum import Enum
+
+
+class RGBColors(Enum):
+    RED = (255, 0, 0)
+    GREEN = (0, 255, 0)
+    BLUE = (0, 0, 255)
+    CYAN = (0, 100, 100)
+    BLACK = (0, 0, 0)
+    WHITE = (255, 255, 255)
+    DARK_GRAY = (50, 50, 50)
+
+
 class Resolution:
 
     def __init__(self, width: int = 0, height: int = 0):

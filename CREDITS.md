@@ -30,3 +30,9 @@ Doors
 
 Items
 - Armor Orb - Sprites: id Software, Rogue Entertainment, Banjo Software, Sound: Bobby Prince (id Software)
+
+HUD
+- Original sprite and code by Arman Asl Yosef Zadeh (Mozilla Public License v2.0), both modified by CyrusBuilt
+
+Fonts
+- DUGAFONT.ttf by Arman Asl Yosef Zadeh (Mozilla Public License v2.0)

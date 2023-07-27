@@ -2,7 +2,7 @@ import pygame as pg
 import pygame_menu as pm
 
 from engine import constants as con
-from screens import RGBColors
+from engine import RGBColors
 
 
 class PauseScreen:
