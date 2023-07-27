@@ -4,6 +4,7 @@ import pygame as pg
 from typing import Optional
 
 from engine import constants as con
+from engine.hud import Hud
 from engine.input_handler import InputEvent
 from engine.input_handler import InputHandler
 from engine.map import Map
@@ -37,8 +38,7 @@ class Game:
         self.object_handler: ObjectHandler = ObjectHandler(self)
         self.path_finder: Optional[PathFinder] = None
         pg.time.set_timer(self.global_event, 40)
-        # TODO Need a class for handling power-ups and inventory.
-        # TODO Maybe support things like shield and extra health, etc.
+        self.hud: Hud = Hud(self)
 
     def new_game(self, skip_default_map_load: bool = False):
         if not skip_default_map_load:
@@ -71,6 +71,7 @@ class Game:
         self.ray_caster.update()
         self.object_handler.update()
         self.current_weapon.update()
+        self.hud.update()
         self.delta_time = self.clock.tick(con.FPS)
         title = self.window_title
         # if con.DEBUG:
