@@ -83,7 +83,7 @@ class ObjectHandler:
     def check_win(self):
         if not len(self.enemy_positions):
             self.game.object_renderer.win()
-            pg.display.flip()
+            self.game.update_display()
             pg.time.delay(1500)
             self.game.map.won = True
             self.game.new_game()

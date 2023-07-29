@@ -73,11 +73,11 @@ class ObjectRenderer:
 
     def win(self):
         if self.win_image:
-            self.screen.blit(self.win_image, (0, 0))
+            self.game.blit(self.win_image, (0, 0))
 
     def game_over(self):
         if self.game_over_image:
-            self.screen.blit(self.game_over_image, (0, 0))
+            self.game.blit(self.game_over_image, (0, 0))
 
     # TODO Health display is in the HUD now.
     # def draw_player_health(self):
@@ -89,14 +89,14 @@ class ObjectRenderer:
 
     def player_damage(self):
         if self.blood_screen:
-            self.screen.blit(self.blood_screen, (0, 0))
+            self.game.blit(self.blood_screen, (0, 0))
 
     def draw_background(self):
         if self.sky_image:
             offset = (self.sky_offset + 4.5 * self.game.player.rel)
             self.sky_offset = offset % con.WIDTH
-            self.screen.blit(self.sky_image, (-self.sky_offset, 0))
-            self.screen.blit(self.sky_image, (-self.sky_offset + con.WIDTH, 0))
+            self.game.blit(self.sky_image, (-self.sky_offset, 0))
+            self.game.blit(self.sky_image, (-self.sky_offset + con.WIDTH, 0))
         else:
             self.screen.fill('black')
 
@@ -104,13 +104,21 @@ class ObjectRenderer:
         # TODO Prefer floor texture if defined, over floor color
         # TODO Fallback to default floor color if neither defined.
         rect = (0, con.HALF_HEIGHT, con.WIDTH, con.HEIGHT)
-        pg.draw.rect(self.screen, self.floor_color, rect)
+        if self.game.hw_render_enabled:
+            old_color = self.game.hw_renderer.draw_color
+            self.game.hw_renderer.draw_color = self.floor_color
+            hw_rect = pg.Rect(rect[0], rect[1], rect[2], rect[3])
+            self.game.hw_renderer.draw_rect(hw_rect)
+            self.game.hw_renderer.fill_rect(hw_rect)
+            self.game.hw_renderer.draw_color = old_color
+        else:
+            pg.draw.rect(self.screen, self.floor_color, rect)
 
     def render_game_objects(self):
         objs_to_render = self.game.ray_caster.objects_to_render
         objects = sorted(objs_to_render, key=lambda t: t[0], reverse=True)
         for unused_depth, image, pos in objects:
-            self.screen.blit(image, pos)
+            self.game.blit(image, pos)
 
     def draw(self):
         self.draw_background()

@@ -25,6 +25,7 @@ class GameSettings:
         self.joy_right_bumper: int = 10
         self.joy_d_pad_x_axis: int = 0
         self.joy_d_pad_y_axis: int = 1
+        self.hardware_render: bool = False
 
     def to_dict(self) -> dict:
         return {

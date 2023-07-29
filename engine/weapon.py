@@ -80,7 +80,7 @@ class Weapon(AnimatedSprite):
                     self.frame_counter = 0
 
     def draw(self):
-        self.game.screen.blit(self.images[0], self.weapon_pos)
+        self.game.blit(self.images[0], self.weapon_pos)
 
     def update(self):
         self.check_animation_time()

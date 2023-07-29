@@ -20,7 +20,7 @@ class Text:
                                                    self.color.value)
 
     def draw(self):
-        self.game.screen.blit(self.layout, self.pos)
+        self.game.blit(self.layout, self.pos)
 
     def update_text(self, string: str):
         self.string = string

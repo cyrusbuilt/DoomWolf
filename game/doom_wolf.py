@@ -47,6 +47,14 @@ class DoomWolf(Game):
             res = self.settings.resolution.to_tuple()
             self.screen = pg.display.set_mode(res)
 
+        print(f'HW render ENABLED in settings: {self.settings.hardware_render}')
+        if self.settings.hardware_render:
+            super().enable_hw_render()
+        else:
+            super().disable_hw_render()
+
+        print(f'HW render enabled: {self.hw_render_enabled}')
+
         if self.settings.launch_fullscreen and not pg.display.is_fullscreen():
             pg.display.toggle_fullscreen()
 

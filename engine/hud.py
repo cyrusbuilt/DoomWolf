@@ -35,7 +35,7 @@ class Hud:
                                      self.ammo_text, self.wpn_text]
 
     def update(self):
-        self.game.screen.blit(self.sprite, self.rect)
+        self.game.blit(self.sprite, self.rect)
         p_armor = self.game.player.armor
         p_health = self.game.player.health
         max_ammo = self.game.current_weapon.ammo_capacity
