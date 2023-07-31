@@ -136,6 +136,30 @@
         "image": "ARECA0.png",
         "animation_time": 200,
         "units": 33
+      },
+      {
+        "name": "armor",
+        "type": "armor",
+        "shift": 1.5,
+        "scale_height": 0.2,
+        "pos_x": 13.5,
+        "pos_y": 7.5,
+        "interaction_sound": "dsitemup.wav",
+        "image": "ARECA0.png",
+        "animation_time": 200,
+        "units": 33
+      },
+      {
+        "name": "health",
+        "type": "health",
+        "shift": 1.5,
+        "scale_height": 0.2,
+        "pos_x": 6.5,
+        "pos_y": 7.5,
+        "interaction_sound": "dsgetpow.wav",
+        "image": "HRECA0.png",
+        "animation_time": 200,
+        "units": 25
       }
     ]
   }

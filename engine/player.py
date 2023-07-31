@@ -67,7 +67,11 @@ class Player:
         if self.check_health_recovery_delay() and can_recover:
             self.health += 1
 
-    def give_health(self, health: int):
+    def give_health(self, health: int) -> bool:
+        if self.health == con.PLAYER_MAX_HEALTH:
+            return False
+
+        print(f'Player took health: {health}%')
         if health > con.PLAYER_MAX_HEALTH:
             health = con.PLAYER_MAX_HEALTH
 
@@ -79,7 +83,12 @@ class Player:
         else:
             self.health += health
 
-    def give_armor(self, armor: int):
+        return True
+
+    def give_armor(self, armor: int) -> bool:
+        if self.armor == con.PLAYER_MAX_ARMOR:
+            return False
+
         print(f'Player: took armor: {armor}%')
         if armor > con.PLAYER_MAX_ARMOR:
             armor = con.PLAYER_MAX_ARMOR
@@ -91,6 +100,8 @@ class Player:
             self.armor = con.PLAYER_MAX_ARMOR
         else:
             self.armor += armor
+
+        return True
 
     def check_game_over(self):
         if self.health < 1:

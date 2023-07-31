@@ -35,17 +35,19 @@ class Item(AnimatedSprite):
         self.refresh_sprite()
         self.check_animation_time()
         self.animate(self.images)
+
+        picked_up = False
         if self.rect:
             if self.rect.colliderect(self.game.player.rect):
-                super().interact()
-
                 if self.type == ItemType.HEALTH:
-                    self.game.player.give_health(self.units)
-                    self.removed = True
+                    picked_up = self.game.player.give_health(self.units)
                 elif self.type == ItemType.ARMOR:
-                    self.game.player.give_armor(self.units)
-                    self.removed = True
+                    picked_up = self.game.player.give_armor(self.units)
                 # TODO Handle other types
+
+                if picked_up:
+                    super().interact()
+                    self.removed = True
 
                 sprite_list = self.game.object_handler.sprite_list
                 if self in sprite_list and self.removed:
