@@ -113,7 +113,6 @@ class AnimatedSprite(Sprite):
         self.images: deque[pg.Surface] = deque()
         self.animation_time_prev: int = pg.time.get_ticks()
         self.animation_trigger: bool = False
-        self.has_viewing_angles: bool = False
         self.sprite_angles: list[frozenset[int]] = []
         self.sprite_positions: dict[frozenset[int], pg.Surface] = {}
 

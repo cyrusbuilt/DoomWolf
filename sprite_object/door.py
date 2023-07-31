@@ -23,10 +23,10 @@ class Door(AnimatedSprite):
         self.SCALE_WIDTH: float = 1.0
         self.tile_count: int = 1
         self.is_interactive = True
-        self.has_viewing_angles = True
         self.type: DoorType = DoorType.HORIZONTAL
         self.previous_pos_x: float = self.x
         self.previous_pos_y: float = self.y
+        self.id: int = hash(self)
 
     def interact(self):
         if self.removed:
