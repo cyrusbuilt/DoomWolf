@@ -1,5 +1,6 @@
 import json
 import os
+from typing import Optional
 
 from engine import constants as con
 from engine import Resolution
@@ -15,7 +16,7 @@ class GameSettings:
         self.monitor_id: int = 0
         self.mouse_sensitivity: float = con.MOUSE_SENSITIVITY
         self.mouse_fire_button: int = 1
-        self.joy_id: int = 0
+        self.joy_id: Optional[int] = None
         self.joy_fire_button: int = 0
         self.joy_pause_button: int = 6
         self.joy_quit_button: int = 4
@@ -72,7 +73,7 @@ class GameSettings:
                 if res:
                     self.resolution = Resolution.from_dict(res)
 
-                monitor_id = settings.get('monitor_id')
+                monitor_id = settings.get('monitor_id', 0)
                 if monitor_id:
                     self.monitor_id = monitor_id
 

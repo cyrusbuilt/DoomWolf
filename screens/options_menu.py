@@ -93,10 +93,24 @@ class OptionsMenu:
                                     height=self.menu.get_height(),
                                     theme=self.menu.get_theme())
         self.joy_menu = joy_menu
+        def_joy_id = self.settings.joy_id
+        all_joys = self._get_joystick_ids()
+        joy_count = len(all_joys)
+        if joy_count == 0:
+            def_joy_id = None
+        elif def_joy_id > joy_count - 1:
+            def_joy_id = 0
+
+        joy_name = "< No joystick/gamepad detected >"
+        if def_joy_id is not None:
+            curr_joy = pg.joystick.Joystick(def_joy_id)
+            joy_name = curr_joy.get_name()
+
         joy_menu.add.dropselect(title="Gamepad/Joystick ID",
-                                default=self.settings.joy_id,
-                                items=self._get_joystick_ids(),
+                                default=def_joy_id,
+                                items=all_joys,
                                 dropselect_id='joy_id')
+        joy_menu.add.label(title=f'Current: {joy_name}')
         joy_menu.add.dropselect(title="Gamepad Fire Button",
                                 default=self.settings.joy_fire_button,
                                 items=self._get_joy_button_ids(),
@@ -199,7 +213,12 @@ class OptionsMenu:
         self.menu.get_theme().widget_font_color = RGBColors.WHITE.value
         self.menu.get_theme().widget_alignment = pm.locals.ALIGN_LEFT
 
+        monitor_ids = self._get_monitor_ids()
         default_disp_index: int = self.settings.monitor_id
+        mon_count = len(monitor_ids)
+        if default_disp_index > mon_count - 1:
+            default_disp_index = 0
+
         disp_index: int = 0
         for res in self.display_modes:
             if res[1] == self.settings.resolution:
@@ -209,8 +228,8 @@ class OptionsMenu:
 
         # TODO Need option for sounds toggle
         self.menu.add.dropselect(title="Display",
-                                 default=self.settings.monitor_id,
-                                 items=self._get_monitor_ids(),
+                                 default=default_disp_index,
+                                 items=monitor_ids,
                                  dropselect_id='monitor_id',
                                  onchange=self._on_res_change)
         self._update_display_modes()
