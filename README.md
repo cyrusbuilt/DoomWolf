@@ -31,6 +31,9 @@ improves on the original with the following:
 - Main menu and options screens
 - Pause screen
 - Map loading system
+- Sprite map loading system
+- HUD
+- Armor and Health pickups
 
 Future planned improvements:
 - More maps!

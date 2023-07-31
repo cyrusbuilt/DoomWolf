@@ -19,10 +19,14 @@ SETTINGS = 'settings.json'
 
 class DoomWolf(Game):
 
-    def __init__(self, window_title: str = 'DoomWolf'):
+    def __init__(self, window_title: str = 'DoomWolf',
+                 settings: Optional[GameSettings] = None):
         super().__init__()
         self.window_title = window_title
-        self.settings: GameSettings = GameSettings(SETTINGS)
+        if settings is None:
+            settings = GameSettings(SETTINGS)
+
+        self.settings: GameSettings = settings
         self.object_handler = DoomWolfObjectHandler(self)
         self.weapon_inventory: WeaponInventory = WeaponInventory(self)
         self.maps: list[str] = []
