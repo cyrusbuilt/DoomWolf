@@ -38,6 +38,7 @@ class Enemy(AnimatedSprite):
         self.player_search_trigger: bool = False
         self.spawn_weight: int = 0
         self.sounds: dict[str, pg.mixer.Sound] = {}
+        self.id: int = hash(self)
 
     @property
     def map_pos(self):

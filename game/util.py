@@ -1,3 +1,5 @@
+import os
+
 
 def str_to_bool(val: str) -> bool:
     """Convert a string representation of truth to true (1) or false (0).
@@ -13,3 +15,11 @@ def str_to_bool(val: str) -> bool:
         return False
 
     raise ValueError(f"Invalid truth value: {val}")
+
+
+def get_user_home() -> str:
+    return os.path.expanduser('~')
+
+
+def get_user_game_data_path() -> str:
+    return os.path.join(get_user_home(), '.doom_wolf')
