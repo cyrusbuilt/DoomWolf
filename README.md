@@ -34,6 +34,7 @@ improves on the original with the following:
 - Sprite map loading system
 - HUD
 - Armor and Health pickups
+- Can Save and Load games
 
 Future planned improvements:
 - More maps!

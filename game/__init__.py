@@ -5,6 +5,7 @@ from game import util
 from game.doom_wolf import DoomWolf
 from game.doom_wolf import SETTINGS
 from game.settings import GameSettings
+from screens.load_game import LoadGameMenu
 from screens.main_menu import MainMenu
 from screens.options_menu import OptionsMenu
 
@@ -31,10 +32,19 @@ def run_doom_wolf(window_title: str = 'DoomWolf'):
     options = OptionsMenu(dw_settings.path, main_menu.width, main_menu.height)
     options.setup()
 
+    game_load = LoadGameMenu(main_menu.get_current())
+    game_load.setup()
+
     main_menu.set_options_menu(options.get_current())
+    main_menu.set_load_game_menu(game_load.get_current())
     main_menu.show_menu()
+
+    save_game = game_load.get_selected_save_game_data()
 
     dw = DoomWolf(window_title, dw_settings)
     dw.find_maps()
-    dw.new_game()
+    if save_game:
+        dw.load_game(save_game)
+    else:
+        dw.new_game()
     dw.run()

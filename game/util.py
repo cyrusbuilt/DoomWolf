@@ -1,5 +1,7 @@
 import os
 
+from engine import constants as con
+
 
 def str_to_bool(val: str) -> bool:
     """Convert a string representation of truth to true (1) or false (0).
@@ -23,3 +25,8 @@ def get_user_home() -> str:
 
 def get_user_game_data_path() -> str:
     return os.path.join(get_user_home(), '.doom_wolf')
+
+
+def get_user_save_game_path() -> str:
+    gd_path = get_user_game_data_path()
+    return os.path.join(gd_path, con.SAVE_GAME_BASE)

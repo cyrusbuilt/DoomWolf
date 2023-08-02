@@ -15,6 +15,11 @@ class DoorBuilder:
         self.the_door: Door = Door(game, path, pos)
 
     @copy_method
+    def set_name(self, name: str):
+        self.the_door.name = name
+        return self
+
+    @copy_method
     def set_scale_height(self, scale_height: float):
         self.the_door.SPRITE_SCALE = scale_height
         return self
@@ -77,6 +82,7 @@ def door(game, door_dict: dict) -> DoorBuilder:
 
     pos = (pos_x, pos_y)
     builder: DoorBuilder = DoorBuilder(game, door_path, pos) \
+        .set_name(name) \
         .set_scale_width(scale_width) \
         .set_scale_height(scale_height) \
         .set_height_shift(shift) \
