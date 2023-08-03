@@ -15,6 +15,7 @@ class MainMenu:
                                           height=height,
                                           theme=pm.themes.THEME_DARK)
         self.options_menu: Optional[pm.Menu] = None
+        self.load_game_menu: Optional[pm.Menu] = None
 
     @property
     def width(self) -> int:
@@ -30,11 +31,19 @@ class MainMenu:
     def set_options_menu(self, menu: pm.Menu):
         self.options_menu = menu
 
+    def set_load_game_menu(self, menu: pm.Menu):
+        self.load_game_menu = menu
+
     def show_menu(self):
         pg.display.set_caption(self.main_menu.get_title())
         self.main_menu.get_theme().widget_alignment = pm.locals.ALIGN_CENTER
         self.main_menu.add.button(title="Start",
                                   action=self.close_menu,
+                                  font_color=RGBColors.WHITE.value,
+                                  background_color=RGBColors.RED.value)
+        self.main_menu.add.label(title="")
+        self.main_menu.add.button(title="Load Game",
+                                  action=self.load_game_menu,
                                   font_color=RGBColors.WHITE.value,
                                   background_color=RGBColors.RED.value)
         self.main_menu.add.label(title="")
@@ -49,3 +58,6 @@ class MainMenu:
                                   background_color=RGBColors.RED.value)
         self.main_menu.mainloop(self.screen)
         pg.display.quit()
+
+    def get_current(self) -> pm.Menu:
+        return self.main_menu

@@ -23,6 +23,7 @@ MAP_DATA_BASE = os.path.join(DATA_BASE, "maps")
 ENEMY_DATA_BASE = os.path.join(DATA_BASE, "enemies")
 WEAPON_DATA_BASE = os.path.join(DATA_BASE, "weapons")
 FONT_BASE = os.path.join(ASSETS_BASE, "fonts")
+SAVE_GAME_BASE = "saves"
 
 DEBUG = False
 GOD_MODE = False

@@ -1,6 +1,6 @@
 from collections import deque
 import math
-import os.path as path
+import os
 import pygame as pg
 from random import randint, random
 
@@ -38,19 +38,22 @@ class Enemy(AnimatedSprite):
         self.player_search_trigger: bool = False
         self.spawn_weight: int = 0
         self.sounds: dict[str, pg.mixer.Sound] = {}
-        self.id: int = hash(self)
+
+    @property
+    def id(self) -> str:
+        return f'{self.name}_{int(self.x)}_{int(self.y)}'
 
     @property
     def map_pos(self):
         return int(self.x), int(self.y)
 
     def setup(self):
-        self.attack_images = self.load_images(path.join(self.path, "attack"))
-        self.death_images = self.load_images(path.join(self.path, "death"))
-        self.idle_images = self.load_images(path.join(self.path, "idle"))
-        self.pain_images = self.load_images(path.join(self.path, "pain"))
-        self.walk_images = self.load_images(path.join(self.path, "walk"))
-        self.see_images = self.load_images(path.join(self.path, "see"))
+        self.attack_images = self.load_images(os.path.join(self.path, "attack"))
+        self.death_images = self.load_images(os.path.join(self.path, "death"))
+        self.idle_images = self.load_images(os.path.join(self.path, "idle"))
+        self.pain_images = self.load_images(os.path.join(self.path, "pain"))
+        self.walk_images = self.load_images(os.path.join(self.path, "walk"))
+        self.see_images = self.load_images(os.path.join(self.path, "see"))
 
     def check_wall(self, x: int, y: int) -> bool:
         return ((x, y) not in self.game.map.world_map and

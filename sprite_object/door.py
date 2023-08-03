@@ -20,13 +20,17 @@ class Door(AnimatedSprite):
                  shift: float = 0.16,
                  animation_time: int = 120):
         super().__init__(game, path, pos, scale, shift, animation_time)
+        self.name: str = ""
         self.SCALE_WIDTH: float = 1.0
         self.tile_count: int = 1
         self.is_interactive = True
         self.type: DoorType = DoorType.HORIZONTAL
         self.previous_pos_x: float = self.x
         self.previous_pos_y: float = self.y
-        self.id: int = hash(self)
+
+    @property
+    def id(self) -> str:
+        return f'{self.name}_{int(self.x)}_{int(self.y)}'
 
     def interact(self):
         if self.removed:

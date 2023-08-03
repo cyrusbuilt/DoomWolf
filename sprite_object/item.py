@@ -30,7 +30,10 @@ class Item(AnimatedSprite):
         self.rect.center = (pos[0] + w / 2, pos[1] + h / 2)
         self.units: int = 0
         self.is_interactive = True
-        self.id: int = hash(self)
+
+    @property
+    def id(self) -> str:
+        return f'{self.name}_{int(self.x)}_{int(self.y)}'
 
     def update(self):
         self.refresh_sprite()
