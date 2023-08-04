@@ -47,6 +47,8 @@ class Item(AnimatedSprite):
                     picked_up = self.game.player.give_health(self.units)
                 elif self.type == ItemType.ARMOR:
                     picked_up = self.game.player.give_armor(self.units)
+                elif self.type == ItemType.AMMO:
+                    picked_up = self.game.current_weapon.give_ammo(self.units)
                 # TODO Handle other types
 
                 if picked_up:

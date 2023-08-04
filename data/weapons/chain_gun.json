@@ -5,7 +5,6 @@
   "animation_time": 60,
   "ammo_capacity": 200,
   "ammo_use": 1,
-  "magazine_capacity": 100,
   "has_continuous_fire": true,
   "action_sounds": {
     "fire": "chain_gun.ogg"

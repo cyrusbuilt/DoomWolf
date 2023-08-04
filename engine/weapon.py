@@ -28,11 +28,11 @@ class Weapon(AnimatedSprite):
         # TODO Until we have power-ups, we have no way for the player
         # to pick up more ammo. So for now, weapons essentially have
         # unlimited ammo (we don't decrement ammo count).
-        self.ammo_capacity: int = 20
+        self.ammo_capacity: int = 32
         self.magazine_capacity: int = 8
         self.total_ammo: int = self.ammo_capacity
         self.ammo_remaining: int = self.magazine_capacity
-        self.total_ammo -= self.ammo_remaining
+        self.magazine_count: int = int(self.total_ammo / self.magazine_capacity) - 1
         self.ammo_use: int = 1
         self.sound: Optional[pg.mixer.Sound] = None
         self.sounds: dict[str, pg.mixer.Sound] = {}
@@ -40,17 +40,19 @@ class Weapon(AnimatedSprite):
         self._idle_prev: int = 0
         self._idle_sound_delay: int = 0
         self._has_idle_sound: bool = False
-
-    @property
-    def magazine_count(self) -> int:
-        if self.ammo_remaining > 0:
-            mags: int = 1
-            if self.total_ammo > self.magazine_capacity > 0:
-                mags += (self.total_ammo / self.magazine_capacity)
-            return mags
-        return 0
+        self._mag_change_trigger: bool = False
+        self.reload_anim_frames: dict[str, pg.Surface] = {}
+        self.reload_anim_images: deque[pg.Surface] = deque()
+        self._mag_change_complete: bool = True
+        self._original_images: deque[pg.Surface] = deque()
 
     def setup(self):
+        self.total_ammo = self.ammo_capacity
+        self.ammo_remaining = self.magazine_capacity
+        self.magazine_count = int(self.total_ammo / self.magazine_capacity) - 1
+        if self.ammo_capacity == -1:
+            self.ammo_remaining = -1
+
         if self.image:
             s_w = self.image.get_width() * self.SPRITE_SCALE
             s_h = self.image.get_height() * self.SPRITE_SCALE
@@ -58,10 +60,16 @@ class Weapon(AnimatedSprite):
                 pg.transform.smoothscale(img, (s_w, s_h))
                 for img in self.images
             ])
+            self._original_images = self.images
             self.num_images = len(self.images)
             i_w = con.HALF_WIDTH - self.images[0].get_width() // 2
             i_h = con.HEIGHT - self.images[0].get_height()
             self.weapon_pos = (i_w, i_h)
+            if len(self.reload_anim_images):
+                self.reload_anim_images = deque([
+                    pg.transform.smoothscale(img, (s_w, s_h))
+                    for img in self.reload_anim_images
+                ])
 
         self._has_idle_sound = self.sounds.get("idle") is not None
         if self._has_idle_sound:
@@ -71,6 +79,10 @@ class Weapon(AnimatedSprite):
     def animate_shot(self):
         if self.reloading:
             self.game.player.shot = False
+            if self.ammo_remaining == 0:
+                self.reloading = False
+                return
+
             if self.animation_trigger:
                 self.images.rotate(-1)
                 self.image = self.images[0]
@@ -79,12 +91,27 @@ class Weapon(AnimatedSprite):
                     self.reloading = False
                     self.frame_counter = 0
 
+    def animate_reload(self):
+        if len(self.reload_anim_images) > 0:
+            self._mag_change_complete = False
+            if self.animation_trigger:
+                self.reload_anim_images.rotate(-1)
+                self.image = self.reload_anim_images[0]
+                self.frame_counter += 1
+                if self.frame_counter == len(self.reload_anim_images):
+                    self.frame_counter = 0
+                    self._mag_change_complete = True
+
     def draw(self):
         self.game.screen.blit(self.images[0], self.weapon_pos)
 
     def update(self):
         self.check_animation_time()
-        self.animate_shot()
+        if self._mag_change_trigger:
+            self.animate_reload()
+        else:
+            self.animate_shot()
+
         if self._has_idle_sound and not self.reloading:
             time_now = pg.time.get_ticks()
             time_delta = time_now - self._idle_prev
@@ -92,10 +119,69 @@ class Weapon(AnimatedSprite):
                 self._idle_prev = time_now
                 self.play_action_sound('idle')
 
+        if self._mag_change_trigger and self._mag_change_complete:
+            self.play_action_sound('mag_in')
+            self._mag_change_trigger = False
+            self.images = self._original_images
+
+            # Mag change complete. Recompute ammo.
+            if self.magazine_count > 0:
+                self.ammo_remaining = self.magazine_capacity
+                self.total_ammo -= self.ammo_remaining
+                self.magazine_count -= 1
+            else:
+                self.ammo_remaining = 0
+                self.total_ammo = 0
+
     def play_action_sound(self, action: str):
         action_sound = self.sounds.get(action)
         if action_sound:
             self.game.sound.play_sound(action_sound)
+        else:
+            print(f"Sound not found for weapon action: '{action}'")
 
-    def play_attack_sound(self):
-        self.play_action_sound('fire')
+    def fire(self):
+        if self.ammo_remaining == -1 and self.ammo_capacity == -1:
+            self.play_action_sound('fire')
+
+        if self.ammo_remaining > 0:
+            self.ammo_remaining -= self.ammo_use
+            self.play_action_sound('fire')
+
+        if self.ammo_remaining <= 0 < self.total_ammo:
+            self._mag_change_trigger = True
+            self.images = self.reload_anim_images
+            self.play_action_sound('mag_out')
+
+        if self.ammo_remaining <= 0 and self.total_ammo == 0:
+            self.play_action_sound('empty')
+
+    def give_ammo(self, ammo: int) -> bool:
+        if (self.ammo_remaining == self.magazine_capacity and
+                self.total_ammo == self.ammo_capacity):
+            return False
+
+        print(f'Player took ammo: {ammo}')
+        if ammo > self.ammo_capacity:
+            ammo = self.ammo_capacity
+
+        if ammo < 1:
+            ammo = 1
+
+        if (self.total_ammo + ammo) > self.ammo_capacity:
+            self.total_ammo = self.ammo_capacity
+            self.ammo_remaining = self.magazine_capacity
+        else:
+            if (self.ammo_remaining + ammo) > self.magazine_capacity:
+                diff = ammo - self.ammo_remaining
+                self.ammo_remaining = self.magazine_capacity
+                if (self.total_ammo + diff) > self.ammo_capacity:
+                    self.total_ammo = self.ammo_capacity
+            else:
+                self.ammo_remaining += ammo
+
+        self.magazine_count = int(self.total_ammo / self.magazine_capacity) - 1
+        self._mag_change_trigger = True
+        self.images = self.reload_anim_images
+        self.play_action_sound('mag_out')
+        return True
