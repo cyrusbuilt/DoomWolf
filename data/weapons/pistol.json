@@ -3,12 +3,15 @@
   "damage": 40,
   "scale": 3.0,
   "animation_time": 90,
-  "ammo_capacity": 16,
+  "ammo_capacity": 32,
   "ammo_use": 1,
   "magazine_capacity": 8,
   "has_continuous_fire": false,
   "action_sounds": {
-    "fire": "pistol.ogg"
+    "fire": "pistol.ogg",
+    "empty": "DRY.ogg",
+    "mag_in": "CLIPIN.ogg",
+    "mag_out": "CLIPOUT.ogg"
   },
   "image": "0.png",
   "animation_frames": {
@@ -16,6 +19,18 @@
     "B": "1.png",
     "C": "2.png",
     "D": "3.png"
+  },
+  "reload_frames": {
+    "A": "DPIRA0.png",
+    "B": "DPIRB0.png",
+    "C": "DPIRC0.png",
+    "D": "DPIRD0.png",
+    "E": "DPIRE0.png",
+    "F": "DPIRF0.png",
+    "G": "DPIRG0.png",
+    "H": "DPIRH0.png",
+    "I": "DPIRI0.png",
+    "J": "DPIRJ0.png"
   },
   "states": {
     "ready": [

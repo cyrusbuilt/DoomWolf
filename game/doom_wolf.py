@@ -7,13 +7,13 @@ from engine import constants as con
 from engine import Resolution
 from engine.game import Game
 from engine.input_handler import InputEvent
-from weapon.weapon_inventory import WeaponInventory
 from game.doom_obj_handler import DoomWolfObjectHandler
 from game.settings import GameSettings
 from maps import game_map
 from maps.sprite_map import sprite_map
 from screens.load_game import LoadGameMenu
 from screens.pause_screen import PauseScreen
+from weapon.weapon_inventory import WeaponInventory
 
 
 SETTINGS = 'settings.json'
@@ -73,11 +73,13 @@ class DoomWolf(Game):
                 self.map = game_map(self, path).build()
                 if self.map.enemies:
                     self.object_handler.enemy_names = self.map.enemies
+        else:
+            [e.setup() for e in self.object_handler.enemy_list]
 
-                s_map = self.map.sprite_map_path
-                if s_map and os.path.exists(s_map):
-                    sprites = sprite_map(self, s_map).build()
-                    self.object_handler.sprite_map = sprites
+        s_map = self.map.sprite_map_path
+        if s_map and os.path.exists(s_map):
+            sprites = sprite_map(self, s_map).build()
+            self.object_handler.sprite_map = sprites
 
         super().new_game(have_maps)
         self.settings.load_settings()

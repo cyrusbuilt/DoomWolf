@@ -1,11 +1,12 @@
 VERSION = '1.0'
+TITLE = 'DoomWolf'
 __author__ = 'Cyrus Brunner'
 __author_email__ = 'cyrusbuilt@gmail.com'
 __license__ = 'MIT'
 __copyright__ = 'Copyright (c) 2023, Cyrus Brunner'
 
 if __name__ == '__main__':
-    title = f'DoomWolf v{VERSION}'
+    title = f'{TITLE} v{VERSION}'
     print(title)
     print(__copyright__)
 

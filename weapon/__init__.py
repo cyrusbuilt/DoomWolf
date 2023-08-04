@@ -71,6 +71,24 @@ class WeaponBuilder:
 
         return self
 
+    @copy_method
+    def set_reload_anim_frames(self, frames: dict[str, str]):
+        if frames:
+            name = self.the_weapon.name
+            img_dir = os.path.join(con.WEAPON_SPRITE_BASE, name)
+            img_dir = os.path.join(img_dir, 'reload')
+            the_frames = dict(sorted(frames.items()))
+            the_frames = {k: os.path.join(img_dir, the_frames[k])
+                          for k in the_frames.keys()}
+            self.the_weapon.reload_anim_frames = {
+                k: pg.image.load(the_frames[k]).convert_alpha()
+                for k in the_frames.keys()
+            }
+
+            self.the_weapon.reload_anim_images = deque(
+                *[self.the_weapon.reload_anim_frames.values()])
+        return self
+
     def build(self) -> Weapon:
         # NOTE: If needed, we can call any additional initialization logic here
         self.the_weapon.setup()
@@ -129,6 +147,11 @@ def weapon(game, data_path: str) -> WeaponBuilder:
             if animation_frames:
                 frames = animation_frames
 
+            rel_frames: dict[str, str] = {}
+            reload_anim_frames = weapon_dict.get('reload_frames')
+            if reload_anim_frames:
+                rel_frames = reload_anim_frames
+
             # TODO Also need a way to load an animation sequence
             # Ideally, something similar to ZDoom, where we can
             # define a sequence where you specify: frame, ticks, action
@@ -143,6 +166,7 @@ def weapon(game, data_path: str) -> WeaponBuilder:
                 .set_ammo_use(ammo_use) \
                 .set_magazine_capacity(mag_cap) \
                 .set_sounds(sounds) \
-                .set_animation_frames(frames)
+                .set_animation_frames(frames) \
+                .set_reload_anim_frames(rel_frames)
 
             return builder

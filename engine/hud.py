@@ -38,13 +38,13 @@ class Hud:
         self.game.screen.blit(self.sprite, self.rect)
         p_armor = self.game.player.armor
         p_health = self.game.player.health
-        max_ammo = self.game.current_weapon.ammo_capacity
+        tot_ammo = self.game.current_weapon.total_ammo
         rem_ammo = self.game.current_weapon.ammo_remaining
         wpn_name = self.game.current_weapon.name
 
         self.armor_text.update_text(f'{p_armor} / {con.PLAYER_MAX_ARMOR}')
         self.health_text.update_text(f'{p_health} / {con.PLAYER_MAX_HEALTH}')
-        self.ammo_text.update_text(f'{rem_ammo} / {max_ammo}')
+        self.ammo_text.update_text(f'{rem_ammo} / {tot_ammo}')
         self.wpn_text.update_text(wpn_name)
 
         for text in self.all_text:
