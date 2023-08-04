@@ -48,6 +48,7 @@ class Weapon(AnimatedSprite):
 
     def setup(self):
         self.total_ammo = self.ammo_capacity
+        self.ammo_remaining = self.magazine_capacity
         self.magazine_count = int(self.total_ammo / self.magazine_capacity) - 1
         if self.ammo_capacity == -1:
             self.ammo_remaining = -1
@@ -156,7 +157,8 @@ class Weapon(AnimatedSprite):
             self.play_action_sound('empty')
 
     def give_ammo(self, ammo: int) -> bool:
-        if self.total_ammo == self.ammo_capacity:
+        if (self.ammo_remaining == self.magazine_capacity and
+                self.total_ammo == self.ammo_capacity):
             return False
 
         print(f'Player took ammo: {ammo}')
@@ -168,8 +170,15 @@ class Weapon(AnimatedSprite):
 
         if (self.total_ammo + ammo) > self.ammo_capacity:
             self.total_ammo = self.ammo_capacity
+            self.ammo_remaining = self.magazine_capacity
         else:
-            self.total_ammo += ammo
+            if (self.ammo_remaining + ammo) > self.magazine_capacity:
+                diff = ammo - self.ammo_remaining
+                self.ammo_remaining = self.magazine_capacity
+                if (self.total_ammo + diff) > self.ammo_capacity:
+                    self.total_ammo = self.ammo_capacity
+            else:
+                self.ammo_remaining += ammo
 
         self.magazine_count = int(self.total_ammo / self.magazine_capacity) - 1
         self._mag_change_trigger = True

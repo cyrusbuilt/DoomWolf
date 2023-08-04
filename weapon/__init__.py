@@ -133,6 +133,9 @@ def weapon(game, data_path: str) -> WeaponBuilder:
             ammo_use = weapon_dict.get('ammo_use', 1)
             mag_cap = weapon_dict.get('magazine_capacity', 0)
 
+            if not mag_cap:
+                mag_cap = ammo_cap
+
             sounds: dict[str, pg.mixer.Sound] = {}
             action_sounds = weapon_dict.get('action_sounds')
             if action_sounds:
