@@ -178,11 +178,6 @@ def weapon(game, data_path: str) -> WeaponBuilder:
                     elif act == 'fire':
                         fir_sounds[frame] = s_action
 
-            # TODO Also need a way to load an animation sequence
-            # Ideally, something similar to ZDoom, where we can
-            # define a sequence where you specify: frame, ticks, action
-            # ie: "A", 3, "play_sound('fire')" or something like that
-
             builder: WeaponBuilder = WeaponBuilder(game, img_path) \
                 .set_name(name) \
                 .set_has_continuous_fire(cont_fire) \
