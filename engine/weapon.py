@@ -25,9 +25,6 @@ class Weapon(AnimatedSprite):
         self.damage: int = 50
         self.weapon_pos = 0
         self.num_images: int = 0
-        # TODO Until we have power-ups, we have no way for the player
-        # to pick up more ammo. So for now, weapons essentially have
-        # unlimited ammo (we don't decrement ammo count).
         self.ammo_capacity: int = 32
         self.magazine_capacity: int = 8
         self.total_ammo: int = self.ammo_capacity
@@ -44,7 +41,10 @@ class Weapon(AnimatedSprite):
         self.reload_anim_frames: dict[str, pg.Surface] = {}
         self.reload_anim_images: deque[pg.Surface] = deque()
         self._mag_change_complete: bool = True
+        self._fire_complete: bool = True
         self._original_images: deque[pg.Surface] = deque()
+        self.custom_reload_sounds: Optional[dict[int, str]] = None
+        self.custom_fire_sounds: Optional[dict[int, str]] = None
 
     def setup(self):
         self.total_ammo = self.ammo_capacity
@@ -60,11 +60,14 @@ class Weapon(AnimatedSprite):
                 pg.transform.smoothscale(img, (s_w, s_h))
                 for img in self.images
             ])
+
             self._original_images = self.images
             self.num_images = len(self.images)
+
             i_w = con.HALF_WIDTH - self.images[0].get_width() // 2
             i_h = con.HEIGHT - self.images[0].get_height()
             self.weapon_pos = (i_w, i_h)
+
             if len(self.reload_anim_images):
                 self.reload_anim_images = deque([
                     pg.transform.smoothscale(img, (s_w, s_h))
@@ -79,16 +82,22 @@ class Weapon(AnimatedSprite):
     def animate_shot(self):
         if self.reloading:
             self.game.player.shot = False
-            if self.ammo_remaining == 0:
+            if self.ammo_remaining == 0 and self._fire_complete:
                 self.reloading = False
                 return
 
             if self.animation_trigger:
                 self.images.rotate(-1)
                 self.image = self.images[0]
+                if (self.custom_fire_sounds and
+                        self.frame_counter in self.custom_fire_sounds):
+                    sound_action = self.custom_fire_sounds[self.frame_counter]
+                    self.play_action_sound(sound_action)
+
                 self.frame_counter += 1
                 if self.frame_counter == self.num_images:
                     self.reloading = False
+                    self._fire_complete = True
                     self.frame_counter = 0
 
     def animate_reload(self):
@@ -97,6 +106,11 @@ class Weapon(AnimatedSprite):
             if self.animation_trigger:
                 self.reload_anim_images.rotate(-1)
                 self.image = self.reload_anim_images[0]
+                if (self.custom_reload_sounds and
+                        self.frame_counter in self.custom_reload_sounds):
+                    sound_action = self.custom_reload_sounds[self.frame_counter]
+                    self.play_action_sound(sound_action)
+
                 self.frame_counter += 1
                 if self.frame_counter == len(self.reload_anim_images):
                     self.frame_counter = 0
@@ -143,12 +157,14 @@ class Weapon(AnimatedSprite):
     def fire(self):
         if self.ammo_remaining == -1 and self.ammo_capacity == -1:
             self.play_action_sound('fire')
+            return
 
         if self.ammo_remaining > 0:
-            self.ammo_remaining -= self.ammo_use
+            self._fire_complete = False
             self.play_action_sound('fire')
+            self.ammo_remaining -= self.ammo_use
 
-        if self.ammo_remaining <= 0 < self.total_ammo:
+        if self.ammo_remaining <= 0 < self.total_ammo and self._fire_complete:
             self._mag_change_trigger = True
             self.images = self.reload_anim_images
             self.play_action_sound('mag_out')

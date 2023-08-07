@@ -2,40 +2,52 @@
   "name": "super_shotgun",
   "damage": 70,
   "scale": 3.5,
-  "animation_time": 90,
+  "animation_time": 120,
   "ammo_capacity": 40,
-  "ammo_use": 2,
-  "magazine_capacity": 10,
+  "ammo_use": 1,
+  "magazine_capacity": 2,
   "has_continuous_fire": false,
   "action_sounds": {
-    "fire": "super_shotgun.ogg"
+    "fire": "DSCOCHFG.ogg",
+    "empty": "DRY.ogg",
+    "mag_in": "DSCOCHR3.ogg",
+    "mag_out": "DSCOCHR1.ogg",
+    "custom_reload1": "DSCOCHR2.ogg"
   },
-  "image": "0.png",
+  "image": "COCHA0.png",
   "animation_frames": {
-    "A": "0.png",
-    "B": "1.png",
-    "C": "2.png",
-    "D": "3.png"
+    "A": "COCHA0.png",
+    "B": "COCHB0.png",
+    "C": "COCHC0.png",
+    "D": "COCHD0.png"
   },
-  "states": {
-    "ready": [
-      {
-        "A": {"ticks": 0}
-      }
-    ],
-    "fire": [
-      {
-        "A": {"ticks": 15}
-      },
-      {
-        "B": {"ticks": 15, "play_sound": "fire"}
-      },
-      {
-        "C": {"ticks": 15}
-      },
-      {
-        "D": {"ticks": 15}
-      }
-    ]
-  }
+  "reload_frames": {
+    "E": "COCHE0.png",
+    "F": "COCHF0.png",
+    "G": "COCHG0.png",
+    "H": "COCHH0.png",
+    "I": "COCHI0.png",
+    "J": "COCHJ0.png",
+    "K": "COCHK0.png",
+    "L": "COCHL0.png",
+    "M": "COCHM0.png",
+    "N": "COCHN0.png",
+    "O": "COCHO0.png",
+    "P": "COCHP0.png",
+    "Q": "COCHQ0.png",
+    "R": "COCHR0.png",
+    "S": "COCHS0.png",
+    "T": "COCHT0.png",
+    "U": "COCHU0.png",
+    "V": "COCHV0.png",
+    "W": "COCHW0.png",
+    "X": "COCHX0.png"
+  },
+  "custom_sounds": [
+    {
+      "action": "reload",
+      "frame": 11,
+      "sound": "custom_reload1"
+    }
+  ]
 }

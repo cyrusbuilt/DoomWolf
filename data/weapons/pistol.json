@@ -31,26 +31,5 @@
     "H": "DPIRH0.png",
     "I": "DPIRI0.png",
     "J": "DPIRJ0.png"
-  },
-  "states": {
-    "ready": [
-      {
-        "A": {"ticks": 0}
-      }
-    ],
-    "fire": [
-      {
-        "A": {"ticks": 15}
-      },
-      {
-        "B": {"ticks": 15, "play_sound": "fire"}
-      },
-      {
-        "C": {"ticks": 15}
-      },
-      {
-        "D": {"ticks": 15}
-      }
-    ]
   }
 }

@@ -8,7 +8,8 @@
   "magazine_capacity": 8,
   "has_continuous_fire": false,
   "action_sounds": {
-    "fire": "shotgun.wav"
+    "fire": "shotgun.wav",
+    "empty": "DRY.ogg"
   },
   "image": "0.png",
   "animation_frames": {
@@ -18,32 +19,5 @@
     "D": "3.png",
     "E": "4.png",
     "F": "5.png"
-  },
-  "states": {
-    "ready": [
-      {
-        "A": {"ticks": 0}
-      }
-    ],
-    "fire": [
-      {
-        "A": {"ticks": 15}
-      },
-      {
-        "B": {"ticks": 15, "play_sound": "fire"}
-      },
-      {
-        "C": {"ticks": 15}
-      },
-      {
-        "D": {"ticks": 15}
-      },
-      {
-        "E": {"ticks": 15}
-      },
-      {
-        "F": {"ticks": 15}
-      }
-    ]
   }
 }

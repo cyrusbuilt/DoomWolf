@@ -7,7 +7,8 @@
   "ammo_use": 1,
   "has_continuous_fire": true,
   "action_sounds": {
-    "fire": "chain_gun.ogg"
+    "fire": "chain_gun.ogg",
+    "empty": "DRY.ogg"
   },
   "image": "0.png",
   "animation_frames": {
@@ -18,35 +19,5 @@
     "E": "4.png",
     "F": "5.png",
     "G": "6.png"
-  },
-  "states": {
-    "ready": [
-      {
-        "A": {"ticks": 0}
-      }
-    ],
-    "fire": [
-      {
-        "A": {"ticks": 9}
-      },
-      {
-        "B": {"ticks": 9, "play_sound": "fire"}
-      },
-      {
-        "C": {"ticks": 9}
-      },
-      {
-        "D": {"ticks": 9}
-      },
-      {
-        "E": {"ticks": 9}
-      },
-      {
-        "F": {"ticks": 9}
-      },
-      {
-        "G": {"ticks": 9}
-      }
-    ]
   }
 }

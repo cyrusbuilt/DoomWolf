@@ -89,6 +89,16 @@ class WeaponBuilder:
                 *[self.the_weapon.reload_anim_frames.values()])
         return self
 
+    @copy_method
+    def set_custom_reload_sounds(self, sounds: dict):
+        self.the_weapon.custom_reload_sounds = sounds
+        return self
+
+    @copy_method
+    def set_custom_fire_sounds(self, sounds: dict):
+        self.the_weapon.custom_fire_sounds = sounds
+        return self
+
     def build(self) -> Weapon:
         # NOTE: If needed, we can call any additional initialization logic here
         self.the_weapon.setup()
@@ -155,10 +165,18 @@ def weapon(game, data_path: str) -> WeaponBuilder:
             if reload_anim_frames:
                 rel_frames = reload_anim_frames
 
-            # TODO Also need a way to load an animation sequence
-            # Ideally, something similar to ZDoom, where we can
-            # define a sequence where you specify: frame, ticks, action
-            # ie: "A", 3, "play_sound('fire')" or something like that
+            rel_sounds = dict()
+            fir_sounds = dict()
+            custom_sounds = weapon_dict.get('custom_sounds')
+            if custom_sounds:
+                for sound_def in custom_sounds:
+                    act = sound_def.get('action')
+                    frame = sound_def.get('frame')
+                    s_action = sound_def.get('sound')
+                    if act == 'reload':
+                        rel_sounds[frame] = s_action
+                    elif act == 'fire':
+                        fir_sounds[frame] = s_action
 
             builder: WeaponBuilder = WeaponBuilder(game, img_path) \
                 .set_name(name) \
@@ -171,5 +189,11 @@ def weapon(game, data_path: str) -> WeaponBuilder:
                 .set_sounds(sounds) \
                 .set_animation_frames(frames) \
                 .set_reload_anim_frames(rel_frames)
+
+            if len(rel_sounds.keys()):
+                builder = builder.set_custom_reload_sounds(rel_sounds)
+
+            if len(fir_sounds.keys()):
+                builder = builder.set_custom_fire_sounds(fir_sounds)
 
             return builder
