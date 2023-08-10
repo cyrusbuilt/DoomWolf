@@ -1,6 +1,0 @@
-include settings.json
-include doomwolf
-include CREDITS.md
-recursive-include assets *
-recursive-include data *
-global-exclude .DS_Store
