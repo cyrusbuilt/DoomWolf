@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+# This script is strictly for running DoomWolf outside the distribution package.
+# PyInstaller generates a 'doomwolf' binary that normally gets called by the launcher.
+# In the cases where that binary doesn't exist, this script can be used instead.
+python3 main.py

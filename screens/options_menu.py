@@ -105,12 +105,14 @@ class OptionsMenu:
         if def_joy_id is not None:
             curr_joy = pg.joystick.Joystick(def_joy_id)
             joy_name = curr_joy.get_name()
-
-        joy_menu.add.dropselect(title="Gamepad/Joystick ID",
-                                default=def_joy_id,
-                                items=all_joys,
-                                dropselect_id='joy_id')
+            joy_menu.add.dropselect(title="Gamepad/Joystick ID",
+                                    default=def_joy_id,
+                                    items=all_joys,
+                                    dropselect_id='joy_id')
         joy_menu.add.label(title=f'Current: {joy_name}')
+        if def_joy_id is None:
+            return joy_menu
+
         joy_menu.add.dropselect(title="Gamepad Fire Button",
                                 default=self.settings.joy_fire_button,
                                 items=self._get_joy_button_ids(),
@@ -201,6 +203,15 @@ class OptionsMenu:
     def _update_display_modes(self):
         monitor = self._get_selected_monitor()
         self.display_modes = self._get_display_modes_for_monitor(monitor)
+        found_1600: bool = False
+        for res in self.display_modes:
+            if res[0] == "1600x900":
+                found_1600 = True
+                break
+
+        if not found_1600:
+            self.display_modes.append(("1600x900", Resolution(1600, 900)))
+
         if self.res_drop:
             self.res_drop.update_items(self.display_modes)
 

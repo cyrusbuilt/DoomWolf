@@ -24,9 +24,13 @@ def get_user_home() -> str:
 
 
 def get_user_game_data_path() -> str:
-    return os.path.join(get_user_home(), '.doom_wolf')
+    path = os.path.join(get_user_home(), '.doom_wolf')
+    os.makedirs(path, exist_ok=True)
+    return path
 
 
 def get_user_save_game_path() -> str:
     gd_path = get_user_game_data_path()
-    return os.path.join(gd_path, con.SAVE_GAME_BASE)
+    save_path = os.path.join(gd_path, con.SAVE_GAME_BASE)
+    os.makedirs(save_path, exist_ok=True)
+    return save_path
