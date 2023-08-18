@@ -90,6 +90,24 @@ class WeaponBuilder:
         return self
 
     @copy_method
+    def set_spindown_anim_frames(self, frames: dict[str, str]):
+        if frames:
+            name = self.the_weapon.name
+            img_dir = os.path.join(con.WEAPON_SPRITE_BASE, name)
+            img_dir = os.path.join(img_dir, 'spindown')
+            the_frames = dict(sorted(frames.items()))
+            the_frames = {k: os.path.join(img_dir, the_frames[k])
+                          for k in the_frames.keys()}
+            self.the_weapon.spindown_anim_frames = {
+                k: pg.image.load(the_frames[k]).convert_alpha()
+                for k in the_frames.keys()
+            }
+
+            self.the_weapon.spindown_anim_images = deque(
+                *[self.the_weapon.spindown_anim_frames.values()])
+        return self
+
+    @copy_method
     def set_custom_reload_sounds(self, sounds: dict):
         self.the_weapon.custom_reload_sounds = sounds
         return self
@@ -165,6 +183,11 @@ def weapon(game, data_path: str) -> WeaponBuilder:
             if reload_anim_frames:
                 rel_frames = reload_anim_frames
 
+            spd_frames: dict[str, str] = {}
+            spindown_anim_frames = weapon_dict.get('spindown_frames')
+            if spindown_anim_frames:
+                spd_frames = spindown_anim_frames
+
             rel_sounds = dict()
             fir_sounds = dict()
             custom_sounds = weapon_dict.get('custom_sounds')
@@ -188,7 +211,8 @@ def weapon(game, data_path: str) -> WeaponBuilder:
                 .set_magazine_capacity(mag_cap) \
                 .set_sounds(sounds) \
                 .set_animation_frames(frames) \
-                .set_reload_anim_frames(rel_frames)
+                .set_reload_anim_frames(rel_frames) \
+                .set_spindown_anim_frames(spd_frames)
 
             if len(rel_sounds.keys()):
                 builder = builder.set_custom_reload_sounds(rel_sounds)

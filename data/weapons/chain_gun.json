@@ -19,5 +19,11 @@
     "E": "4.png",
     "F": "5.png",
     "G": "6.png"
+  },
+  "spindown_frames": {
+    "A": "HCGGA0.png",
+    "B": "HCGGB0.png",
+    "C": "HCGGC0.png",
+    "D": "HCGGD0.png"
   }
 }
