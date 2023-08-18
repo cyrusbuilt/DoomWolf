@@ -40,8 +40,12 @@ class Weapon(AnimatedSprite):
         self._mag_change_trigger: bool = False
         self.reload_anim_frames: dict[str, pg.Surface] = {}
         self.reload_anim_images: deque[pg.Surface] = deque()
+        self.spindown_anim_frames: dict[str, pg.Surface] = {}
+        self.spindown_anim_images: deque[pg.Surface] = deque()
         self._mag_change_complete: bool = True
         self._fire_complete: bool = True
+        self._spindown_complete: bool = True
+        self._spindown_trigger: bool = False
         self._original_images: deque[pg.Surface] = deque()
         self.custom_reload_sounds: Optional[dict[int, str]] = None
         self.custom_fire_sounds: Optional[dict[int, str]] = None
@@ -74,6 +78,12 @@ class Weapon(AnimatedSprite):
                     for img in self.reload_anim_images
                 ])
 
+            if len(self.spindown_anim_images):
+                self.spindown_anim_images = deque([
+                    pg.transform.smoothscale(img, (s_w, s_h))
+                    for img in self.spindown_anim_images
+                ])
+
         self._has_idle_sound = self.sounds.get("idle") is not None
         if self._has_idle_sound:
             self._idle_prev = pg.time.get_ticks()
@@ -96,9 +106,10 @@ class Weapon(AnimatedSprite):
 
                 self.frame_counter += 1
                 if self.frame_counter == self.num_images:
-                    self.reloading = False
                     self._fire_complete = True
                     self.frame_counter = 0
+                    self.reloading = False
+                    self._spindown_trigger = True
 
     def animate_reload(self):
         if len(self.reload_anim_images) > 0:
@@ -116,6 +127,17 @@ class Weapon(AnimatedSprite):
                     self.frame_counter = 0
                     self._mag_change_complete = True
 
+    def animate_spindown(self):
+        if len(self.spindown_anim_images) > 0:
+            self._spindown_complete = False
+            if self.animation_trigger:
+                self.spindown_anim_images.rotate(-1)
+                self.image = self.spindown_anim_images[0]
+                self.frame_counter += 1
+                if self.frame_counter == len(self.spindown_anim_images):
+                    self.frame_counter = 0
+                    self._spindown_complete = True
+
     def draw(self):
         self.game.screen.blit(self.images[0], self.weapon_pos)
 
@@ -125,6 +147,13 @@ class Weapon(AnimatedSprite):
             self.animate_reload()
         else:
             self.animate_shot()
+
+        if self._spindown_trigger and not self.game.player.shot:
+            self.animate_spindown()
+
+        if self._spindown_trigger and self._spindown_complete:
+            self._spindown_trigger = False
+            self.images = self._original_images
 
         if self._has_idle_sound and not self.reloading:
             time_now = pg.time.get_ticks()
