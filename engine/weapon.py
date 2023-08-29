@@ -148,12 +148,13 @@ class Weapon(AnimatedSprite):
         else:
             self.animate_shot()
 
-        if self._spindown_trigger and not self.game.player.shot:
-            self.animate_spindown()
-
-        if self._spindown_trigger and self._spindown_complete:
-            self._spindown_trigger = False
-            self.images = self._original_images
+        # TODO Fix spin-down. Too slow (should never trigger during continuous fire) and breaks fire animation.
+        # if self._spindown_trigger and not self.game.player.shot:
+        #     self.animate_spindown()
+        #
+        # if self._spindown_trigger and self._spindown_complete:
+        #     self._spindown_trigger = False
+        #     self.images = self._original_images
 
         if self._has_idle_sound and not self.reloading:
             time_now = pg.time.get_ticks()
@@ -186,12 +187,16 @@ class Weapon(AnimatedSprite):
     def fire(self):
         if self.ammo_remaining == -1 and self.ammo_capacity == -1:
             self.play_action_sound('fire')
+            self.reloading = True
+            self.game.player.shot = True
             return
 
         if self.ammo_remaining > 0:
             self._fire_complete = False
             self.play_action_sound('fire')
             self.ammo_remaining -= self.ammo_use
+            self.reloading = True
+            self.game.player.shot = (self.ammo_capacity == -1 or self.ammo_remaining > 0)
 
         if self.ammo_remaining <= 0 < self.total_ammo and self._fire_complete:
             self._mag_change_trigger = True
@@ -226,7 +231,4 @@ class Weapon(AnimatedSprite):
                 self.ammo_remaining += ammo
 
         self.magazine_count = int(self.total_ammo / self.magazine_capacity) - 1
-        self._mag_change_trigger = True
-        self.images = self.reload_anim_images
-        self.play_action_sound('mag_out')
         return True
