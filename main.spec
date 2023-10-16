@@ -58,11 +58,7 @@ coll = COLLECT(
     upx_exclude=[],
     name='doomwolf',
 )
-app = BUNDLE(exe,
-    a.scripts,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
+app = BUNDLE(coll,
     name='DoomWolf.app',
     icon=None,
     bundle_identifier='net.cyrusbuilt.doomwolf',

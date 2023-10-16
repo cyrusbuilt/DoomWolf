@@ -1,6 +1,6 @@
 {
   "music_volume": 0.4,
-  "launch_fullscreen": false,
+  "launch_fullscreen": true,
   "monitor_id": 1,
   "resolution": {
     "width": 1600,

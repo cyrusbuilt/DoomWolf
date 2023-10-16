@@ -1,9 +1,11 @@
+import os
 import sys
 
 import pygame as pg
 from typing import Optional
 
 from engine import constants as con
+from engine import RGBColors
 from engine.hud import Hud
 from engine.input_handler import InputEvent
 from engine.input_handler import InputHandler
@@ -14,6 +16,7 @@ from engine.path_finder import PathFinder
 from engine.player import Player
 from engine.raycaster import RayCaster
 from engine.sound import Sound
+from engine.text import Text
 from engine.weapon import Weapon
 
 
@@ -22,7 +25,7 @@ class Game:
     def __init__(self):
         pg.init()
         self.input: InputHandler = InputHandler(self)
-        self.screen: pg.Surface = pg.display.set_mode(con.RES)
+        self.screen: pg.Surface = pg.display.set_mode(con.RES, pg.HWSURFACE)
         self.window_title: str = ''
         self.clock: pg.time.Clock = pg.time.Clock()
         self.delta_time: int = 1
@@ -39,6 +42,8 @@ class Game:
         self.path_finder: Optional[PathFinder] = None
         pg.time.set_timer(self.global_event, 40)
         self.hud: Hud = Hud(self)
+        self.running: bool = False
+        self.fps_text: Optional[Text] = None
 
     def new_game(self, skip_default_map_load: bool = False):
         if not skip_default_map_load:
@@ -62,6 +67,9 @@ class Game:
 
         self.path_finder = PathFinder(self)
         self.sound.play_music()
+        if con.SHOW_FPS:
+            self.fps_text = Text(self, (0, 0), "FPS: ",
+                                 RGBColors.RED, "DUGAFONT.ttf", 35)
 
     def update(self):
         if self.paused:
@@ -75,7 +83,11 @@ class Game:
         self.delta_time = self.clock.tick(con.FPS)
         title = self.window_title
         # if con.DEBUG:
-        title += f' FPS: {self.clock.get_fps() :.1f}'
+        fps_text = f'FPS: {self.clock.get_fps() :.1f}'
+        title += ' ' + fps_text
+        if con.SHOW_FPS:
+            self.fps_text.update_text(fps_text)
+            self.fps_text.draw()
 
         pg.display.set_caption(title)
         pg.display.flip()
@@ -120,8 +132,8 @@ class Game:
             elif event == InputEvent.INTERACT:
                 self.player.interact = True
             elif event == InputEvent.QUIT:
-                pg.quit()
-                sys.exit()
+                self.running = False
+                return
             elif event == InputEvent.GLOBAL_EVENT:
                 self.global_trigger = True
 
@@ -131,8 +143,14 @@ class Game:
         self.do_events(events)
 
     def run(self):
-        while True:
+        self.running = True
+        while self.running:
             self.check_events()
-            if not self.paused:
+            if not self.paused and self.running:
                 self.update()
                 self.draw()
+
+        self.sound.fadeout()
+        pg.time.wait(self.sound.fadeout_interval)
+        pg.quit()
+        sys.exit()
