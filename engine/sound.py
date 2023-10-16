@@ -13,8 +13,11 @@ class Sound:
         self.path: str = con.SOUND_BASE
         self.music_loaded: bool = False
         self.music_path: str = os.path.join(self.path, 'theme.mp3')
-        self.item_channel: pg.mixer.Channel = pg.mixer.Channel(2)
-        self.body_channel: pg.mixer.Channel = pg.mixer.Channel(3)
+        self.item_channel: pg.mixer.Channel = pg.mixer.Channel(
+            con.AUDIO_ITEM_CHANNEL)
+        self.body_channel: pg.mixer.Channel = pg.mixer.Channel(
+            con.AUDIO_BODY_CHANNEL)
+        self.fadeout_interval: int = con.AUDIO_FADE_OUT
 
         self.player_pain: Optional[pg.mixer.Sound] = None
         player_pain_path = os.path.join(self.path, 'player_pain.wav')
@@ -86,6 +89,9 @@ class Sound:
     def set_music_volume(self, volume: float):
         if self.music_loaded:
             pg.mixer.music.set_volume(volume)
+
+    def fadeout(self):
+        pg.mixer.fadeout(self.fadeout_interval)
 
     @staticmethod
     def play_sound(sound: pg.mixer.Sound):

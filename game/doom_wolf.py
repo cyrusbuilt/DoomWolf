@@ -51,7 +51,7 @@ class DoomWolf(Game):
         self.sound.set_music_volume(self.settings.music_volume)
         if self.settings.resolution != Resolution.zero():
             res = self.settings.resolution.to_tuple()
-            self.screen = pg.display.set_mode(res)
+            self.screen = pg.display.set_mode(res, pg.HWSURFACE)
 
         if self.settings.launch_fullscreen and not pg.display.is_fullscreen():
             pg.display.toggle_fullscreen()
