@@ -12,7 +12,7 @@ class GameSettings:
         self.path: str = path
         self.music_volume: float = 0.4
         self.launch_fullscreen: bool = False
-        self.resolution: Resolution = Resolution.zero()
+        self.resolution: Resolution = Resolution.default()
         self.monitor_id: int = 0
         self.mouse_sensitivity: float = con.MOUSE_SENSITIVITY
         self.mouse_fire_button: int = 1

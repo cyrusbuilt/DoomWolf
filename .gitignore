@@ -163,3 +163,5 @@ cython_debug/
 *.kra
 *.kra~
 *.png~
+
+.DS_Store

@@ -44,6 +44,7 @@ class Game:
         self.hud: Hud = Hud(self)
         self.running: bool = False
         self.fps_text: Optional[Text] = None
+        self.test_mode: bool = False
 
     def new_game(self, skip_default_map_load: bool = False):
         if not skip_default_map_load:
