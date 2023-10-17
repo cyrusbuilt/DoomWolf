@@ -216,3 +216,10 @@ class DoomWolf(Game):
             if os.path.exists(map_file):
                 print(f'Found map file: {map_file}')
                 self.maps.append(map_file)
+
+    def load_test_map(self, map_path: str):
+        if os.path.exists(map_path):
+            print(f'Loading test map: {map_path}')
+            self.maps.clear()
+            self.maps.append(map_path)
+            self.test_mode = True

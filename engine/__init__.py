@@ -1,4 +1,5 @@
 from enum import Enum
+from engine import constants as con
 
 
 class RGBColors(Enum):
@@ -38,3 +39,7 @@ class Resolution:
     @staticmethod
     def zero():
         return Resolution()
+
+    @staticmethod
+    def default():
+        return Resolution(con.WIDTH, con.HEIGHT)

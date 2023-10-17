@@ -41,7 +41,8 @@ class Item(AnimatedSprite):
         self.animate(self.images)
 
         picked_up = False
-        if self.rect:
+        if self.rect and not self.game.test_mode:
+            # TODO *really* need to fix collision logic. We're able to pickup at weird distances.
             if self.rect.colliderect(self.game.player.rect):
                 if self.type == ItemType.HEALTH:
                     picked_up = self.game.player.give_health(self.units)

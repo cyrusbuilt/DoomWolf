@@ -48,3 +48,17 @@ def run_doom_wolf(window_title: str = 'DoomWolf'):
     else:
         dw.new_game()
     dw.run()
+
+
+def test_map(map_path: str):
+    if not os.path.isabs(map_path):
+        print(f'ERROR: {map_path} is not an absolute path.')
+        quit()
+
+    dw_settings = GameSettings("")
+    _, file_name = os.path.split(map_path)
+    title = f'Testing map: {file_name}'
+    dw = DoomWolf(title, dw_settings)
+    dw.load_test_map(map_path)
+    dw.new_game()
+    dw.run()

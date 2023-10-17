@@ -73,6 +73,8 @@ class Enemy(AnimatedSprite):
             print(f"ERROR: Sound not found for action: '{action}'")
 
     def movement(self):
+        # TODO check collision with player and/or vice-versa. Currently, the player can literally walk through
+        # enemies. We need to prevent this.
         get_path = self.game.path_finder.get_path
         my_pos = self.map_pos
         player_pos = self.game.player.map_pos
@@ -220,7 +222,7 @@ class Enemy(AnimatedSprite):
 
             if self.pain:
                 self.animate_pain()
-            elif self.ray_cast_value:
+            elif self.ray_cast_value and not self.game.test_mode:
                 # TODO In the future, we should probably implement a way for
                 # enemies to 'lose track' of the player and go back to idle.
                 # Right now, once an enemy spots the player, it *never* loses
