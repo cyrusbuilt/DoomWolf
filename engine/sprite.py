@@ -7,7 +7,7 @@ from engine import constants as con
 from engine.player import Player
 
 
-class Sprite:
+class Sprite(pg.sprite.Sprite):
 
     def __init__(self,
                  game,
@@ -15,6 +15,7 @@ class Sprite:
                  pos: tuple[float, float] = (10.5, 3.5),
                  scale: float = 0.7,
                  shift: float = 0.27):
+        super().__init__()
         self.game = game
         self.player: Player = game.player
         self.x: float = pos[0]
@@ -36,12 +37,16 @@ class Sprite:
         self.IMAGE_RATIO: int = 0
         self.interaction_sound: Optional[pg.mixer.Sound] = None
         self.removed: bool = False
+        self.rect: Optional[pg.Rect] = None
 
         if os.path.exists(path):
             self.image = pg.image.load(path).convert_alpha()
             self.IMAGE_WIDTH = self.image.get_width()
             self.IMAGE_HALF_WIDTH = self.image.get_width() // 2
             self.IMAGE_RATIO = self.IMAGE_WIDTH / self.image.get_height()
+
+        if self.image is not None:
+            self.rect = self.image.get_rect()
 
     def get_sprite_projection(self):
         if not self.image:

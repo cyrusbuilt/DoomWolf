@@ -7,9 +7,10 @@ from engine.input_handler import InputEvent
 from engine.input_handler import Movement
 
 
-class Player:
+class Player(pg.sprite.Sprite):
 
     def __init__(self, game):
+        super().__init__()
         self.game = game
         self.x: float = con.PLAYER_POS[0]
         self.y: float = con.PLAYER_POS[1]
@@ -26,9 +27,10 @@ class Player:
             self.game.sound.player_movement
         self.do_continuous_fire: bool = False
         self.interact: bool = False
-        self.sprite: pg.Surface = pg.Surface(((con.GRID_BLOCK / 12) - 3,
-                                              (con.GRID_BLOCK / 12) - 3))
+        self.sprite: pg.Surface = pg.Surface(((con.GRID_BLOCK / 12) - 6,
+                                              (con.GRID_BLOCK / 12) - 6))
         self.rect: pg.Rect = self.sprite.get_rect()
+        self.rect.center = (self.rect.width / 2, self.rect.height / 2)
         self.rect.x = self.x
         self.rect.y = self.y
         self.hit_pickup: bool = False
