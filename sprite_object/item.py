@@ -42,12 +42,13 @@ class Item(AnimatedSprite):
 
         picked_up = False
         if self.rect and not self.game.test_mode:
-            # TODO *really* need to fix collision logic. We're able to pickup at weird distances.
             if self.rect.colliderect(self.game.player.rect):
                 if self.type == ItemType.HEALTH:
                     picked_up = self.game.player.give_health(self.units)
                 elif self.type == ItemType.ARMOR:
                     picked_up = self.game.player.give_armor(self.units)
+                    print(f'item rect: x = {self.rect.x}, y = {self.rect.y}, w = {self.rect.width}, h = {self.rect.height}')
+                    print(f'player rect: x = {self.game.player.rect.x}, y = {self.game.player.rect.y}, w = {self.game.player.rect.width}, h = {self.game.player.rect.height}')
                 elif self.type == ItemType.AMMO:
                     picked_up = self.game.current_weapon.give_ammo(self.units)
                 # TODO Handle other types

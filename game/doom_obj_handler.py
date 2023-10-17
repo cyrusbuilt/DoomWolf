@@ -9,7 +9,6 @@ from engine.sprite import Sprite
 from enemy import get_enemy_meta
 from enemy import enemy
 from maps.sprite_map import SpriteMap
-from sprite_object.item import Item
 
 
 class DoomWolfObjectHandler(ObjectHandler):

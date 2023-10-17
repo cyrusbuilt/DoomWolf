@@ -139,7 +139,7 @@ class ItemBuilder:
     @copy_method
     def set_interaction_sound(self, sound: pg.mixer.Sound):
         self.the_item.interaction_sound = sound
-        self.the_item.interaction_sound.set_volume(1.0)
+        self.the_item.interaction_sound.set_volume(1.5)
         return self
 
     def build(self) -> Item:
